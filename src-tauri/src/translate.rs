@@ -255,9 +255,11 @@ async fn mymemory(client: &reqwest::Client, text: &str, target: &str) -> Result<
         .ok_or_else(|| "MyMemory: unexpected response".into())
 }
 
-/// Texts per LLM request are bounded by characters so long captures stay within context
-/// and a malformed reply only costs one batch.
-const LLM_BATCH_CHARS: usize = 6000;
+
+/// Smaller batch (max 1500 chars or 10 items) prevents LLMs like Gemini from
+/// hitting token truncation or generating malformed unescaped JSON.
+const LLM_BATCH_CHARS: usize = 1500;
+const LLM_MAX_ITEMS_PER_BATCH: usize = 10;
 const LLM_TIMEOUT: Duration = Duration::from_secs(90);
 
 /// Dispatches on the configured provider. A failing user-chosen provider is an error:
@@ -281,20 +283,39 @@ async fn openai_batched(
     texts: &[String],
 ) -> Result<Vec<String>, String> {
     let mut out = Vec::with_capacity(texts.len());
-    for batch in batches(texts, LLM_BATCH_CHARS) {
+    for batch in split_llm_batches(texts, LLM_BATCH_CHARS, LLM_MAX_ITEMS_PER_BATCH) {
         let reply = chat(client, settings, api_key, batch).await?;
         out.extend(parse_json_array(&reply, batch.len())?);
     }
     Ok(out)
 }
 
+fn split_llm_batches(texts: &[String], max_chars: usize, max_items: usize) -> Vec<&[String]> {
+    let mut result = Vec::new();
+    let (mut start, mut size) = (0, 0);
+    for (i, text) in texts.iter().enumerate() {
+        let len = text.chars().count() + 1;
+        if i > start && (size + len > max_chars || i - start >= max_items) {
+            result.push(&texts[start..i]);
+            (start, size) = (i, 0);
+        }
+        size += len;
+    }
+    if start < texts.len() {
+        result.push(&texts[start..]);
+    }
+    result
+}
+
 fn system_prompt(language: &str) -> String {
     format!(
-        "You are a translation engine for text captured from a screenshot. \
-         The user message is a JSON array of strings. Translate every string into {language}, \
-         keeping numbers, URLs, file paths, code identifiers, product and proper names unchanged. \
-         Strings that are already in {language} are returned as is. \
-         Reply with ONLY a JSON array of exactly the same length and order, no commentary, no markdown."
+        "You are an accurate translator. You receive a JSON array of strings extracted from a screen capture. \
+         Translate every string into {language}. \
+         CRITICAL RULES: \
+         1. Keep numbers, technical terms, URLs, file paths, and code identifiers unchanged. \
+         2. Your response MUST be ONLY a valid JSON array of strings with EXACTLY the same number of items. \
+         3. Do NOT output markdown code fences, notes, or explanations. \
+         4. Escape any inner quotes with backslashes so the output is strictly valid JSON."
     )
 }
 
@@ -354,8 +375,32 @@ pub async fn verify(client: &reqwest::Client, settings: &Settings, api_key: Opti
 /// Extracts the JSON string array from a model reply, tolerating code fences and
 /// surrounding prose, and checks the count so results can never shift between blocks.
 fn parse_json_array(reply: &str, expected: usize) -> Result<Vec<String>, String> {
-    let (start, end) = reply.find('[').zip(reply.rfind(']')).filter(|(s, e)| s < e).ok_or("model did not return a JSON array")?;
-    let items: Vec<Value> = serde_json::from_str(&reply[start..=end]).map_err(|e| format!("model returned invalid JSON ({e})"))?;
+    let trimmed = reply.trim();
+    // Find outermost `[` and `]`
+    let (start, end) = trimmed
+        .find('[')
+        .zip(trimmed.rfind(']'))
+        .filter(|(s, e)| s < e)
+        .ok_or_else(|| format!("model did not return a JSON array: {}", trimmed.chars().take(200).collect::<String>()))?;
+
+    let raw_json = &trimmed[start..=end];
+    // Attempt 1: Standard JSON parse
+    if let Ok(items) = serde_json::from_str::<Vec<Value>>(raw_json) {
+        if items.len() == expected {
+            return items
+                .into_iter()
+                .map(|v| v.as_str().map(str::to_owned).ok_or_else(|| "model returned a non-string item".to_string()))
+                .collect();
+        }
+    }
+
+    // Attempt 2: Lenient extraction if raw parse failed (e.g. unescaped newlines or quotes inside strings)
+    // Parse line-by-line / regex or fallback to cleaned json
+    let cleaned = sanitize_json_array(raw_json);
+    let items: Vec<Value> = serde_json::from_str(&cleaned).map_err(|e| {
+        format!("model returned invalid JSON ({e}): {}", raw_json.chars().take(300).collect::<String>())
+    })?;
+
     if items.len() != expected {
         return Err(format!("model returned {} items for {expected} texts", items.len()));
     }
@@ -363,6 +408,46 @@ fn parse_json_array(reply: &str, expected: usize) -> Result<Vec<String>, String>
         .into_iter()
         .map(|v| v.as_str().map(str::to_owned).ok_or_else(|| "model returned a non-string item".to_string()))
         .collect()
+}
+
+/// Sanitizes common LLM JSON glitches like literal unescaped newlines or trailing commas
+fn sanitize_json_array(input: &str) -> String {
+    let mut out = String::with_capacity(input.len());
+    let mut in_str = false;
+    let mut chars = input.chars().peekable();
+    while let Some(c) = chars.next() {
+        match c {
+            '\\' => {
+                out.push(c);
+                if let Some(next) = chars.next() {
+                    out.push(next);
+                }
+            }
+            '"' => {
+                in_str = !in_str;
+                out.push(c);
+            }
+            '\n' | '\r' if in_str => {
+                // Replace literal unescaped newline inside JSON string with space
+                out.push(' ');
+            }
+            ',' => {
+                // Look ahead: if followed only by whitespace and `]`, drop trailing comma
+                let mut rest = chars.clone();
+                for nc in rest.by_ref() {
+                    if nc == ']' {
+                        // skip comma
+                        break;
+                    } else if !nc.is_whitespace() {
+                        out.push(',');
+                        break;
+                    }
+                }
+            }
+            _ => out.push(c),
+        }
+    }
+    out
 }
 
 #[cfg(test)]
