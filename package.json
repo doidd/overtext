@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "ocr:setup": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File scripts/install-paddleocr.ps1",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",

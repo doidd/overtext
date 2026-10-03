@@ -109,7 +109,12 @@ fn starts_list_item(text: &str) -> bool {
     let t = text.trim_start();
     let mut chars = t.chars();
     match chars.next() {
-        Some('•' | '·' | '▪' | '◦' | '‣' | '●' | '○' | '■' | '–' | '-' | '*') => {
+        // OCR often attaches a Japanese bullet directly to the first glyph.
+        // Keep ordinary hyphens/asterisks conservative (e.g. -1, *pointer).
+        Some('•' | '·' | '・' | '▪' | '◦' | '‣' | '●' | '○' | '■') => {
+            chars.next().is_some()
+        }
+        Some('–' | '-' | '*') => {
             chars.next().is_some_and(char::is_whitespace)
         }
         Some(c) if c.is_ascii_digit() => {
@@ -367,6 +372,23 @@ mod tests {
             ]
         );
         assert_eq!((blocks[1].y, blocks[1].height, blocks[1].width), (80.0, 44.0, 400.0));
+    }
+
+    #[test]
+    fn japanese_bullets_without_spaces_remain_separate_list_items() {
+        let lines = [
+            line("データ加工・整理", 300.0, 10.0, 400.0, 30.0),
+            line("·弊社側で保持していない項目の付加", 30.0, 80.0, 500.0, 20.0),
+            line("・分類／名寄せ、集計軸の整備", 30.0, 108.0, 450.0, 20.0),
+            line("•現データと過去データの統合", 30.0, 136.0, 470.0, 20.0),
+            line("·分析要件に合わせた加工", 30.0, 164.0, 400.0, 20.0),
+        ];
+        let blocks = build_blocks(&lines, &white());
+        assert_eq!(blocks.len(), 5);
+        assert!(blocks[1..].iter().all(|b| b.kind == Kind::List && b.line_count == 1));
+        assert_eq!(blocks[4].y, 164.0);
+        assert!(!starts_list_item("-1"));
+        assert!(!starts_list_item("*pointer"));
     }
 
     #[test]

@@ -6,6 +6,8 @@ mod macos;
 mod ocr;
 mod settings;
 mod translate;
+#[cfg(target_os = "windows")]
+mod windows;
 
 use std::{
     fs,
@@ -20,11 +22,13 @@ use serde::Serialize;
 use serde_json::json;
 use settings::Settings;
 use tauri::{
-    menu::{Menu, MenuItem, PredefinedMenuItem, Submenu},
+    menu::{Menu, MenuItem},
     tray::TrayIconBuilder,
     AppHandle, Manager, RunEvent, WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
 };
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
+#[cfg(target_os = "macos")]
+use tauri::menu::{PredefinedMenuItem, Submenu};
 
 const CAPTURE_SHORTCUT: &str = "CommandOrControl+Shift+1";
 const SELECTOR_PREFIX: &str = "selector-";
@@ -58,11 +62,17 @@ async fn recognize_capture(app: AppHandle, image_path: PathBuf) -> Result<Recogn
     if !path.starts_with(dir.canonicalize().map_err(|e| e.to_string())?) {
         return Err("image is outside the captures directory".into());
     }
+    let ocr_language = app.state::<AppState>().settings.lock().ocr_lang.clone();
     tauri::async_runtime::spawn_blocking(move || {
         let started = Instant::now();
         let image = image::open(&path).map_err(|e| e.to_string())?.to_rgba8();
-        let lines = ocr::recognize(&path)?;
+        let decode = started.elapsed();
+        let recognize_started = Instant::now();
+        let lines = ocr::recognize(&path, &ocr_language)?;
+        let recognize = recognize_started.elapsed();
+        let layout_started = Instant::now();
         let blocks = layout::build_blocks(&lines, &image);
+        eprintln!("ocr stages: image={}x{}, decode={decode:?}, recognize={recognize:?}, layout={:?}", image.width(), image.height(), layout_started.elapsed());
         eprintln!("ocr: {} lines → {} blocks in {:?}", lines.len(), blocks.len(), started.elapsed());
         Ok(Recognition { width: image.width(), height: image.height(), blocks })
     })
@@ -141,14 +151,33 @@ async fn translate_texts(app: AppHandle, texts: Vec<String>) -> Result<Vec<Strin
 struct SettingsView {
     settings: Settings,
     languages: Vec<(&'static str, &'static str)>,
+    ocr_languages: Option<Vec<String>>,
+    paddleocr_installed: bool,
 }
 
 #[tauri::command]
-fn get_settings(app: AppHandle) -> SettingsView {
-    SettingsView { settings: app.state::<AppState>().settings.lock().clone(), languages: settings::LANGUAGES.to_vec() }
+async fn get_settings(app: AppHandle) -> Result<SettingsView, String> {
+    #[cfg(target_os = "windows")]
+    let ocr_languages = Some(tauri::async_runtime::spawn_blocking(ocr::available_languages)
+        .await.map_err(|e| e.to_string())??);
+    #[cfg(not(target_os = "windows"))]
+    let ocr_languages = None;
+    #[cfg(target_os = "windows")]
+    let paddleocr_installed = ocr::paddleocr_installed();
+    #[cfg(not(target_os = "windows"))]
+    let paddleocr_installed = false;
+    Ok(SettingsView { settings: app.state::<AppState>().settings.lock().clone(), languages: settings::LANGUAGES.to_vec(), ocr_languages, paddleocr_installed })
 }
 
-/// Whether a key is stored for `base_url`; the key itself never leaves the Keychain.
+#[tauri::command]
+async fn install_paddleocr() -> Result<(), String> {
+    #[cfg(target_os = "windows")]
+    return tauri::async_runtime::spawn_blocking(ocr::install_paddleocr).await.map_err(|e| e.to_string())?;
+    #[cfg(not(target_os = "windows"))]
+    Err("PaddleOCR fallback hiện chỉ dùng trên Windows".into())
+}
+
+/// Whether a key is stored for `base_url`; the key never leaves the credential store.
 #[tauri::command]
 async fn has_api_key(base_url: String) -> Result<bool, String> {
     tauri::async_runtime::spawn_blocking(move || settings::api_key(base_url.trim().trim_end_matches('/')).map(|k| k.is_some()))
@@ -175,7 +204,7 @@ async fn save_settings(app: AppHandle, settings: Settings, api_key: Option<Strin
         };
         translate::verify(&app.state::<AppState>().http, &settings, effective_key.as_deref())
             .await
-            .map_err(|e| format!("Không kết nối được: {e}"))?;
+            .map_err(|e| e.to_string())?;
     }
     if let Some(key) = api_key {
         tauri::async_runtime::spawn_blocking(move || settings::set_api_key(&url, key.trim()))
@@ -194,22 +223,35 @@ async fn copy_image_to_clipboard(_app: AppHandle, base64_png: String) -> Result<
     {
         macos::copy_image_to_clipboard(&bytes)
     }
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(target_os = "windows")]
+    {
+        tauri::async_runtime::spawn_blocking(move || windows::copy_image_to_clipboard(&bytes))
+            .await
+            .map_err(|e| e.to_string())?
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
         let _ = bytes;
-        Err("Copy image is only implemented on macOS".into())
+        Err("Copy image is only implemented on macOS and Windows".into())
     }
 }
 
 #[tauri::command]
-async fn save_image_to_file(_app: AppHandle, base64_png: String, default_name: Option<String>) -> Result<bool, String> {
+async fn save_image_to_file(_app: AppHandle, _window: WebviewWindow, base64_png: String, default_name: Option<String>) -> Result<bool, String> {
     let bytes = decode_base64_png(&base64_png)?;
     let name = default_name.unwrap_or_else(|| "translated-screenshot.png".into());
-    #[cfg(target_os = "macos")]
+    #[cfg(target_os = "windows")]
+    let owner = _window.hwnd().map_err(|e| e.to_string())?.0 as isize;
+    #[cfg(any(target_os = "macos", target_os = "windows"))]
     {
-        let path = tauri::async_runtime::spawn_blocking(move || macos::show_save_file_dialog(&name))
+        let path = tauri::async_runtime::spawn_blocking(move || {
+            #[cfg(target_os = "macos")]
+            { Ok::<_, String>(macos::show_save_file_dialog(&name)) }
+            #[cfg(target_os = "windows")]
+            { windows::show_save_file_dialog(&name, owner) }
+        })
             .await
-            .map_err(|e| e.to_string())?;
+            .map_err(|e| e.to_string())??;
         if let Some(mut dest) = path {
             if dest.extension().is_none() {
                 dest.set_extension("png");
@@ -220,11 +262,11 @@ async fn save_image_to_file(_app: AppHandle, base64_png: String, default_name: O
             Ok(false)
         }
     }
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
         let _ = bytes;
         let _ = name;
-        Err("Save image is only implemented on macOS".into())
+        Err("Save image is only implemented on macOS and Windows".into())
     }
 }
 
@@ -346,7 +388,7 @@ fn open_settings(app: &AppHandle) {
     }
     let built = WebviewWindowBuilder::new(app, "settings", WebviewUrl::App("index.html".into()))
         .initialization_script("window.__OVERTEXT__ = {\"view\":\"settings\"};")
-        .title("OverText — Cài đặt")
+        .title("OverText")
         .inner_size(460.0, 520.0)
         .resizable(false)
         .build();
@@ -413,23 +455,29 @@ fn open_selectors(app: &AppHandle) -> Result<(), String> {
     // lock the session: never hold the lock while building windows.
     let monitors: Vec<_> = frames
         .iter()
-        .map(|f| (f.x, f.y, f.width, f.height, f.path.clone()))
+        .map(|f| (f.x, f.y, f.width, f.height, f.coordinate_scale, f.path.clone()))
         .collect();
     *app.state::<AppState>().session.lock() = Some(frames);
 
-    for (i, (x, y, width, height, path)) in monitors.into_iter().enumerate() {
-        let boot = json!({ "view": "selector", "monitor": i, "imagePath": path, "width": width, "height": height });
-        let window = page(app, format!("{SELECTOR_PREFIX}{i}"), boot)
+    for (i, (x, y, width, height, scale, path)) in monitors.into_iter().enumerate() {
+        let boot = json!({ "view": "selector", "monitor": i, "imagePath": path, "width": f64::from(width) / scale, "height": f64::from(height) / scale });
+        let builder = page(app, format!("{SELECTOR_PREFIX}{i}"), boot);
+        #[cfg(not(target_os = "windows"))]
+        let builder = builder
             .position(f64::from(x), f64::from(y))
-            .inner_size(f64::from(width), f64::from(height))
+            .inner_size(f64::from(width), f64::from(height));
+        let window = builder
             .shadow(false)
             .visible_on_all_workspaces(true)
             .build()
             .map_err(|e| e.to_string())?;
         #[cfg(target_os = "macos")]
         macos::make_overlay(&window);
-        #[cfg(not(target_os = "macos"))]
-        let _ = window;
+        #[cfg(target_os = "windows")]
+        {
+            window.set_position(tauri::PhysicalPosition::new(x, y)).map_err(|e| e.to_string())?;
+            window.set_size(tauri::PhysicalSize::new(width, height)).map_err(|e| e.to_string())?;
+        }
     }
     Ok(())
 }
@@ -450,13 +498,25 @@ fn end_capture(app: &AppHandle) {
 
 fn open_result(app: &AppHandle, n: u32, path: &Path, crop: &Crop) -> Result<(), String> {
     let boot = json!({ "view": "result", "imagePath": path, "width": crop.width, "height": crop.height });
-    let window = page(app, format!("{RESULT_PREFIX}{n}"), boot)
+    let builder = page(app, format!("{RESULT_PREFIX}{n}"), boot);
+    #[cfg(not(target_os = "windows"))]
+    let builder = builder
         .position(crop.x, crop.y)
-        .inner_size(crop.width, crop.height)
+        .inner_size(crop.width, crop.height);
+    let window = builder
         .build()
         .map_err(|e| e.to_string())?;
     #[cfg(target_os = "macos")]
     macos::allow_over_fullscreen(&window);
+    #[cfg(target_os = "windows")]
+    {
+        window.set_position(tauri::PhysicalPosition::new(crop.x.round() as i32, crop.y.round() as i32))
+            .map_err(|e| e.to_string())?;
+        window.set_size(tauri::PhysicalSize::new(
+            (crop.width * crop.coordinate_scale).round() as u32,
+            (crop.height * crop.coordinate_scale).round() as u32,
+        )).map_err(|e| e.to_string())?;
+    }
     let path = path.to_owned();
     window.on_window_event(move |event| {
         if matches!(event, WindowEvent::Destroyed) {
@@ -468,19 +528,23 @@ fn open_result(app: &AppHandle, n: u32, path: &Path, crop: &Crop) -> Result<(), 
 
 /// Whether the cursor is on the monitor a selector window covers.
 fn cursor_on_monitor(app: &AppHandle, monitor: usize) -> bool {
-    #[cfg(target_os = "macos")]
+    #[cfg(any(target_os = "macos", target_os = "windows"))]
     {
+        #[cfg(target_os = "macos")]
+        let cursor = macos::cursor_position();
+        #[cfg(target_os = "windows")]
+        let cursor = windows::cursor_position();
         let state = app.state::<AppState>();
         let session = state.session.lock();
         let (Some(frame), Some((cx, cy))) =
-            (session.as_ref().and_then(|f| f.get(monitor)), macos::cursor_position())
+            (session.as_ref().and_then(|f| f.get(monitor)), cursor)
         else {
             return false;
         };
         let (x, y) = (f64::from(frame.x), f64::from(frame.y));
         cx >= x && cx < x + f64::from(frame.width) && cy >= y && cy < y + f64::from(frame.height)
     }
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
         let _ = app;
         monitor == 0
@@ -570,6 +634,7 @@ pub fn run() {
 
             let handle = app.handle();
             // Accessory apps have no default menu, so ⌘C/⌘V/⌘A would not reach text fields.
+            #[cfg(target_os = "macos")]
             let edit = Submenu::with_items(
                 handle,
                 "Edit",
@@ -584,6 +649,7 @@ pub fn run() {
                     &PredefinedMenuItem::select_all(handle, None)?,
                 ],
             )?;
+            #[cfg(target_os = "macos")]
             app.set_menu(Menu::with_items(handle, &[&edit])?)?;
             // Leftovers from a previous run; nothing references them any more.
             if let Ok(dir) = captures_dir(handle) {
@@ -617,6 +683,7 @@ pub fn run() {
             recognize_capture,
             translate_texts,
             get_settings,
+            install_paddleocr,
             has_api_key,
             save_settings,
             copy_image_to_clipboard,
@@ -629,6 +696,10 @@ pub fn run() {
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
         .run(|_app, event| {
+            #[cfg(target_os = "windows")]
+            if let RunEvent::Exit = event {
+                ocr::shutdown_paddleocr();
+            }
             // Tray app: closing the last window must not quit.
             if let RunEvent::ExitRequested { code: None, api, .. } = event {
                 api.prevent_exit();

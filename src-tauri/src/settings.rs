@@ -36,7 +36,12 @@ pub enum Provider {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", default)]
 pub struct Settings {
+    /// Settings interface language; independent of OCR and translation.
+    pub ui_lang: String,
     pub target_lang: String,
+    /// Windows OCR source language (BCP-47); empty prefers installed PaddleOCR
+    /// for Japanese/Chinese/English, otherwise uses Windows preferences.
+    pub ocr_lang: String,
     pub provider: Provider,
     pub base_url: String,
     pub model: String,
@@ -45,7 +50,9 @@ pub struct Settings {
 impl Default for Settings {
     fn default() -> Self {
         Self {
+            ui_lang: "system".into(),
             target_lang: "vi".into(),
+            ocr_lang: String::new(),
             provider: Provider::Free,
             base_url: "https://api.openai.com/v1".into(),
             model: "gpt-4o-mini".into(),
@@ -66,6 +73,13 @@ impl Settings {
     }
     /// Normalizes user input; rejects values that would produce malformed requests.
     pub fn validated(mut self) -> Result<Self, String> {
+        if !["system", "vi", "en", "ja"].contains(&self.ui_lang.as_str()) {
+            return Err("Unsupported interface language".into());
+        }
+        self.ocr_lang = self.ocr_lang.trim().to_owned();
+        if self.ocr_lang.len() > 64 || !self.ocr_lang.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-') {
+            return Err("OCR language must be a language tag such as ja-JP or en-US".into());
+        }
         if !LANGUAGES.iter().any(|(c, _)| *c == self.target_lang) {
             return Err(format!("unsupported language: {}", self.target_lang));
         }
@@ -102,8 +116,8 @@ pub fn save(app: &AppHandle, settings: &Settings) -> Result<(), String> {
     fs::write(&path, serde_json::to_vec_pretty(settings).map_err(|e| e.to_string())?).map_err(|e| e.to_string())
 }
 
-/// API keys live in the macOS Keychain, one per base URL, never in `settings.json`.
-#[cfg(target_os = "macos")]
+/// API keys live in Keychain / Windows Credential Manager, never in `settings.json`.
+#[cfg(any(target_os = "macos", target_os = "windows"))]
 mod keychain {
     const SERVICE: &str = "com.overtext.app";
 
@@ -131,13 +145,13 @@ mod keychain {
     }
 }
 
-#[cfg(not(target_os = "macos"))]
+#[cfg(not(any(target_os = "macos", target_os = "windows")))]
 mod keychain {
     pub fn get(_: &str) -> Result<Option<String>, String> {
         Ok(None)
     }
     pub fn set(_: &str, _: &str) -> Result<(), String> {
-        Err("API key storage is only implemented on macOS".into())
+        Err("API key storage is only implemented on macOS and Windows".into())
     }
 }
 
@@ -152,6 +166,18 @@ mod tests {
         let s: Settings = serde_json::from_str(r#"{"targetLang":"ja"}"#).unwrap();
         assert_eq!((s.target_lang.as_str(), s.provider), ("ja", Provider::Free));
         assert_eq!(s.model, "gpt-4o-mini");
+        assert!(s.ocr_lang.is_empty());
+        assert_eq!(s.ui_lang, "system");
+    }
+
+    #[test]
+    fn interface_language_round_trip_is_independent_of_translation_and_ocr() {
+        let settings = Settings { ui_lang: "ja".into(), target_lang: "vi".into(), ocr_lang: "en-US".into(), ..Settings::default() }.validated().unwrap();
+        let restored: Settings = serde_json::from_str(&serde_json::to_string(&settings).unwrap()).unwrap();
+        assert_eq!(restored.ui_lang, "ja");
+        assert_eq!(restored.target_lang, "vi");
+        assert_eq!(restored.ocr_lang, "en-US");
+        assert!(Settings { ui_lang: "xx".into(), ..Settings::default() }.validated().is_err());
     }
 
     #[test]
@@ -167,5 +193,26 @@ mod tests {
         // Free provider ignores the OpenAI fields entirely.
         let free = Settings { base_url: "garbage".into(), model: String::new(), ..Settings::default() };
         assert!(free.validated().is_ok());
+    }
+
+    #[cfg(target_os = "windows")]
+    #[test]
+    fn windows_credentials_round_trip_and_delete_without_touching_provider_keys() {
+        let id = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos();
+        let url = format!("https://overtext-test.invalid/{}/{id}", std::process::id());
+        struct Cleanup(String);
+        impl Drop for Cleanup {
+            fn drop(&mut self) {
+                let _ = set_api_key(&self.0, "");
+            }
+        }
+        let _cleanup = Cleanup(url.clone());
+        assert!(api_key(&url).unwrap().is_none());
+        set_api_key(&url, "overtext-test-key").unwrap();
+        assert_eq!(api_key(&url).unwrap().as_deref(), Some("overtext-test-key"));
+        set_api_key(&url, "").unwrap();
+        assert!(api_key(&url).unwrap().is_none());
+        set_api_key(&url, "").unwrap();
     }
 }

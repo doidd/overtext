@@ -81,14 +81,6 @@ body,
   color: #b00020;
 }
 
-.block {
-  position: absolute;
-  overflow: hidden;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  cursor: grab;
-}
-
 .text-view {
   position: absolute;
   inset: 0;

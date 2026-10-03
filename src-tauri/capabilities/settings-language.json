@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "settings-language",
+  "description": "Update the settings window title when the interface language changes",
+  "windows": ["settings"],
+  "permissions": ["core:window:allow-set-title"]
+}

@@ -2,8 +2,9 @@ use std::{
     fs::File,
     io::BufWriter,
     path::{Path, PathBuf},
-    thread,
 };
+#[cfg(not(target_os = "windows"))]
+use std::thread;
 
 use image::{
     codecs::png::{CompressionType, FilterType, PngEncoder},
@@ -11,13 +12,14 @@ use image::{
 };
 use serde::Deserialize;
 
-/// Frozen screenshot of one monitor. Geometry is in logical points (global desktop
-/// coordinates, top-left origin); `image` holds physical pixels.
+/// Frozen screenshot of one monitor. Desktop geometry is logical on macOS and
+/// physical on Windows; `coordinate_scale` converts CSS selections to that space.
 pub struct Frame {
     pub x: i32,
     pub y: i32,
     pub width: u32,
     pub height: u32,
+    pub coordinate_scale: f64,
     pub image: RgbaImage,
     pub path: PathBuf,
 }
@@ -33,30 +35,41 @@ pub struct Selection {
     pub height: f64,
 }
 
-/// Cropped region with its logical placement on the global desktop.
+/// Cropped region: x/y in native desktop coordinates, width/height in CSS pixels.
 pub struct Crop {
     pub image: RgbaImage,
     pub x: f64,
     pub y: f64,
     pub width: f64,
     pub height: f64,
+    pub coordinate_scale: f64,
 }
 
-/// Captures every monitor in parallel and writes each frame to `dir/monitor-<i>.png`.
+/// Captures every monitor and writes each frame to `dir/monitor-<i>.png`.
+/// Windows monitor handles are not Send, so capture them on the calling worker.
 pub fn capture_all(dir: &Path) -> Result<Vec<Frame>, String> {
     let monitors = xcap::Monitor::all().map_err(|e| e.to_string())?;
-    let handles: Vec<_> = monitors
-        .into_iter()
-        .enumerate()
-        .map(|(i, monitor)| {
-            let path = dir.join(format!("monitor-{i}.png"));
-            thread::spawn(move || capture_monitor(&monitor, path))
-        })
-        .collect();
-    handles
-        .into_iter()
-        .map(|h| h.join().map_err(|_| "capture thread panicked".to_string())?)
-        .collect()
+    #[cfg(target_os = "windows")]
+    {
+        monitors.iter().enumerate()
+            .map(|(i, monitor)| capture_monitor(monitor, dir.join(format!("monitor-{i}.png"))))
+            .collect()
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        let handles: Vec<_> = monitors
+            .into_iter()
+            .enumerate()
+            .map(|(i, monitor)| {
+                let path = dir.join(format!("monitor-{i}.png"));
+                thread::spawn(move || capture_monitor(&monitor, path))
+            })
+            .collect();
+        handles
+            .into_iter()
+            .map(|h| h.join().map_err(|_| "capture thread panicked".to_string())?)
+            .collect()
+    }
 }
 
 fn capture_monitor(monitor: &xcap::Monitor, path: PathBuf) -> Result<Frame, String> {
@@ -68,6 +81,10 @@ fn capture_monitor(monitor: &xcap::Monitor, path: PathBuf) -> Result<Frame, Stri
         y: monitor.y().map_err(e)?,
         width: monitor.width().map_err(e)?,
         height: monitor.height().map_err(e)?,
+        #[cfg(target_os = "windows")]
+        coordinate_scale: f64::from(monitor.scale_factor().map_err(e)?),
+        #[cfg(not(target_os = "windows"))]
+        coordinate_scale: 1.0,
         image,
         path,
     })
@@ -86,10 +103,11 @@ impl Frame {
     /// selection is degenerate after clamping to the monitor.
     pub fn crop(&self, sel: &Selection) -> Option<Crop> {
         let (w, h) = (f64::from(self.width), f64::from(self.height));
-        let left = sel.x.clamp(0.0, w);
-        let top = sel.y.clamp(0.0, h);
-        let right = (sel.x + sel.width).clamp(0.0, w);
-        let bottom = (sel.y + sel.height).clamp(0.0, h);
+        let scale = self.coordinate_scale;
+        let left = (sel.x * scale).clamp(0.0, w);
+        let top = (sel.y * scale).clamp(0.0, h);
+        let right = ((sel.x + sel.width) * scale).clamp(0.0, w);
+        let bottom = ((sel.y + sel.height) * scale).clamp(0.0, h);
 
         let sx = f64::from(self.image.width()) / w;
         let sy = f64::from(self.image.height()) / h;
@@ -105,8 +123,9 @@ impl Frame {
             image: imageops::crop_imm(&self.image, px, py, pw, ph).to_image(),
             x: f64::from(self.x) + left,
             y: f64::from(self.y) + top,
-            width: right - left,
-            height: bottom - top,
+            width: (right - left) / scale,
+            height: (bottom - top) / scale,
+            coordinate_scale: scale,
         })
     }
 }
@@ -124,6 +143,7 @@ mod tests {
             y: 20,
             width: 100,
             height: 50,
+            coordinate_scale: 1.0,
             image: RgbaImage::from_fn(200, 100, |x, y| Rgba([x as u8, y as u8, 0, 255])),
             path: PathBuf::new(),
         }
@@ -161,5 +181,23 @@ mod tests {
     fn rejects_selection_outside_monitor() {
         assert!(retina_frame().crop(&sel(120.0, 10.0, 20.0, 20.0)).is_none());
         assert!(retina_frame().crop(&sel(10.0, 10.0, 0.0, 20.0)).is_none());
+    }
+
+    #[test]
+    fn windows_scaled_monitor_keeps_physical_origin_and_css_result_size() {
+        let frame = Frame {
+            x: -300,
+            y: 100,
+            width: 300,
+            height: 150,
+            coordinate_scale: 1.5,
+            image: RgbaImage::from_fn(300, 150, |x, y| Rgba([x as u8, y as u8, 0, 255])),
+            path: PathBuf::new(),
+        };
+        let crop = frame.crop(&sel(20.0, 10.0, 40.0, 20.0)).unwrap();
+        assert_eq!(crop.image.dimensions(), (60, 30));
+        assert_eq!(crop.image.get_pixel(0, 0), &Rgba([30, 15, 0, 255]));
+        assert_eq!((crop.x, crop.y), (-270.0, 115.0));
+        assert_eq!((crop.width, crop.height), (40.0, 20.0));
     }
 }

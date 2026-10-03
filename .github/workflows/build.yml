@@ -1,0 +1,28 @@
+name: Desktop checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm ci
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/test-paddleocr-worker.py
+      - run: npm run build
+      - run: cargo test --manifest-path src-tauri/Cargo.toml --test desktop --locked
+      - run: npm run tauri build -- --no-bundle
