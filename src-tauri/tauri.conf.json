@@ -15,7 +15,9 @@
       "csp": null,
       "assetProtocol": {
         "enable": true,
-        "scope": ["$APPCACHE/captures/**"]
+        "scope": [
+          "$APPCACHE/captures/**"
+        ]
       }
     }
   },
@@ -28,6 +30,9 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "macOS": {
+      "minimumSystemVersion": "13.0"
+    }
   }
 }

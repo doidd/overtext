@@ -1,6 +1,7 @@
 // An explicit test executable lets build.rs link the Windows application
 // manifest. Cargo's implicit library test executable cannot receive that link arg.
-#![allow(dead_code)]
+// These modules are shared with the app crate; items only the app uses are not dead here.
+#![allow(dead_code, unused_imports)]
 
 #[path = "../src/cache.rs"]
 mod cache;

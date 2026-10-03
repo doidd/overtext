@@ -42,6 +42,8 @@ pub struct Crop {
     pub y: f64,
     pub width: f64,
     pub height: f64,
+    /// Read only on Windows, where window sizes are physical pixels.
+    #[cfg_attr(not(target_os = "windows"), allow(dead_code))]
     pub coordinate_scale: f64,
 }
 
