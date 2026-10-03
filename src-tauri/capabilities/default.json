@@ -1,0 +1,11 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Selector overlays, result windows and settings",
+  "windows": ["selector-*", "result-*", "settings", "history"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-close",
+    "core:window:allow-start-dragging"
+  ]
+}

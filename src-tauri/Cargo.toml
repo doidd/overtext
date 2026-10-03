@@ -1,0 +1,50 @@
+[package]
+name = "overtext"
+version = "0.1.0"
+description = "A Tauri App"
+authors = ["you"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "overtext_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["protocol-asset", "tray-icon"] }
+tauri-plugin-global-shortcut = "2.4.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+xcap = "0.9.8"
+image = { version = "0.25.10", default-features = false, features = ["png"] }
+parking_lot = "0.12.5"
+
+reqwest = { version = "0.13.5", default-features = false, features = ["charset", "form", "http2", "json", "native-tls", "query"] }
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+
+# Capture/PNG/OCR crates are ~10-50× slower unoptimized; keep only our own crate at opt-level 0.
+[profile.dev.package."*"]
+opt-level = 3
+
+# Read the optimization guideline for more details: https://tauri.app/concept/size/#cargo-configuration
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true
+
+[target.'cfg(target_os = "macos")'.dependencies]
+keyring = { version = "3", default-features = false, features = ["apple-native"] }
+objc2 = "0.6"
+objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSResponder", "NSWindow", "NSPasteboard", "NSSavePanel"] }
+objc2-core-foundation = { version = "0.3", default-features = false, features = ["std", "CFCGTypes"] }
+objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSString", "NSArray", "NSData", "NSURL", "NSDictionary", "NSError", "NSValue"] }
+objc2-vision = { version = "0.3", default-features = false, features = ["std", "VNRequest", "VNRequestHandler", "VNRecognizeTextRequest", "VNObservation", "VNTypes", "objc2-core-foundation"] }
