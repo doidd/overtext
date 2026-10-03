@@ -106,7 +106,7 @@ export async function renderTranslatedImage(
   ctx.drawImage(img, 0, 0, translation.width, translation.height);
 
   // Keep unchanged labels/numbers in their original font (e.g. slide badges).
-  const blocks = translation.blocks.filter((block) => block.kind !== "code"
+  const blocks = translation.blocks.filter((block) => block.kind !== "code" && block.kind !== "metadata"
     && block.translated.trim() !== block.text.trim());
   const regions = blocks.map((block) => textRegion(block, translation.blocks));
   // Erase all source regions first so neighboring fills cannot overwrite translations.

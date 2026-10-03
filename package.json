@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test:render": "playwright test",
     "ocr:setup": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File scripts/install-paddleocr.ps1",
     "dev": "vite",
     "build": "tsc && vite build",
@@ -16,6 +17,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tauri-apps/cli": "^2",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",

@@ -1,0 +1,90 @@
+{
+  "width": 408,
+  "height": 204,
+  "blocks": [
+    {
+      "x": 375.02000000000004,
+      "y": 28.9,
+      "width": 9.180000000000007,
+      "height": 9.86,
+      "lineHeight": 9.86,
+      "lineCount": 1,
+      "kind": "paragraph",
+      "align": "left",
+      "color": "#fdf5f0",
+      "background": "#e47e3b",
+      "text": "4",
+      "translated": "4"
+    },
+    {
+      "x": 119.00000000000001,
+      "y": 33.660000000000004,
+      "width": 168.3,
+      "height": 25.840000000000003,
+      "lineHeight": 25.840000000000003,
+      "lineCount": 1,
+      "kind": "heading",
+      "align": "left",
+      "color": "#313c47",
+      "background": "#ffffff",
+      "text": "データ加工・整理",
+      "translated": "Xử lý và tổ chức dữ liệu"
+    },
+    {
+      "x": 36.38,
+      "y": 75.48,
+      "width": 333.54,
+      "height": 17.679999999999993,
+      "lineHeight": 17.68,
+      "lineCount": 1,
+      "kind": "list",
+      "align": "left",
+      "color": "#566471",
+      "background": "#ffffff",
+      "text": "·社側で保持していない項目の付加(例：重要度)",
+      "translated": "• Bổ sung các mục chưa được công ty nắm giữ (ví dụ: tầm quan trọng)"
+    },
+    {
+      "x": 37.4,
+      "y": 104.38000000000001,
+      "width": 197.54000000000002,
+      "height": 17,
+      "lineHeight": 17,
+      "lineCount": 1,
+      "kind": "list",
+      "align": "left",
+      "color": "#596674",
+      "background": "#ffffff",
+      "text": "·分類/名寄せ、集計軸の整備",
+      "translated": "• Phân loại/đối khớp dữ liệu và thiết lập các trục tổng hợp"
+    },
+    {
+      "x": 36.72,
+      "y": 130.22,
+      "width": 292.4,
+      "height": 18.69999999999999,
+      "lineHeight": 18.7,
+      "lineCount": 1,
+      "kind": "list",
+      "align": "left",
+      "color": "#556270",
+      "background": "#ffffff",
+      "text": "·現データと過去データの統合 (共通指摘ID)",
+      "translated": "• Tích hợp dữ liệu hiện tại và lịch sử (mã định danh chung)"
+    },
+    {
+      "x": 37.06,
+      "y": 157.76,
+      "width": 169.66,
+      "height": 17.680000000000007,
+      "lineHeight": 17.68,
+      "lineCount": 1,
+      "kind": "list",
+      "align": "left",
+      "color": "#576572",
+      "background": "#ffffff",
+      "text": "·分析要件に合わせた加工",
+      "translated": "• Xử lý để đáp ứng các yêu cầu phân tích"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "width": 707,
+  "height": 280,
+  "blocks": [
+    {
+      "x": 56.56,
+      "y": 11.789473684210526,
+      "width": 360.57,
+      "height": 34.77894736842105,
+      "lineHeight": 17.094736842105263,
+      "lineCount": 2,
+      "kind": "metadata",
+      "align": "left",
+      "color": "#695b68",
+      "background": "#ffffff",
+      "text": "drupalreleases.com\nhttps://www.drupalreleases.com>project>simple-crawler",
+      "translated": "BAD_METADATA_REWRITE"
+    },
+    {
+      "x": 21.799166666666668,
+      "y": 60.126315789473686,
+      "width": 437.75083333333333,
+      "height": 20.042105263157886,
+      "lineHeight": 20.042105263157893,
+      "lineCount": 1,
+      "kind": "heading",
+      "align": "left",
+      "color": "#600fa8",
+      "background": "#ffffff",
+      "text": "Simple Crawler - Drupal Module | Drupal Releases",
+      "translated": "Simple Crawler – Module Drupal | Drupal Releases"
+    },
+    {
+      "x": 21.21,
+      "y": 84.8842105263158,
+      "width": 589.1666666666666,
+      "height": 38.31578947368419,
+      "lineHeight": 16.505263157894735,
+      "lineCount": 2,
+      "kind": "paragraph",
+      "align": "left",
+      "color": "#867d87",
+      "background": "#ffffff",
+      "text": "Simple Crawler helps you scrape or even crawl webpages and websites for context, research or migrations. It just a wrapper around …",
+      "translated": "Simple Crawler giúp thu thập hoặc quét các trang web để nghiên cứu nội dung hay chuyển dữ liệu. Nó chỉ là một lớp bao bọc…"
+    },
+    {
+      "x": 21.799166666666668,
+      "y": 157.38947368421054,
+      "width": 308.7233333333333,
+      "height": 34.189473684210526,
+      "lineHeight": 15.91578947368421,
+      "lineCount": 2,
+      "kind": "metadata",
+      "align": "left",
+      "color": "#6b5d6a",
+      "background": "#ffffff",
+      "text": "whatisdrupal.com\nhttps://whatisdrupal.com>how-to-optimize-your...",
+      "translated": "BAD_METADATA_REWRITE"
+    },
+    {
+      "x": 21.799166666666668,
+      "y": 203.95789473684212,
+      "width": 557.3516666666667,
+      "height": 20.04210526315788,
+      "lineHeight": 20.042105263157893,
+      "lineCount": 1,
+      "kind": "heading",
+      "align": "left",
+      "color": "#6111a9",
+      "background": "#ffffff",
+      "text": "How to Optimize Your Drupal Website for Al Crawlers and Data",
+      "translated": "Cách tối ưu website Drupal cho trình thu thập dữ liệu AI và dữ liệu…"
+    },
+    {
+      "x": 20.620833333333334,
+      "y": 228.71578947368423,
+      "width": 600.3608333333334,
+      "height": 38.90526315789472,
+      "lineHeight": 18.273684210526316,
+      "lineCount": 2,
+      "kind": "paragraph",
+      "align": "left",
+      "color": "#857d87",
+      "background": "#ffffff",
+      "text": "Optimizing a Drupal website for Al crawlers requires a clean and organized content management foundation that adheres to ….",
+      "translated": "Tối ưu website Drupal cho trình thu thập AI cần nền tảng quản lý nội dung sạch, có tổ chức và tuân thủ…"
+    }
+  ]
+}

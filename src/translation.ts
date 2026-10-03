@@ -7,7 +7,7 @@ export type Block = {
   height: number;
   lineHeight: number;
   lineCount: number;
-  kind: "heading" | "list" | "paragraph" | "code";
+  kind: "heading" | "list" | "paragraph" | "code" | "metadata";
   align: "left" | "center" | "right";
   color: string;
   background: string;
@@ -30,14 +30,14 @@ export async function translateCapture(imagePath: string, onPhase: (phase: Phase
   const rec = await invoke<Recognition>("recognize_capture", { imagePath });
   if (rec.blocks.length === 0) return { ...rec, blocks: [] };
 
-  const toTranslate = rec.blocks.filter((b) => b.kind !== "code");
+  const toTranslate = rec.blocks.filter((b) => b.kind !== "code" && b.kind !== "metadata");
   onPhase("translating");
   const translated = toTranslate.length
     ? await invoke<string[]>("translate_texts", { texts: toTranslate.map((b) => b.text) })
     : [];
 
   let i = 0;
-  return { ...rec, blocks: rec.blocks.map((b) => (b.kind === "code" ? { ...b, translated: b.text } : { ...b, translated: translated[i++] })) };
+  return { ...rec, blocks: rec.blocks.map((b) => (b.kind === "code" || b.kind === "metadata" ? { ...b, translated: b.text } : { ...b, translated: translated[i++] })) };
 }
 
 /** Structured-text output: headings, list items, code blocks and paragraphs as Markdown. */

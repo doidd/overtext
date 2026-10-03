@@ -9,6 +9,8 @@ pub enum Kind {
     Heading,
     List,
     Paragraph,
+    /// Standalone website/URL labels: preserve their original text and appearance.
+    Metadata,
     /// Source code or terminal output: lines are never merged with surrounding
     /// prose, and merged runs are capped (see `MAX_GROUP_LINES`) so a mis-detected
     /// run can't swallow unrelated content into one block.
@@ -91,6 +93,100 @@ struct Line {
     /// Precomputed by `classify_code` over the whole line sequence (context-aware,
     /// unlike `looks_like_code` on its own).
     is_code: bool,
+    role: Role,
+    foreground: [u8; 3],
+    background: [u8; 3],
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Role { Body, Heading, Metadata }
+
+fn standalone_link(text: &str) -> bool {
+    let trimmed = text.trim();
+    let first = trimmed.split_whitespace().next().unwrap_or("");
+    let rest = trimmed[first.len()..].trim_start();
+    if first.starts_with("https://") || first.starts_with("http://") || first.starts_with("www.") {
+        return rest.is_empty() || rest.starts_with(['›', '>', '»']);
+    }
+    // A bare domain must occupy the whole row. A URL mentioned inside prose
+    // ("visit https://… for details") is still ordinary prose.
+    if !rest.is_empty() { return false; }
+    let domain = first.trim_end_matches('/');
+    let Some((name, suffix)) = domain.rsplit_once('.') else { return false };
+    !name.is_empty() && name.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'.')
+        && ["com", "org", "net", "io", "dev", "edu", "gov", "vn", "jp", "uk", "ai"].contains(&suffix)
+}
+
+fn rgb(hex: &str) -> [u8; 3] {
+    [1, 3, 5].map(|i| u8::from_str_radix(&hex[i..i + 2], 16).expect("sampled RGB color"))
+}
+
+fn style_boundary(a: &Line, b: &Line) -> bool {
+    // Compare strong foreground changes only on a similar background. Code
+    // highlighting is excluded by the caller. White-box tests have equal colors.
+    dist(a.foreground, b.foreground) > 75 * 75 && dist(a.background, b.background) < 40 * 40
+}
+
+fn body_continuation(group: &[Line], line: &Line) -> bool {
+    let last = group.last().expect("non-empty group");
+    let widest = group.iter().map(|l| l.w).fold(0.0, f64::max);
+    !last.is_code && !line.is_code && last.role == Role::Body && line.role == Role::Body
+        && !ends_sentence(&last.text) && last.w >= 0.7 * widest
+}
+
+fn returns_to_style(lines: &[Line], evidence: usize, reference: &Line) -> bool {
+    let mut previous = &lines[evidence];
+    for next in lines.iter().skip(evidence + 1).take(3) {
+        if next.is_code || next.role == Role::Metadata || starts_list_item(&next.text)
+            || ends_sentence(&previous.text) || next.y - previous.bottom() > 0.9 * previous.h
+            || (next.x - reference.x).abs() > 1.5 * reference.h {
+            break;
+        }
+        if next.h >= 0.95 * reference.h && next.h <= 1.2 * reference.h && !style_boundary(reference, next) {
+            return true;
+        }
+        previous = next;
+    }
+    false
+}
+
+fn classify_roles(lines: &mut [Line]) {
+    for line in lines.iter_mut() {
+        if !line.is_code && standalone_link(&line.text) { line.role = Role::Metadata; }
+    }
+    let mut roles: Vec<Role> = lines.iter().enumerate().map(|(i, line)| {
+        if line.is_code || line.role == Role::Metadata || starts_list_item(&line.text) { return line.role; }
+        let previous = i.checked_sub(1).map(|j| &lines[j]);
+        let independent = previous.is_none_or(|prev| prev.role == Role::Metadata
+            || ends_sentence(&prev.text) || line.y - prev.bottom() > 0.6 * prev.h);
+        if !independent { return Role::Body; }
+        // A title needs corroboration from nearby smaller body text. A taller
+        // inline-code row in the middle of a sentence cannot become a heading.
+        let title = lines.iter().enumerate().skip(i + 1).take(3).any(|(j, next)| {
+            !next.is_code && next.role != Role::Metadata && !starts_list_item(&next.text)
+                && next.y >= line.bottom() - 0.35 * line.h && next.y - line.bottom() < 2.5 * line.h
+                && (next.x - line.x).abs() < 1.5 * line.h
+                && line.h > next.h * 1.12
+                && !returns_to_style(lines, j, line)
+                && (style_boundary(line, next)
+                    || previous.is_some_and(|prev| prev.role == Role::Metadata)
+                    || line.h > next.h * 1.5 && line.w < next.w * 0.9)
+        });
+        if title { Role::Heading } else { Role::Body }
+    }).collect();
+    // A wrapped heading may span several rows. Propagate the hint through
+    // matching title rows, stopping at smaller/differently styled body text.
+    for i in 1..lines.len() {
+        let (prev, line) = (&lines[i - 1], &lines[i]);
+        let gap = line.y - prev.bottom();
+        if roles[i - 1] == Role::Heading && roles[i] == Role::Body
+            && !line.is_code && !starts_list_item(&line.text) && !ends_sentence(&prev.text)
+            && line.h >= 0.9 * prev.h && line.h <= 1.2 * prev.h && !style_boundary(prev, line)
+            && gap > -0.35 * prev.h && gap < 0.9 * prev.h
+            && ((line.x - prev.x).abs() < 1.5 * prev.h || (line.center() - prev.center()).abs() < 1.5 * prev.h)
+        { roles[i] = Role::Heading; }
+    }
+    for (line, role) in lines.iter_mut().zip(roles) { line.role = role; }
 }
 
 impl Line {
@@ -140,6 +236,17 @@ fn split_reason(group: &[Line], line: &Line) -> Option<String> {
     if starts_list_item(&line.text) {
         return Some("starts a list item".into());
     }
+    // Priority: structural/style boundaries veto merging. Sentence continuation
+    // below can relax size checks only; it cannot override these boundaries.
+    if !line.is_code && last.role != line.role {
+        return Some(format!("role boundary {:?} -> {:?}", last.role, line.role));
+    }
+    // Color alone is ambiguous inside a wrapped sentence (e.g. an inline code
+    // span). Confirmed role boundaries above still veto body continuation.
+    if !line.is_code && line.role != Role::Metadata && style_boundary(last, line)
+        && !body_continuation(group, line) {
+        return Some("foreground style boundary".into());
+    }
     // OCR box height follows glyph content (a line without ascenders/descenders is shorter),
     // so compare against the block's median rather than a single neighbouring line.
     let h = median(group.iter().map(|l| l.h).collect()).max(1.0);
@@ -161,8 +268,7 @@ fn split_reason(group: &[Line], line: &Line) -> Option<String> {
     // own continuation, so tolerate a large height difference there: OCR boxes follow glyph
     // content, and a line made mostly of x-height monospace (an inline code span) can be ~0.6x
     // as tall as its neighbours.
-    let widest = group.iter().map(|l| l.w).fold(0.0, f64::max);
-    let mid_sentence = !last.is_code && !ends_sentence(&last.text) && last.w >= 0.7 * widest;
+    let mid_sentence = body_continuation(group, line);
     // A lone unpunctuated line is usually a heading, so a much *smaller* next line only joins an
     // established multi-line paragraph.
     let low = if mid_sentence && group.len() >= 2 { 0.45 } else { 0.75 };
@@ -214,7 +320,7 @@ fn align_of(lines: &[Line]) -> Align {
 /// Prose is reflowed into a single line (translators expect that); code/terminal
 /// output keeps its line breaks since each line is usually its own statement.
 fn join_lines(lines: &[Line]) -> String {
-    if lines[0].is_code {
+    if lines[0].is_code || lines[0].role == Role::Metadata {
         return lines.iter().map(|l| l.text.trim_end()).collect::<Vec<_>>().join("\n");
     }
     let mut out = String::new();
@@ -267,15 +373,36 @@ pub fn build_blocks(lines: &[OcrLine], image: &RgbaImage) -> Vec<Block> {
     let (iw, ih) = (f64::from(image.width()), f64::from(image.height()));
     let mut lines: Vec<Line> = lines
         .iter()
-        .map(|l| Line { text: l.text.clone(), x: l.x * iw, y: l.y * ih, w: l.width * iw, h: l.height * ih, is_code: false })
+        .map(|l| {
+            let (x, y, w, h) = (l.x * iw, l.y * ih, l.width * iw, l.height * ih);
+            let (foreground, background) = sample_colors(image, x, y, w, h);
+            Line { text: l.text.clone(), x, y, w, h, is_code: false, role: Role::Body,
+                foreground: rgb(&foreground), background: rgb(&background) }
+        })
         .collect();
     lines.sort_by(|a, b| a.y.total_cmp(&b.y).then(a.x.total_cmp(&b.x)));
     classify_code(&mut lines);
+    classify_roles(&mut lines);
 
     let mut groups: Vec<Vec<Line>> = Vec::new();
     for (index, line) in lines.into_iter().enumerate() {
-        match groups.iter_mut().rev().take(4).find(|g| continues(g, &line)) {
-            Some(group) => group.push(line),
+        let candidate = (0..groups.len()).rev().take(4).find(|&i| {
+            // Looking back supports interleaved columns, but must not jump over
+            // a block in the same column, bypassing an earlier split decision.
+            let crosses_block = groups[i + 1..].iter().any(|g| g.iter().any(|other|
+                other.x < line.right() && other.right() > line.x));
+            !crosses_block && continues(&groups[i], &line)
+        });
+        match candidate {
+            Some(i) => {
+                if cfg!(debug_assertions) {
+                    let last = groups[i].last().unwrap();
+                    let h = median(groups[i].iter().map(|l| l.h).collect()).max(1.0);
+                    eprintln!("layout: line {index} joins block {i}: role={:?}, code={}, gap={:.2}h, size={:.2}x, color_delta={}",
+                        line.role, line.is_code, (line.y - last.bottom()) / h, line.h / h, dist(last.foreground, line.foreground));
+                }
+                groups[i].push(line);
+            }
             None => {
                 if cfg!(debug_assertions) {
                     if let Some(reason) = groups.last().and_then(|g| split_reason(g, &line)) {
@@ -303,9 +430,11 @@ pub fn build_blocks(lines: &[OcrLine], image: &RgbaImage) -> Vec<Block> {
             let line_height = median(g.iter().map(|l| l.h).collect());
             let kind = if g[0].is_code {
                 Kind::Code
+            } else if g[0].role == Role::Metadata {
+                Kind::Metadata
             } else if starts_list_item(&g[0].text) {
                 Kind::List
-            } else if g.len() <= 2 && line_height > 1.3 * median_h {
+            } else if g[0].role == Role::Heading || g.len() <= 2 && line_height > 1.3 * median_h {
                 Kind::Heading
             } else {
                 Kind::Paragraph
@@ -424,6 +553,100 @@ mod tests {
             ]
         );
         assert_eq!((blocks[1].y, blocks[1].height, blocks[1].width), (80.0, 44.0, 400.0));
+    }
+
+    #[test]
+    fn real_search_results_keep_metadata_titles_and_snippets_separate() {
+        let lines: Vec<OcrLine> = serde_json::from_str(include_str!("../assets/ocr-search-results.json")).unwrap();
+        let image = image::load_from_memory(include_bytes!("../assets/ocr-search-results.png")).unwrap().to_rgba8();
+        let blocks = build_blocks(&lines, &image);
+        let summary: Vec<_> = blocks.iter().map(|b| (b.kind, b.line_count)).collect();
+        assert_eq!(summary, [
+            (Kind::Metadata, 2), (Kind::Heading, 1), (Kind::Paragraph, 2),
+            (Kind::Metadata, 2), (Kind::Heading, 1), (Kind::Paragraph, 2),
+        ]);
+        assert!(blocks[0].text.contains("https://"));
+        assert!(!blocks[2].text.contains("Drupal Releases"));
+        assert!(!blocks[5].text.contains("https://"));
+        assert_ne!(blocks[1].color, blocks[2].color);
+        assert_ne!(blocks[4].color, blocks[5].color);
+        assert!(blocks[1].line_height > blocks[2].line_height);
+        assert!(blocks[4].line_height > blocks[5].line_height);
+        eprintln!("search layout preview: {}", serde_json::to_string(&blocks).unwrap());
+    }
+
+    #[test]
+    fn a_link_between_body_rows_cannot_be_bypassed_by_lookback() {
+        let lines = [
+            line("This unfinished body row needs its own block", 10.0, 10.0, 700.0, 40.0),
+            line("https://example.com", 10.0, 52.0, 180.0, 8.0),
+            line("Another body row after a link", 10.0, 64.0, 700.0, 40.0),
+        ];
+        let blocks = build_blocks(&lines, &white());
+        assert_eq!(blocks.len(), 3);
+        assert_eq!(blocks[1].kind, Kind::Metadata);
+        assert!(blocks.iter().all(|b| b.line_count == 1));
+    }
+
+    #[test]
+    fn interleaved_columns_still_join_within_their_own_column() {
+        let lines = [
+            line("Left column starts with", 10.0, 10.0, 250.0, 20.0),
+            line("Right column starts with", 600.0, 11.0, 250.0, 20.0),
+            line("its own continuation", 10.0, 34.0, 220.0, 20.0),
+            line("a separate continuation", 600.0, 35.0, 230.0, 20.0),
+        ];
+        let blocks = build_blocks(&lines, &white());
+        assert_eq!(blocks.len(), 2);
+        assert!(blocks.iter().all(|b| b.line_count == 2));
+    }
+
+    #[test]
+    fn a_url_at_the_start_of_a_sentence_is_still_translatable_prose() {
+        let lines = [
+            line("https://example.com provides useful background on this topic", 10.0, 10.0, 800.0, 20.0),
+            line("and the rest of this sentence explains its purpose", 10.0, 34.0, 750.0, 20.0),
+        ];
+        let blocks = build_blocks(&lines, &white());
+        assert_eq!(blocks.len(), 1);
+        assert_eq!(blocks[0].kind, Kind::Paragraph);
+        assert_eq!(blocks[0].line_count, 2);
+    }
+
+    #[test]
+    fn wrapped_headings_join_without_swallowing_the_body() {
+        let lines = [
+            line("A long title that wraps onto", 10.0, 10.0, 700.0, 40.0),
+            line("a second title row", 10.0, 55.0, 400.0, 40.0),
+            line("The smaller body starts here and", 10.0, 105.0, 900.0, 20.0),
+            line("continues onto another row.", 10.0, 130.0, 800.0, 20.0),
+        ];
+        let blocks = build_blocks(&lines, &white());
+        assert_eq!(blocks.len(), 2);
+        assert_eq!((blocks[0].kind, blocks[0].line_count), (Kind::Heading, 2));
+        assert_eq!((blocks[1].kind, blocks[1].line_count), (Kind::Paragraph, 2));
+    }
+
+    #[test]
+    fn colored_inline_code_and_short_boxes_still_continue_the_body() {
+        let lines = [
+            line("The Windows OCR test recognizes the bundled image and", 10.0, 10.0, 800.0, 20.0),
+            line("then run this command and check the output from", 10.0, 33.0, 790.0, 20.0),
+            line("test --manifest-path src-tauri/Cargo.toml --test desktop japanese", 10.0, 58.0, 810.0, 12.0),
+            line("the fallback before saving another translated image", 10.0, 76.0, 800.0, 20.0),
+        ];
+        let mut image = white();
+        for (i, row) in lines.iter().enumerate() {
+            let color = if i == 2 { [140, 20, 170, 255] } else { [70, 70, 70, 255] };
+            for y in (row.y * 1000.0) as u32 + 2..((row.y + row.height) * 1000.0) as u32 - 2 {
+                for x in (row.x * 1000.0) as u32 + 2..((row.x + row.width) * 1000.0) as u32 - 2 {
+                    image.put_pixel(x, y, Rgba(color));
+                }
+            }
+        }
+        let blocks = build_blocks(&lines, &image);
+        assert_eq!(blocks.len(), 1);
+        assert_eq!((blocks[0].kind, blocks[0].line_count), (Kind::Paragraph, 4));
     }
 
     #[test]

@@ -106,6 +106,9 @@ installed once on each machine; they are not bundled into the installer.
 
 ```sh
 npm run build
+node --test scripts/test-settings-i18n.mjs scripts/test-translation.mjs
+npx playwright install chromium
+npm run test:render
 python scripts/test-paddleocr-worker.py
 cargo test --manifest-path src-tauri/Cargo.toml --test desktop --locked
 npm run tauri build -- --no-bundle
@@ -126,6 +129,8 @@ reopen history, and save/relaunch/remove a provider key. Verify placement on mon
 100%, 125%, and 150%, including a secondary monitor to the left of the primary.
 
 ## Layout
+
+Layout rule priorities and regression cases are documented in [docs/layout-rules.md](docs/layout-rules.md). Standalone website/URL labels are preserved; titles and descriptions are translated as separate blocks.
 
 | Path | Role |
 |---|---|
