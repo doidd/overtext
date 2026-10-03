@@ -125,21 +125,28 @@ fn starts_list_item(text: &str) -> bool {
     }
 }
 
-/// Whether `line` continues the paragraph whose lines are `group`.
-fn continues(group: &[Line], line: &Line) -> bool {
+/// Why `line` can't join the paragraph `group`, or `None` if it continues it. The text is a
+/// diagnostic for debug builds (geometry only, never recognized text).
+fn split_reason(group: &[Line], line: &Line) -> Option<String> {
     if group.len() >= MAX_GROUP_LINES {
-        return false;
+        return Some(format!("block is full ({MAX_GROUP_LINES} lines)"));
     }
     let last = group.last().expect("non-empty group");
     // Code/terminal lines must never bridge into or out of prose: merging them
     // produced one giant run-on block whose translation was unrelated nonsense.
     if last.is_code != line.is_code {
-        return false;
+        return Some(format!("code/prose boundary (previous code={}, this code={})", last.is_code, line.is_code));
     }
-    let h = last.h.max(1.0);
-    let similar_size = (0.75..=1.33).contains(&(line.h / h));
+    if starts_list_item(&line.text) {
+        return Some("starts a list item".into());
+    }
+    // OCR box height follows glyph content (a line without ascenders/descenders is shorter),
+    // so compare against the block's median rather than a single neighbouring line.
+    let h = median(group.iter().map(|l| l.h).collect()).max(1.0);
     let gap = line.y - last.bottom();
-    let close_below = gap > -0.35 * h && gap < 0.9 * h;
+    if !(gap > -0.35 * h && gap < 0.9 * h) {
+        return Some(format!("vertical gap {gap:.1}px = {:.2}h, allowed -0.35h..0.9h (h={h:.1})", gap / h));
+    }
     let first = &group[0];
     // Code indentation varies by nesting level (far more than prose margins ever
     // do), so code lines get a much looser left/center/right tolerance.
@@ -147,7 +154,32 @@ fn continues(group: &[Line], line: &Line) -> bool {
     let aligned = (line.x - first.x).abs() < tolerance
         || (line.center() - first.center()).abs() < tolerance
         || (line.right() - first.right()).abs() < tolerance;
-    similar_size && close_below && aligned && !starts_list_item(&line.text)
+    if !aligned {
+        return Some(format!("misaligned: left offset {:.1}px, tolerance {tolerance:.1}px", line.x - first.x));
+    }
+    // A wrapped line that stops mid-sentence and spans nearly the full width is followed by its
+    // own continuation, so tolerate a large height difference there: OCR boxes follow glyph
+    // content, and a line made mostly of x-height monospace (an inline code span) can be ~0.6x
+    // as tall as its neighbours.
+    let widest = group.iter().map(|l| l.w).fold(0.0, f64::max);
+    let mid_sentence = !last.is_code && !ends_sentence(&last.text) && last.w >= 0.7 * widest;
+    // A lone unpunctuated line is usually a heading, so a much *smaller* next line only joins an
+    // established multi-line paragraph.
+    let low = if mid_sentence && group.len() >= 2 { 0.45 } else { 0.75 };
+    let high = if mid_sentence { 1.8 } else { 1.33 };
+    let ratio = line.h / h;
+    if !(low..=high).contains(&ratio) {
+        return Some(format!("size ratio {ratio:.2} outside {low}..{high} (h={h:.1}, mid_sentence={mid_sentence})"));
+    }
+    None
+}
+
+fn continues(group: &[Line], line: &Line) -> bool {
+    split_reason(group, line).is_none()
+}
+
+fn ends_sentence(text: &str) -> bool {
+    text.trim_end().chars().last().is_some_and(|c| matches!(c, '.' | '?' | '!' | ':' | ';' | '…' | '。' | '！' | '？' | '：' | '；'))
 }
 
 fn median(mut v: Vec<f64>) -> f64 {
@@ -155,16 +187,21 @@ fn median(mut v: Vec<f64>) -> f64 {
     v[v.len() / 2]
 }
 
-fn align_of(lines: &[Line]) -> Align {
-    if lines.len() < 2 {
-        return Align::Left;
-    }
+/// Spread (max - min) of the left edges, centers and right edges of `lines`.
+fn edge_spreads(lines: &[Line]) -> (f64, f64, f64) {
     let spread = |f: fn(&Line) -> f64| {
         let vals: Vec<f64> = lines.iter().map(f).collect();
         vals.iter().cloned().fold(f64::MIN, f64::max) - vals.iter().cloned().fold(f64::MAX, f64::min)
     };
+    (spread(|l| l.x), spread(Line::center), spread(Line::right))
+}
+
+fn align_of(lines: &[Line]) -> Align {
+    if lines.len() < 2 {
+        return Align::Left;
+    }
     let h = lines[0].h;
-    let (l, c, r) = (spread(|l| l.x), spread(Line::center), spread(Line::right));
+    let (l, c, r) = edge_spreads(lines);
     if l <= c && l <= r || l < 0.5 * h {
         Align::Left
     } else if c <= r {
@@ -236,10 +273,17 @@ pub fn build_blocks(lines: &[OcrLine], image: &RgbaImage) -> Vec<Block> {
     classify_code(&mut lines);
 
     let mut groups: Vec<Vec<Line>> = Vec::new();
-    for line in lines {
+    for (index, line) in lines.into_iter().enumerate() {
         match groups.iter_mut().rev().take(4).find(|g| continues(g, &line)) {
             Some(group) => group.push(line),
-            None => groups.push(vec![line]),
+            None => {
+                if cfg!(debug_assertions) {
+                    if let Some(reason) = groups.last().and_then(|g| split_reason(g, &line)) {
+                        eprintln!("layout: line {index} starts a new block: {reason}");
+                    }
+                }
+                groups.push(vec![line]);
+            }
         }
     }
 
@@ -266,6 +310,14 @@ pub fn build_blocks(lines: &[OcrLine], image: &RgbaImage) -> Vec<Block> {
             } else {
                 Kind::Paragraph
             };
+            let align = align_of(&g);
+            if cfg!(debug_assertions) && g.len() > 1 {
+                let (l, c, r) = edge_spreads(&g);
+                eprintln!(
+                    "layout: block {:?} lines={} align={align:?} spreads left={l:.1} center={c:.1} right={r:.1} h={:.1}px",
+                    kind, g.len(), g[0].h
+                );
+            }
             let (color, background) = sample_colors(image, x, y, right - x, bottom - y);
             Block {
                 x,
@@ -275,7 +327,7 @@ pub fn build_blocks(lines: &[OcrLine], image: &RgbaImage) -> Vec<Block> {
                 line_height,
                 line_count: g.len(),
                 kind,
-                align: align_of(&g),
+                align,
                 color,
                 background,
                 text: join_lines(&g),
@@ -401,6 +453,59 @@ mod tests {
     fn detects_centered_alignment() {
         let lines = [line("a much longer centered line", 100.0, 10.0, 800.0, 20.0), line("short", 400.0, 34.0, 200.0, 20.0)];
         assert_eq!(build_blocks(&lines, &white())[0].align, Align::Center);
+    }
+
+
+    /// Real Vision output for a 13-line wrapped paragraph (889×325): box heights vary from
+    /// 0.049 to 0.062 depending on glyph content, which must not break the paragraph apart.
+    #[test]
+    fn wrapped_paragraph_with_varying_box_heights_stays_one_block() {
+        let rows: [(f64, f64, f64, f64); 13] = [
+            (0.021, 0.058, 0.021, 0.863), (0.104, 0.055, 0.022, 0.919), (0.170, 0.057, 0.029, 0.883),
+            (0.252, 0.055, 0.025, 0.937), (0.325, 0.049, 0.022, 0.888), (0.392, 0.062, 0.022, 0.942),
+            (0.472, 0.055, 0.022, 0.946), (0.546, 0.061, 0.025, 0.939), (0.620, 0.055, 0.025, 0.908),
+            (0.681, 0.058, 0.021, 0.804), (0.761, 0.062, 0.029, 0.917), (0.840, 0.055, 0.025, 0.928),
+            (0.920, 0.049, 0.025, 0.346),
+        ];
+        let lines: Vec<OcrLine> = rows
+            .iter()
+            .enumerate()
+            .map(|(i, &(y, height, x, width))| OcrLine { text: format!("word{i} continues the sentence without a stop"), x, y, width, height })
+            .collect();
+        let image = RgbaImage::from_pixel(889, 325, Rgba([30, 33, 40, 255]));
+        assert_eq!(build_blocks(&lines, &image).len(), 1);
+    }
+
+    #[test]
+    fn taller_line_in_the_middle_of_a_sentence_does_not_split_the_paragraph() {
+        // A line holding an inline code span can be ~1.4x taller than its neighbours.
+        let lines = [
+            line("The worker keeps the active model in memory and", 10.0, 10.0, 600.0, 20.0),
+            line("restarts after errors or a long timeout while the", 10.0, 33.0, 600.0, 28.0),
+            line("runtime directory holds the logs for each run", 10.0, 66.0, 600.0, 20.0),
+        ];
+        assert_eq!(build_blocks(&lines, &white()).len(), 1);
+    }
+
+    #[test]
+    fn short_box_from_an_inline_code_line_does_not_split_a_wrapped_paragraph() {
+        // Observed: a line made mostly of x-height monospace text got a box 0.6x as tall.
+        let lines = [
+            line("The Windows OCR test recognizes the bundled warm-up image and", 10.0, 10.0, 800.0, 20.0),
+            line("then run the regression with the command below and check that", 10.0, 33.0, 790.0, 20.0),
+            line("test --manifest-path src-tauri/Cargo.toml --test desktop japanese", 10.0, 58.0, 810.0, 12.0),
+            line("the fallback is used when no language pack is installed on this", 10.0, 76.0, 800.0, 20.0),
+        ];
+        assert_eq!(build_blocks(&lines, &white()).len(), 1);
+    }
+
+    #[test]
+    fn size_change_after_a_finished_sentence_still_splits() {
+        let lines = [
+            line("The first paragraph ends here.", 10.0, 10.0, 600.0, 20.0),
+            line("Next heading-sized text", 10.0, 33.0, 600.0, 36.0),
+        ];
+        assert_eq!(build_blocks(&lines, &white()).len(), 2);
     }
 
     #[test]

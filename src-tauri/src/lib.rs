@@ -247,12 +247,22 @@ async fn save_image_to_file(_app: AppHandle, _window: WebviewWindow, base64_png:
     let owner = _window.hwnd().map_err(|e| e.to_string())?.0 as isize;
     #[cfg(any(target_os = "macos", target_os = "windows"))]
     {
-        let path = tauri::async_runtime::spawn_blocking(move || {
-            #[cfg(target_os = "macos")]
-            { Ok::<_, String>(macos::show_save_file_dialog(&name, dialog_title)) }
-            #[cfg(target_os = "windows")]
-            { windows::show_save_file_dialog(&name, owner, dialog_title) }
-        })
+        #[cfg(target_os = "macos")]
+        let path = {
+            // AppKit panels must be created and run on the main thread; from a worker thread
+            // `MainThreadMarker::new()` is `None` and the dialog silently never appears.
+            let (tx, rx) = std::sync::mpsc::channel();
+            _app.run_on_main_thread(move || {
+                let _ = tx.send(macos::show_save_file_dialog(&name, dialog_title));
+            })
+            .map_err(|e| e.to_string())?;
+            tauri::async_runtime::spawn_blocking(move || rx.recv())
+                .await
+                .map_err(|e| e.to_string())?
+                .map_err(|e| e.to_string())?
+        };
+        #[cfg(target_os = "windows")]
+        let path = tauri::async_runtime::spawn_blocking(move || windows::show_save_file_dialog(&name, owner, dialog_title))
             .await
             .map_err(|e| e.to_string())??;
         if let Some(mut dest) = path {

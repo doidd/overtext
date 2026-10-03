@@ -65,14 +65,14 @@ function drawBlock(ctx: CanvasRenderingContext2D, block: Block, region: { width:
     descent = Math.max(...metrics.map((m) => m.actualBoundingBoxDescent));
     advance = Math.max(fontSize * 1.18, ascent + descent);
     inkHeight = ascent + descent + (lines.length - 1) * advance;
-    const offset = Math.max(0, (block.height - ascent - descent) / 2);
+    const offset = Math.max(0, (block.height - inkHeight) / 2);
     const fits = offset + inkHeight <= region.height && metrics.every((m) => m.width <= region.width);
     if (fits || fontSize <= minimum) break;
     fontSize = Math.max(minimum, fontSize * 0.94);
   }
 
-  // Center visible glyphs in the OCR region, accounting for margins and font metrics.
-  const baseline = block.y + Math.max(0, (block.height - ascent - descent) / 2) + ascent;
+  // Center the whole paragraph (all lines) in the OCR region, not just its first line.
+  const baseline = block.y + Math.max(0, (block.height - inkHeight) / 2) + ascent;
   ctx.save();
   ctx.beginPath();
   ctx.rect(block.x, block.y, region.width, region.height);
