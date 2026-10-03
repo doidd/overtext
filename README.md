@@ -3,6 +3,23 @@
 Tray app (Tauri v2) for macOS and Windows that captures a screen region and translates
 its text into a target language while keeping the layout.
 
+## Install (pre-release builds)
+
+Download the installer from the [Releases](https://github.com/doidd/overtext/releases) page:
+macOS (Apple Silicon, macOS 13+): `.dmg`; Windows 10/11: `.exe` (needs the WebView2 Runtime, normally preinstalled).
+
+### Installing an unsigned build
+
+These builds are not code-signed yet, so the operating system warns on first launch.
+
+- **macOS**: drag `OverText.app` to Applications. If it is blocked, open **System Settings › Privacy & Security**,
+  scroll down and choose **Open Anyway**; or run `xattr -dr com.apple.quarantine /Applications/OverText.app`.
+  On first capture grant **Screen Recording**, then quit OverText from the menu bar icon and reopen it.
+  The permission may be requested again after an update.
+- **Windows**: in the SmartScreen dialog choose **More info › Run anyway**.
+
+The first OCR run on macOS can take up to a minute while the system prepares its text models.
+
 ## Run
 
 ```sh
