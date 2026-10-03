@@ -17,7 +17,7 @@ npm run tauri dev
   *Gốc*, *Chép* copies the Markdown. Drag to move, `Esc` or `×` closes.
 - On macOS, first run asks for **Screen Recording** permission (System Settings › Privacy & Security);
   macOS applies it after relaunching the app.
-- Settings (tray menu › *Cài đặt…*): interface language (system / Vietnamese / English / Japanese), target language and translation service. Interface language is saved separately from OCR and translation; unsupported system languages fall back to English. Default translation is key-less
+- Settings (tray menu › *Cài đặt…*): interface language (system / Vietnamese / English / Japanese), target language and translation service. Interface language applies to tray/edit menus, result and history windows, settings, app messages and save-dialog titles. Saving it updates open windows and menus immediately. It is saved separately from OCR and translation; unsupported system languages fall back to English. Default translation is key-less
   (Google Chrome endpoint → Google `gtx` → MyMemory). Or pick an OpenAI-compatible LLM (OpenAI,
   Gemini, Groq, OpenRouter, Ollama or a custom base URL + model). API keys go to macOS
   Keychain or Windows Credential Manager, one per base URL; `settings.json` (app config dir) holds no secrets. If the chosen

@@ -168,7 +168,7 @@ async fn google(client: &reqwest::Client, text: &str, target: &str) -> Result<St
         .await
         .map_err(|e| format!("Google: {e}"))?;
     match response.status() {
-        s if s.is_redirection() || s.as_u16() == 429 => return Err("Google: tạm thời bị giới hạn (rate limit)".into()),
+        s if s.is_redirection() || s.as_u16() == 429 => return Err(crate::i18n::current("rateLimit").into()),
         s if !s.is_success() => return Err(format!("Google: HTTP {s}")),
         _ => {}
     }
@@ -341,7 +341,7 @@ async fn chat(
     let status = response.status();
     let text = response.text().await.map_err(|e| format!("{}: {e}", settings.base_url))?;
     if !status.is_success() {
-        let hint = if status.as_u16() == 404 { " (kiểm tra Base URL và tên model)" } else { "" };
+        let hint = if status.as_u16() == 404 { crate::i18n::current("modelHint") } else { "" };
         return Err(format!("HTTP {status}: {}{hint}", error_detail(&text)));
     }
     let body: Value = serde_json::from_str(&text).map_err(|_| format!("{}: not an OpenAI-style JSON response", settings.base_url))?;

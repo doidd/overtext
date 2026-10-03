@@ -96,12 +96,13 @@ pub fn copy_image_to_clipboard(png_bytes: &[u8]) -> Result<(), String> {
 }
 
 /// Opens macOS native Save Panel to prompt the user for a destination file path.
-pub fn show_save_file_dialog(suggested_name: &str) -> Option<std::path::PathBuf> {
+pub fn show_save_file_dialog(suggested_name: &str, dialog_title: &str) -> Option<std::path::PathBuf> {
     use objc2_app_kit::{NSModalResponseOK, NSSavePanel};
     use objc2_foundation::{MainThreadMarker, NSString};
 
     let mtm = MainThreadMarker::new()?;
     let panel = NSSavePanel::savePanel(mtm);
+    panel.setTitle(Some(&NSString::from_str(dialog_title)));
     let title = NSString::from_str(suggested_name);
     panel.setNameFieldStringValue(&title);
     let response = panel.runModal();

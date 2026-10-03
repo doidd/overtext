@@ -13,6 +13,8 @@ mod layout;
 mod ocr;
 #[path = "../src/settings.rs"]
 mod settings;
+#[path = "../src/i18n.rs"]
+mod i18n;
 #[path = "../src/translate.rs"]
 mod translate;
 

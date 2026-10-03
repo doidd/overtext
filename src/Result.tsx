@@ -2,17 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { convertFileSrc, invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { toMarkdown, translateCapture, type Phase, type Translation } from "./translation";
+import { useAppLocale } from "./useAppLocale";
 import { renderTranslatedImage } from "./renderImage";
 
 type Props = { imagePath: string; width: number; height: number };
 type View = "image" | "text" | "original";
 
 export function Result({ imagePath }: Props) {
+  const { t } = useAppLocale();
   const [failed, setFailed] = useState(false);
   const [translatedImage, setTranslatedImage] = useState<string | null>(null);
   const windowShown = useRef(false);
   const [translation, setTranslation] = useState<Translation | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ key?: "copyImageError" | "saveImageError"; detail: string } | null>(null);
   const [view, setView] = useState<View>("image");
   const [copiedText, setCopiedText] = useState(false);
   const [copiedImage, setCopiedImage] = useState(false);
@@ -61,7 +63,7 @@ export function Result({ imagePath }: Props) {
           }
         }
       })
-      .catch((e) => setError(String(e)))
+      .catch((e) => setError({ detail: String(e) }))
       .finally(() => clearTimeout(timer));
   }, [imagePath]);
 
@@ -72,10 +74,12 @@ export function Result({ imagePath }: Props) {
     invoke("window_ready");
   };
 
+  const errorText = error ? (error.key ? t[error.key] + ": " : "") + error.detail : "";
   const markdown = translation ? toMarkdown(translation.blocks) : "";
 
   const copyText = async () => {
-    await navigator.clipboard.writeText(markdown);
+    try { await navigator.clipboard.writeText(markdown); }
+    catch (e) { setError({ detail: String(e) }); return; }
     setCopiedText(true);
     setTimeout(() => setCopiedText(false), 1200);
   };
@@ -89,7 +93,7 @@ export function Result({ imagePath }: Props) {
       setCopiedImage(true);
       setTimeout(() => setCopiedImage(false), 1200);
     } catch (e) {
-      setError(`Lỗi chép ảnh: ${e}`);
+      setError({ key: "copyImageError", detail: String(e) });
     } finally {
       setProcessingImage(false);
     }
@@ -109,7 +113,7 @@ export function Result({ imagePath }: Props) {
         setTimeout(() => setSavedImage(false), 1500);
       }
     } catch (e) {
-      setError(`Lỗi lưu ảnh: ${e}`);
+      setError({ key: "saveImageError", detail: String(e) });
     } finally {
       setProcessingImage(false);
     }
@@ -119,7 +123,7 @@ export function Result({ imagePath }: Props) {
     <div className="result" data-tauri-drag-region>
       {failed ? (
         <p className="error" data-tauri-drag-region>
-          Không tải được ảnh: {imagePath}
+          {t.imageLoadError}: {imagePath}
         </p>
       ) : (
         <img
@@ -136,7 +140,7 @@ export function Result({ imagePath }: Props) {
 
       {translation && view === "text" && (
         <div className="text-view">
-          {translation.blocks.length === 0 ? <p className="muted">Không tìm thấy chữ.</p> : <pre>{markdown}</pre>}
+          {translation.blocks.length === 0 ? <p className="muted">{t.noText}</p> : <pre>{markdown}</pre>}
         </div>
       )}
 
@@ -144,35 +148,35 @@ export function Result({ imagePath }: Props) {
         {!translation && !error && (
           <span className="status">
             {phase === "translating"
-              ? "Đang dịch…"
+              ? t.translating
               : slowOcr
-                ? "OCR đang xử lý, lần đầu có thể cần thêm thời gian…"
-                : "Đang nhận dạng chữ…"}
+                ? t.slowOcr
+                : t.recognizing}
           </span>
         )}
-        {error && <span className="status error-pill" title={error}>Lỗi: {error}</span>}
+        {error && <span className="status error-pill" title={errorText}>{t.error}: {errorText}</span>}
         {translation?.blocks.length === 0 && <span className="status error-pill">
-          Không tìm thấy chữ. Kiểm tra ngôn ngữ OCR trong Cài đặt.
+          {t.noTextHint}
         </span>}
         {translation && (
           <>
             {(["image", "text", "original"] as const).map((v) => (
               <button key={v} className={view === v ? "active" : ""} onClick={() => setView(v)}>
-                {v === "image" ? "Ảnh dịch" : v === "text" ? "Văn bản" : "Gốc"}
+                {v === "image" ? t.translatedImage : v === "text" ? t.textView : t.original}
               </button>
             ))}
-            <button onClick={copyImage} title="Sao chép ảnh đã dịch vào clipboard">
-              {copiedImage ? "Đã chép ảnh" : "Chép ảnh"}
+            <button onClick={copyImage} title={t.copyImageHint}>
+              {copiedImage ? t.copiedImage : t.copyImage}
             </button>
-            <button onClick={saveImage} title="Lưu ảnh đã dịch ra file PNG">
-              {savedImage ? "Đã lưu ảnh" : "Lưu ảnh"}
+            <button onClick={saveImage} title={t.saveImageHint}>
+              {savedImage ? t.savedImage : t.saveImage}
             </button>
-            <button onClick={copyText} title="Sao chép văn bản Markdown">
-              {copiedText ? "Đã chép chữ" : "Chép chữ"}
+            <button onClick={copyText} title={t.copyTextHint}>
+              {copiedText ? t.copiedText : t.copyText}
             </button>
           </>
         )}
-        <button title="Đóng (Esc)" onClick={() => getCurrentWindow().close()}>
+        <button title={t.closeHint} onClick={() => getCurrentWindow().close()}>
           ×
         </button>
       </div>

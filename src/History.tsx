@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 
+import { useAppLocale } from "./useAppLocale";
+
 export type HistoryItem = {
   id: number;
   createdAt: number;
@@ -12,6 +14,8 @@ export type HistoryItem = {
 };
 
 export function History() {
+  const { t, locale } = useAppLocale();
+  const [error, setError] = useState<string | null>(null);
   const [items, setItems] = useState<HistoryItem[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
@@ -27,6 +31,7 @@ export function History() {
           setSelectedId(res[0].id);
         }
       })
+      .catch(e => setError(String(e)))
       .finally(() => setLoading(false));
   };
 
@@ -35,7 +40,7 @@ export function History() {
   }, []);
 
   const deleteItem = async (id: number) => {
-    await invoke("delete_history", { id });
+    try { await invoke("delete_history", { id }); } catch (e) { setError(String(e)); return; }
     setItems((prev) => prev.filter((it) => it.id !== id));
     if (selectedId === id) {
       const remaining = items.filter((it) => it.id !== id);
@@ -44,20 +49,20 @@ export function History() {
   };
 
   const clearAll = async () => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử dịch?")) return;
-    await invoke("clear_history");
+    if (!window.confirm(t.clearConfirm)) return;
+    try { await invoke("clear_history"); } catch (e) { setError(String(e)); return; }
     setItems([]);
     setSelectedId(null);
   };
 
   const copy = async (text: string, type: string) => {
-    await navigator.clipboard.writeText(text);
+    try { await navigator.clipboard.writeText(text); } catch (e) { setError(String(e)); return; }
     setCopied(type);
     setTimeout(() => setCopied(null), 1500);
   };
 
   const copyImage = async (base64Png: string) => {
-    await invoke("copy_image_to_clipboard", { base64Png });
+    try { await invoke("copy_image_to_clipboard", { base64Png }); } catch (e) { setError(String(e)); return; }
     setCopied("image");
     setTimeout(() => setCopied(null), 1500);
   };
@@ -77,7 +82,7 @@ export function History() {
 
   const formatDate = (secs: number) => {
     const d = new Date(secs * 1000);
-    return `${d.toLocaleDateString("vi-VN")} ${d.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}`;
+    return `${d.toLocaleDateString(locale)} ${d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}`;
   };
 
   return (
@@ -86,22 +91,23 @@ export function History() {
         <div className="history-search-bar">
           <input
             type="search"
-            placeholder="Tìm kiếm lịch sử..."
+            placeholder={t.searchHistory}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           {items.length > 0 && (
-            <button className="clear-btn" title="Xóa tất cả" onClick={clearAll}>
-              Xóa hết
+            <button className="clear-btn" title={t.clearAll} onClick={clearAll}>
+              {t.clearAll}
             </button>
           )}
         </div>
 
         <div className="history-list">
-          {loading && <p className="muted" style={{ padding: 12 }}>Đang tải...</p>}
+          {error && <p className="error">{t.historyError}: {error}</p>}
+          {loading && <p className="muted" style={{ padding: 12 }}>{t.loadingHistory}</p>}
           {!loading && filtered.length === 0 && (
             <p className="muted" style={{ padding: 12 }}>
-              {items.length === 0 ? "Chưa có lịch sử dịch nào." : "Không tìm thấy kết quả."}
+              {items.length === 0 ? t.emptyHistory : t.noResults}
             </p>
           )}
           {filtered.map((item) => (
@@ -112,9 +118,9 @@ export function History() {
             >
               <div className="history-thumb-wrap">
                 {item.thumbnailBase64 ? (
-                  <img src={item.thumbnailBase64} alt="Thumb" className="history-thumb" />
+                  <img src={item.thumbnailBase64} alt={t.image} className="history-thumb" />
                 ) : (
-                  <div className="history-thumb-placeholder">Ảnh</div>
+                  <div className="history-thumb-placeholder">{t.image}</div>
                 )}
               </div>
               <div className="history-card-body">
@@ -126,7 +132,7 @@ export function History() {
               </div>
               <button
                 className="delete-card-btn"
-                title="Xóa mục này"
+                title={t.deleteItem}
                 onClick={(e) => {
                   e.stopPropagation();
                   deleteItem(item.id);
@@ -144,44 +150,44 @@ export function History() {
           <div className="history-detail-inner">
             <div className="history-detail-header">
               <div>
-                <span className="lang-pill">Ngôn ngữ: {selected.targetLang.toUpperCase()}</span>
-                <span className="provider-pill">Dịch vụ: {selected.providerKey}</span>
+                <span className="lang-pill">{t.language}: {selected.targetLang.toUpperCase()}</span>
+                <span className="provider-pill">{t.service}: {selected.providerKey}</span>
                 <span className="time-pill">{formatDate(selected.createdAt)}</span>
               </div>
               <div className="detail-actions">
                 {selected.thumbnailBase64 && (
                   <button onClick={() => copyImage(selected.thumbnailBase64)}>
-                    {copied === "image" ? "Đã chép ảnh" : "Chép ảnh"}
+                    {copied === "image" ? t.copiedImage : t.copyImage}
                   </button>
                 )}
                 <button onClick={() => copy(selected.translatedMarkdown, "trans")}>
-                  {copied === "trans" ? "Đã chép bản dịch" : "Chép bản dịch"}
+                  {copied === "trans" ? t.copiedTranslation : t.copyTranslation}
                 </button>
                 <button onClick={() => copy(selected.sourceMarkdown, "source")}>
-                  {copied === "source" ? "Đã chép gốc" : "Chép chữ gốc"}
+                  {copied === "source" ? t.copiedSource : t.copySource}
                 </button>
               </div>
             </div>
 
             {selected.thumbnailBase64 && (
               <div className="detail-preview-image">
-                <img src={selected.thumbnailBase64} alt="Captured" />
+                <img src={selected.thumbnailBase64} alt={t.image} />
               </div>
             )}
 
             <div className="detail-markdown-section">
-              <h4>Bản dịch (Markdown)</h4>
+              <h4>{t.translationMarkdown}</h4>
               <pre>{selected.translatedMarkdown}</pre>
             </div>
 
             <div className="detail-markdown-section">
-              <h4>Nội dung gốc</h4>
+              <h4>{t.sourceText}</h4>
               <pre>{selected.sourceMarkdown}</pre>
             </div>
           </div>
         ) : (
           <div className="no-selection">
-            <p className="muted">Chọn một mục từ danh sách bên trái để xem chi tiết</p>
+            <p className="muted">{t.selectHistory}</p>
           </div>
         )}
       </div>

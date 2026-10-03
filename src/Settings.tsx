@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
+import { useAppLocale } from "./useAppLocale";
 import { languageName, messages, nativeOcrAvailable, resolveLocale, type MessageKey, type UiLanguage } from "./settingsI18n";
 
 type Provider = "free" | "openai";
@@ -24,6 +25,7 @@ const PRESETS: { name: string; baseUrl: string; model: string; needsKey: boolean
 ];
 
 export function Settings() {
+  const { systemLocale } = useAppLocale();
   const [view, setView] = useState<View | null>(null);
   const [s, setS] = useState<SettingsData | null>(null);
   const [apiKey, setApiKey] = useState("");
@@ -33,7 +35,7 @@ export function Settings() {
   const [saving, setSaving] = useState(false);
   const [installingOcr, setInstallingOcr] = useState(false);
 
-  const locale = resolveLocale(s?.uiLang ?? "system", navigator.languages);
+  const locale = resolveLocale(s?.uiLang ?? "system", [systemLocale]);
   const t = messages[locale];
   const statusText = status ? t[status.key] + (status.detail ? ": " + status.detail : "") : "";
   useEffect(() => {

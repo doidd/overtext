@@ -28,7 +28,7 @@ pub fn copy_image_to_clipboard(png_bytes: &[u8]) -> Result<(), String> {
         .map_err(|e| e.to_string())
 }
 
-pub fn show_save_file_dialog(suggested_name: &str, owner: isize) -> Result<Option<PathBuf>, String> {
+pub fn show_save_file_dialog(suggested_name: &str, owner: isize, title: &str) -> Result<Option<PathBuf>, String> {
     use ::windows::{
         core::{w, HRESULT, HSTRING},
         Win32::Foundation::HWND,
@@ -66,11 +66,12 @@ pub fn show_save_file_dialog(suggested_name: &str, owner: isize) -> Result<Optio
                     | FOS_PATHMUSTEXIST
                     | FOS_OVERWRITEPROMPT,
             )?;
-            dialog.SetTitle(&HSTRING::from("Lưu ảnh đã dịch"))?;
+            dialog.SetTitle(&HSTRING::from(title))?;
             dialog.SetFileName(&HSTRING::from(suggested_name))?;
             dialog.SetDefaultExtension(w!("png"))?;
+            let filter_name: Vec<u16> = crate::i18n::current("pngImage").encode_utf16().chain(Some(0)).collect();
             dialog.SetFileTypes(&[COMDLG_FILTERSPEC {
-                pszName: w!("PNG image"),
+                pszName: ::windows::core::PCWSTR(filter_name.as_ptr()),
                 pszSpec: w!("*.png"),
             }])?;
             if let Err(error) = dialog.Show(Some(HWND(owner as *mut _))) {

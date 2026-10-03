@@ -108,6 +108,9 @@ body,
   right: 4px;
   bottom: 4px;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: calc(100% - 8px);
   gap: 2px;
   padding: 2px;
   border-radius: 6px;
@@ -137,6 +140,12 @@ body,
 .toolbar button.active,
 .toolbar button:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.toolbar .status {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .toolbar .error-pill {

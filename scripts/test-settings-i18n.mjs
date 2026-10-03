@@ -3,7 +3,8 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import ts from "typescript";
 
-const source = readFileSync(new URL("../src/settingsI18n.ts", import.meta.url), "utf8");
+const catalog = readFileSync(new URL("../src/locales/messages.json", import.meta.url), "utf8");
+const source = readFileSync(new URL("../src/settingsI18n.ts", import.meta.url), "utf8").replace('import catalog from "./locales/messages.json";', `const catalog = ${catalog};`);
 const { outputText } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2020 } });
 const { resolveLocale, languageName, nativeOcrAvailable } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`);
 

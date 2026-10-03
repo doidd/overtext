@@ -24,7 +24,7 @@ static PROCESS: OnceLock<Mutex<Option<Arc<Mutex<Child>>>>> = OnceLock::new();
 fn runtime_dir() -> Result<PathBuf, String> {
     std::env::var_os("LOCALAPPDATA")
         .map(|dir| PathBuf::from(dir).join("OverText/paddleocr"))
-        .ok_or_else(|| "Không tìm thấy thư mục dữ liệu PaddleOCR".into())
+        .ok_or_else(|| crate::i18n::current("paddleData").into())
 }
 
 pub fn installed() -> bool {
@@ -57,10 +57,11 @@ pub fn install() -> Result<(), String> {
         .stderr(stderr)
         .creation_flags(CREATE_NO_WINDOW)
         .status()
-        .map_err(|e| format!("Không chạy được trình cài PaddleOCR: {e}"))?;
+        .map_err(|e| format!("{}: {e}", crate::i18n::current("paddleInstaller")))?;
     if !status.success() || !installed() {
         return Err(format!(
-            "Cài PaddleOCR thất bại. Kiểm tra kết nối mạng và thử lại. Chi tiết: {}",
+            "{} {}",
+            crate::i18n::current("paddleInstallFailed"),
             log.display()
         ));
     }
@@ -75,11 +76,11 @@ struct Reply {
 
 fn parse_reply(reply: &str) -> Result<Vec<OcrLine>, String> {
     let reply: Reply = serde_json::from_str(reply)
-        .map_err(|e| format!("PaddleOCR trả dữ liệu không hợp lệ: {e}"))?;
+        .map_err(|e| format!("{}: {e}", crate::i18n::current("paddleInvalid")))?;
     if let Some(error) = reply.error {
         return Err(format!("PaddleOCR: {error}"));
     }
-    let lines = reply.lines.ok_or("PaddleOCR không trả kết quả")?;
+    let lines = reply.lines.ok_or(crate::i18n::current("paddleNoResult"))?;
     for line in &lines {
         if ![line.x, line.y, line.width, line.height]
             .iter()
@@ -91,7 +92,7 @@ fn parse_reply(reply: &str) -> Result<Vec<OcrLine>, String> {
             || line.x + line.width > 1.001
             || line.y + line.height > 1.001
         {
-            return Err("PaddleOCR trả tọa độ không hợp lệ".into());
+            return Err(crate::i18n::current("paddleGeometry").into());
         }
     }
     Ok(lines)
@@ -106,7 +107,7 @@ struct Worker {
 impl Worker {
     fn start() -> Result<Self, String> {
         if !installed() {
-            return Err("Chưa cài PaddleOCR. Mở Cài đặt OverText → Cài PaddleOCR để dùng khi Windows thiếu ngôn ngữ OCR.".into());
+            return Err(crate::i18n::current("paddleMissing").into());
         }
         let dir = runtime_dir()?;
         let log = fs::File::create(dir.join("worker.log")).map_err(|e| e.to_string())?;
@@ -120,7 +121,7 @@ impl Worker {
             .stderr(log)
             .creation_flags(CREATE_NO_WINDOW)
             .spawn()
-            .map_err(|e| format!("Không khởi động được PaddleOCR: {e}"))?;
+            .map_err(|e| format!("{}: {e}", crate::i18n::current("paddleStart")))?;
         let input = child.stdin.take().expect("piped stdin");
         let output = child.stdout.take().expect("piped stdout");
         let child = Arc::new(Mutex::new(child));
@@ -149,11 +150,11 @@ impl Worker {
         self.input
             .write_all(&request)
             .and_then(|_| self.input.flush())
-            .map_err(|e| format!("PaddleOCR worker đã dừng: {e}"))?;
+            .map_err(|e| format!("{}: {e}", crate::i18n::current("paddleStopped")))?;
         // The first request can download the model. Kill a timed-out worker so
         // its late response cannot be mistaken for a subsequent capture.
         let reply = self.replies.recv_timeout(Duration::from_secs(180))
-            .map_err(|e| format!("PaddleOCR không phản hồi ({e}). Kiểm tra mạng khi tải model lần đầu; xem worker.log trong dữ liệu OverText/paddleocr."))??;
+            .map_err(|e| format!("{} ({e})", crate::i18n::current("paddleTimeout")))??;
         let roundtrip = started.elapsed();
         let parse_started = Instant::now();
         let result = parse_reply(&reply);

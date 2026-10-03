@@ -1,6 +1,7 @@
 mod cache;
 mod capture;
 mod layout;
+mod i18n;
 #[cfg(target_os = "macos")]
 mod macos;
 mod ocr;
@@ -24,7 +25,7 @@ use settings::Settings;
 use tauri::{
     menu::{Menu, MenuItem},
     tray::TrayIconBuilder,
-    AppHandle, Manager, RunEvent, WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
+    AppHandle, Emitter, Manager, RunEvent, WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
 };
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 #[cfg(target_os = "macos")]
@@ -174,7 +175,7 @@ async fn install_paddleocr() -> Result<(), String> {
     #[cfg(target_os = "windows")]
     return tauri::async_runtime::spawn_blocking(ocr::install_paddleocr).await.map_err(|e| e.to_string())?;
     #[cfg(not(target_os = "windows"))]
-    Err("PaddleOCR fallback hiện chỉ dùng trên Windows".into())
+    Err(i18n::current("paddleWindows").into())
 }
 
 /// Whether a key is stored for `base_url`; the key never leaves the credential store.
@@ -213,6 +214,7 @@ async fn save_settings(app: AppHandle, settings: Settings, api_key: Option<Strin
     }
     settings::save(&app, &settings)?;
     *app.state::<AppState>().settings.lock() = settings;
+    refresh_ui_language(&app).map_err(|e| e.to_string())?;
     Ok(())
 }
 
@@ -238,6 +240,7 @@ async fn copy_image_to_clipboard(_app: AppHandle, base64_png: String) -> Result<
 
 #[tauri::command]
 async fn save_image_to_file(_app: AppHandle, _window: WebviewWindow, base64_png: String, default_name: Option<String>) -> Result<bool, String> {
+    let dialog_title = i18n::current("saveDialog");
     let bytes = decode_base64_png(&base64_png)?;
     let name = default_name.unwrap_or_else(|| "translated-screenshot.png".into());
     #[cfg(target_os = "windows")]
@@ -246,9 +249,9 @@ async fn save_image_to_file(_app: AppHandle, _window: WebviewWindow, base64_png:
     {
         let path = tauri::async_runtime::spawn_blocking(move || {
             #[cfg(target_os = "macos")]
-            { Ok::<_, String>(macos::show_save_file_dialog(&name)) }
+            { Ok::<_, String>(macos::show_save_file_dialog(&name, dialog_title)) }
             #[cfg(target_os = "windows")]
-            { windows::show_save_file_dialog(&name, owner) }
+            { windows::show_save_file_dialog(&name, owner, dialog_title) }
         })
             .await
             .map_err(|e| e.to_string())??;
@@ -336,8 +339,8 @@ fn open_history(app: &AppHandle) {
         return;
     }
     let built = WebviewWindowBuilder::new(app, "history", WebviewUrl::App("index.html".into()))
-        .initialization_script("window.__OVERTEXT__ = {\"view\":\"history\"};")
-        .title("OverText — Lịch sử dịch")
+        .initialization_script(ui_script(app, json!({"view":"history"})))
+        .title(i18n::current("historyTitle"))
         .inner_size(720.0, 560.0)
         .resizable(true)
         .build();
@@ -387,8 +390,8 @@ fn open_settings(app: &AppHandle) {
         return;
     }
     let built = WebviewWindowBuilder::new(app, "settings", WebviewUrl::App("index.html".into()))
-        .initialization_script("window.__OVERTEXT__ = {\"view\":\"settings\"};")
-        .title("OverText")
+        .initialization_script(ui_script(app, json!({"view":"settings"})))
+        .title(i18n::current("title"))
         .inner_size(460.0, 520.0)
         .resizable(false)
         .build();
@@ -414,9 +417,10 @@ fn session_dir(app: &AppHandle) -> Result<PathBuf, String> {
 }
 
 fn page(app: &AppHandle, label: String, boot: serde_json::Value) -> WebviewWindowBuilder<'_, tauri::Wry, AppHandle> {
+    let title = if boot["view"] == "result" { i18n::current("resultTitle") } else { "OverText" };
     WebviewWindowBuilder::new(app, label, WebviewUrl::App("index.html".into()))
-        .initialization_script(format!("window.__OVERTEXT__ = {boot};"))
-        .title("OverText")
+        .initialization_script(ui_script(app, boot))
+        .title(title)
         .decorations(false)
         .resizable(false)
         .skip_taskbar(true)
@@ -592,14 +596,72 @@ async fn finish_capture(app: AppHandle, selection: Selection) -> Result<(), Stri
     open_result(&app, n, &path, &crop)
 }
 
+
+#[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct UiLocale {
+    locale: &'static str,
+    system_locale: &'static str,
+}
+
+#[tauri::command]
+fn get_ui_locale(app: AppHandle) -> UiLocale {
+    let system_locale = i18n::system_locale();
+    let choice = app.state::<AppState>().settings.lock().ui_lang.clone();
+    UiLocale { locale: i18n::resolve(&choice, &[system_locale.to_owned()]), system_locale }
+}
+
+fn ui_script(app: &AppHandle, mut boot: serde_json::Value) -> String {
+    let locale = get_ui_locale(app.clone());
+    boot["uiLocale"] = json!(locale.locale);
+    boot["systemLocale"] = json!(locale.system_locale);
+    format!("window.__OVERTEXT__ = {boot};")
+}
+
+fn tray_menu(app: &AppHandle) -> tauri::Result<Menu<tauri::Wry>> {
+    let capture = MenuItem::with_id(app, "capture", i18n::current("capture"), true, Some(CAPTURE_SHORTCUT))?;
+    let history = MenuItem::with_id(app, "history", i18n::current("historyMenu"), true, None::<&str>)?;
+    let settings = MenuItem::with_id(app, "settings", i18n::current("settingsMenu"), true, None::<&str>)?;
+    let quit = MenuItem::with_id(app, "quit", i18n::current("quit"), true, None::<&str>)?;
+    Menu::with_items(app, &[&capture, &history, &settings, &quit])
+}
+
+fn update_edit_menu(_app: &AppHandle) -> tauri::Result<()> {
+    #[cfg(target_os = "macos")]
+    {
+        // Accessory apps need an Edit menu for clipboard shortcuts.
+        let edit = Submenu::with_items(_app, i18n::current("edit"), true, &[
+            &PredefinedMenuItem::undo(_app, Some(i18n::current("undo")))?,
+            &PredefinedMenuItem::redo(_app, Some(i18n::current("redo")))?,
+            &PredefinedMenuItem::separator(_app)?,
+            &PredefinedMenuItem::cut(_app, Some(i18n::current("cut")))?,
+            &PredefinedMenuItem::copy(_app, Some(i18n::current("copy")))?,
+            &PredefinedMenuItem::paste(_app, Some(i18n::current("paste")))?,
+            &PredefinedMenuItem::select_all(_app, Some(i18n::current("selectAll")))?,
+        ])?;
+        _app.set_menu(Menu::with_items(_app, &[&edit])?)?;
+    }
+    Ok(())
+}
+
+fn refresh_ui_language(app: &AppHandle) -> tauri::Result<()> {
+    let locale = get_ui_locale(app.clone());
+    i18n::set_locale(locale.locale);
+    if let Some(tray) = app.tray_by_id("main") { tray.set_menu(Some(tray_menu(app)?))?; }
+    update_edit_menu(app)?;
+    for (label, window) in app.webview_windows() {
+        let key = if label == "settings" { "title" } else if label == "history" { "historyTitle" } else if label.starts_with(RESULT_PREFIX) { "resultTitle" } else { continue };
+        window.set_title(i18n::current(key))?;
+    }
+    app.emit("ui-language-changed", locale)?;
+    Ok(())
+}
+
 fn build_tray(app: &AppHandle) -> tauri::Result<()> {
-    let capture = MenuItem::with_id(app, "capture", "Chụp vùng màn hình", true, Some(CAPTURE_SHORTCUT))?;
-    let history = MenuItem::with_id(app, "history", "Lịch sử dịch…", true, None::<&str>)?;
-    let settings = MenuItem::with_id(app, "settings", "Cài đặt…", true, None::<&str>)?;
-    let quit = MenuItem::with_id(app, "quit", "Thoát OverText", true, None::<&str>)?;
+    let menu = tray_menu(app)?;
     let mut tray = TrayIconBuilder::with_id("main")
         .tooltip("OverText")
-        .menu(&Menu::with_items(app, &[&capture, &history, &settings, &quit])?)
+        .menu(&menu)
         .show_menu_on_left_click(true)
         .on_menu_event(|app, event| match event.id().as_ref() {
             "capture" => start_capture(app),
@@ -633,24 +695,10 @@ pub fn run() {
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
             let handle = app.handle();
-            // Accessory apps have no default menu, so ⌘C/⌘V/⌘A would not reach text fields.
-            #[cfg(target_os = "macos")]
-            let edit = Submenu::with_items(
-                handle,
-                "Edit",
-                true,
-                &[
-                    &PredefinedMenuItem::undo(handle, None)?,
-                    &PredefinedMenuItem::redo(handle, None)?,
-                    &PredefinedMenuItem::separator(handle)?,
-                    &PredefinedMenuItem::cut(handle, None)?,
-                    &PredefinedMenuItem::copy(handle, None)?,
-                    &PredefinedMenuItem::paste(handle, None)?,
-                    &PredefinedMenuItem::select_all(handle, None)?,
-                ],
-            )?;
-            #[cfg(target_os = "macos")]
-            app.set_menu(Menu::with_items(handle, &[&edit])?)?;
+            *handle.state::<AppState>().settings.lock() = settings::load(handle);
+            let locale = get_ui_locale(handle.clone()).locale;
+            i18n::set_locale(locale);
+            update_edit_menu(handle)?;
             // Leftovers from a previous run; nothing references them any more.
             if let Ok(dir) = captures_dir(handle) {
                 let _ = fs::remove_dir_all(dir);
@@ -659,7 +707,6 @@ pub fn run() {
             if let Err(err) = handle.global_shortcut().register(CAPTURE_SHORTCUT) {
                 eprintln!("cannot register {CAPTURE_SHORTCUT}: {err}");
             }
-            *handle.state::<AppState>().settings.lock() = settings::load(handle);
             if let Ok(cache_dir) = handle.path().app_cache_dir() {
                 let db_path = cache_dir.join("translations.db");
                 match cache::Cache::open(&db_path) {
@@ -683,6 +730,7 @@ pub fn run() {
             recognize_capture,
             translate_texts,
             get_settings,
+            get_ui_locale,
             install_paddleocr,
             has_api_key,
             save_settings,

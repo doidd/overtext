@@ -111,14 +111,7 @@ pub fn recognize(path: &Path, language: &str) -> Result<Vec<OcrLine>, String> {
                 if automatic_paddle {
                     return format!("PaddleOCR: {e}");
                 }
-                format!(
-                    "Windows chưa cài ngôn ngữ OCR {}. {e}",
-                    if language.is_empty() {
-                        "nguồn"
-                    } else {
-                        language
-                    }
-                )
+                format!("{} ({language}) {e}", crate::i18n::current("missingOcr"))
             })
         },
     )
@@ -277,7 +270,7 @@ mod windows_ocr {
                 if !OcrEngine::IsLanguageSupported(&language)? {
                     return Err(::windows::core::Error::new(
                         ::windows::core::HRESULT(0x80004005u32 as i32),
-                        format!("Chưa cài gói OCR {source_language}. Mở Windows Settings > Time & language > Language & region, thêm ngôn ngữ nguồn và cài Optical character recognition (OCR)."),
+                        format!("{} ({source_language})", crate::i18n::current("missingOcr")),
                     ));
                 }
                 OcrEngine::TryCreateFromLanguage(&language)?
@@ -289,7 +282,7 @@ mod windows_ocr {
                         if languages.Size()? == 0 {
                             return Err(::windows::core::Error::new(
                             ::windows::core::HRESULT(0x80004005u32 as i32),
-                            "Chưa có ngôn ngữ OCR. Mở Settings > Time & language > Language & region và cài gói OCR cho ngôn ngữ nguồn.",
+                            crate::i18n::current("missingOcr"),
                         ));
                         }
                         OcrEngine::TryCreateFromLanguage(&languages.GetAt(0)?)?
@@ -416,7 +409,7 @@ mod windows_ocr {
                 .to_rgba8();
             let error = recognize(image, "ja-JP").unwrap_err();
             assert!(
-                error.contains("ja-JP") && error.contains("gói OCR"),
+                error.contains("ja-JP") && error.contains(crate::i18n::current("missingOcr")),
                 "{error}"
             );
         }

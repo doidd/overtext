@@ -73,24 +73,25 @@ impl Settings {
     }
     /// Normalizes user input; rejects values that would produce malformed requests.
     pub fn validated(mut self) -> Result<Self, String> {
+        let locale = crate::i18n::resolve(&self.ui_lang, &[crate::i18n::system_locale().to_owned()]);
         if !["system", "vi", "en", "ja"].contains(&self.ui_lang.as_str()) {
-            return Err("Unsupported interface language".into());
+            return Err(crate::i18n::text(locale, "invalidUi").into());
         }
         self.ocr_lang = self.ocr_lang.trim().to_owned();
         if self.ocr_lang.len() > 64 || !self.ocr_lang.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-') {
-            return Err("OCR language must be a language tag such as ja-JP or en-US".into());
+            return Err(crate::i18n::text(locale, "invalidOcr").into());
         }
         if !LANGUAGES.iter().any(|(c, _)| *c == self.target_lang) {
-            return Err(format!("unsupported language: {}", self.target_lang));
+            return Err(format!("{}: {}", crate::i18n::text(locale, "unsupportedTarget"), self.target_lang));
         }
         self.base_url = self.base_url.trim().trim_end_matches('/').to_owned();
         self.model = self.model.trim().to_owned();
         if self.provider == Provider::Openai {
             if !(self.base_url.starts_with("https://") || self.base_url.starts_with("http://")) {
-                return Err("Base URL must start with http:// or https://".into());
+                return Err(crate::i18n::text(locale, "invalidUrl").into());
             }
             if self.model.is_empty() {
-                return Err("Model must not be empty".into());
+                return Err(crate::i18n::text(locale, "missingModel").into());
             }
         }
         Ok(self)

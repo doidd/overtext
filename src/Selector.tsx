@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { convertFileSrc, invoke } from "@tauri-apps/api/core";
 
+import { useAppLocale } from "./useAppLocale";
+
 type Props = { monitor: number; imagePath: string; width: number; height: number };
 type Point = { x: number; y: number };
 type Rect = { x: number; y: number; width: number; height: number };
@@ -18,6 +20,7 @@ function toRect(a: Point, b: Point): Rect {
 }
 
 export function Selector({ monitor, imagePath, width }: Props) {
+  const { t } = useAppLocale();
   const [anchor, setAnchor] = useState<Point | null>(null);
   const [cursor, setCursor] = useState<Point | null>(null);
   const [pixelRatio, setPixelRatio] = useState(1);
@@ -80,7 +83,7 @@ export function Selector({ monitor, imagePath, width }: Props) {
           await img.decode().catch(() => {});
           invoke("window_ready");
         }}
-        onError={() => invoke("cancel_capture", { error: `cannot load ${imagePath}` })}
+        onError={() => invoke("cancel_capture", { error: `${t.imageLoadError}: ${imagePath}` })}
       />
       {rect ? (
         <div className="selection" style={{ left: rect.x, top: rect.y, width: rect.width, height: rect.height }}>
