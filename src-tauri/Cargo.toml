@@ -3,6 +3,7 @@ name = "overtext"
 version = "0.1.0"
 description = "Screen-region OCR and layout-preserving translation"
 authors = ["doidd"]
+license = "MIT"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

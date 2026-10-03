@@ -149,3 +149,7 @@ scope in `tauri.conf.json` (`app.security.assetProtocol.scope`) must cover that 
 
 | M6a | Windows OCR, DPI-aware capture placement, image copy/save, Credential Manager | implemented |
 | M6b | Signing/notarization, auto-update | |
+
+## License
+
+[MIT](LICENSE)
