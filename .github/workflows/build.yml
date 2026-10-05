@@ -5,6 +5,26 @@ on:
   pull_request:
 
 jobs:
+  # Reference run: text measurement depends on the OS font, so the pinned-font tests
+  # (bundled Noto Sans) must pass here and on macOS/Windows with identical results.
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:render
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: render-results-linux
+          path: test-results/
+          if-no-files-found: ignore
+
   desktop:
     strategy:
       fail-fast: false

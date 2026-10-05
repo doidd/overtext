@@ -7,14 +7,30 @@ const renderer = ts.transpileModule(readFileSync("src/renderImage.ts", "utf8"), 
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
 }).outputText.replace("export async function", "async function").replace(/export \{\};?/, "");
 
+// Text measurement depends on the font, so the same translation can wrap differently per OS.
+//  - pinned-font:  bundled Noto Sans; identical on every OS (the reference result).
+//  - system-font:  the production font stack on the host OS (smoke test of real conditions).
+//  - stress-long:  pinned font with ~50% longer translations, to force shrink-to-fit and
+//                  wrapping everywhere; only the pixel-containment invariants must hold.
+const pinnedFont = readFileSync("tests/render/fonts/NotoSans-Latin-VN.woff2").toString("base64");
+const PINNED = '"OverTextTest", sans-serif';
+const lengthen = (t: string) => { const w = t.split(" "); return `${t} ${w.slice(0, Math.ceil(w.length / 2)).join(" ")}`; };
+
+for (const mode of ["pinned-font", "system-font", "stress-long"] as const)
 for (const name of ["search-results", "japanese-list"]) {
-  const fixture = JSON.parse(readFileSync(`tests/render/fixtures/${name}.json`, "utf8"));
+  const base = JSON.parse(readFileSync(`tests/render/fixtures/${name}.json`, "utf8"));
+  const fixture = mode !== "stress-long" ? base : { ...base, blocks: base.blocks.map((b: any) =>
+    b.translated.trim() === b.text.trim() ? b : { ...b, translated: lengthen(b.translated) }) };
   const source = "data:image/png;base64," + readFileSync(`src-tauri/assets/ocr-${name}.png`).toString("base64");
 
-  test(`${name}: erase source, preserve surroundings, fit and center translated text`, async ({ page }, testInfo) => {
+  test(`${mode} ${name}: erase source, preserve surroundings, fit and center translated text`, async ({ page }, testInfo) => {
     await page.setContent('<meta charset="utf-8"><img id="result">');
     await page.addScriptTag({ content: renderer });
-    const result = await page.evaluate(async ({ source, fixture }) => {
+    if (mode !== "system-font") {
+      await page.addStyleTag({ content: `@font-face{font-family:"OverTextTest";src:url(data:font/woff2;base64,${pinnedFont}) format("woff2");font-weight:100 900;font-stretch:62.5% 100%;}` });
+      await page.evaluate(() => Promise.all([document.fonts.load('400 16px "OverTextTest"'), document.fonts.load('600 16px "OverTextTest"')]));
+    }
+    const result = await page.evaluate(async ({ source, fixture, fontFamily }) => {
       const render = (window as any).renderTranslatedImage;
       const read = async (url: string) => {
         const image = new Image(); image.src = url; await image.decode();
@@ -34,13 +50,13 @@ for (const name of ["search-results", "japanese-list"]) {
         return original.call(this, text, x, y, ...rest);
       };
       let url: string;
-      try { url = await render(source, fixture); }
+      try { url = await render(source, fixture, { fontFamily }); }
       finally { CanvasRenderingContext2D.prototype.fillText = original; }
       (document.querySelector("#result") as HTMLImageElement).src = url;
       const before = await read(source), after = await read(url);
       // A blank translation isolates source erasure from newly drawn glyphs.
       const blank = await read(await render(source, { ...fixture, blocks: fixture.blocks.map((b: any) =>
-        active.includes(b) ? { ...b, translated: " " } : b) }));
+        active.includes(b) ? { ...b, translated: " " } : b) }, { fontFamily }));
       let metadataChanges = 0, unerased = 0, missingInk = 0;
       const equal = (a: Uint8ClampedArray, b: Uint8ClampedArray, i: number) =>
         [0, 1, 2, 3].every(c => a[i + c] === b[i + c]);
@@ -72,12 +88,13 @@ for (const name of ["search-results", "japanese-list"]) {
         if (!equal(before, after, (y * fixture.width + x) * 4)) outsideChanges++;
       }
       return { metadataChanges, unerased, missingInk, outsideChanges, draws, active, listRight, url };
-    }, { source, fixture });
-    await testInfo.attach(`${name}.png`, { body: Buffer.from(result.url.split(",")[1], "base64"), contentType: "image/png" });
+    }, { source, fixture, fontFamily: mode === "system-font" ? undefined : PINNED });
+    await testInfo.attach(`${mode}-${name}.png`, { body: Buffer.from(result.url.split(",")[1], "base64"), contentType: "image/png" });
     expect(result.metadataChanges, "preserved metadata/code pixels").toBe(0);
     expect(result.unerased, "all original block pixels must be erased").toBe(0);
     expect(result.missingInk, "each translated block must be visible").toBe(0);
     expect(result.outsideChanges, "surrounding pixels must stay unchanged").toBe(0);
+    if (mode === "stress-long") return;
     // Draw operations must contain the whole translation, fit their region, and
     // center the complete paragraph vertically (not only its first line).
     let cursor = 0;

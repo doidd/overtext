@@ -35,3 +35,16 @@ Browser render regressions run with `npx playwright install chromium` followed b
 For both images at device scales 1, 1.25, 1.5, and 2, tests assert that source block interiors are completely erased, translated blocks contain visible ink, metadata stays pixel-identical even if given a changed translation, and surroundings (including the Japanese badge/border) stay unchanged. Captured draw operations must include every translated character, retain block colors, fit within allowed regions, and center the complete paragraph. A two-pixel optical-centering tolerance allows accents to differ between rows. Tests attach output PNGs; CI uploads test-results on failure. Pixel expectations are calculated within the same browser rather than using platform-sensitive font screenshots.
 
 This covers image-coordinate rendering, not OS capture scaling, monitor placement, clipboard/save dialogs, missed OCR glyphs outside recorded boxes, or arbitrarily long translations that cannot fit at the renderer's minimum font size. Those require additional fixtures or end-to-end/manual checks; device-scale emulation does not certify native Windows DPI conversion.
+
+## Cross-platform render tests
+
+Canvas text measurement depends on the installed font, so identical input can wrap
+differently on macOS and Windows. `tests/render/render.spec.ts` therefore runs three modes:
+
+- `pinned-font`: the bundled Noto Sans (`tests/render/fonts`); identical on every OS and the
+  reference result. Linux CI runs it as well.
+- `system-font`: the production font stack on the host OS.
+- `stress-long`: pinned font with ~50% longer translations; the pixel-containment
+  invariants must still hold (nothing outside the allowed regions, source fully erased).
+
+`renderTranslatedImage(src, translation, { fontFamily })` accepts the font so tests can pin it.

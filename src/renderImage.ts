@@ -40,14 +40,18 @@ function textRegion(block: Block, blocks: Block[]): { width: number; height: num
   const next = blocks.filter((other) => other.y > block.y
     && other.x < right && other.x + other.width > block.x)
     .sort((a, b) => a.y - b.y)[0];
-  const gap = next ? next.y - block.y : 0;
+  // A one-line source item keeps its original height: the translation shrinks to fit instead of
+  // wrapping into the gap before the next item (which also changes pixels outside the item).
+  const gap = next && block.lineCount > 1 ? next.y - block.y : 0;
   const margin = next ? Math.max(next.lineHeight, block.lineHeight) * 0.24 : 0;
   const height = gap > 0 && gap < block.lineHeight * 3
     ? Math.max(block.height, gap - margin) : block.height;
   return { width: right - block.x, height };
 }
 
-function drawBlock(ctx: CanvasRenderingContext2D, block: Block, region: { width: number; height: number }) {
+const SYSTEM_FONT = '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+function drawBlock(ctx: CanvasRenderingContext2D, block: Block, region: { width: number; height: number }, fontFamily: string) {
   const base = block.lineHeight * FONT_PER_LINE;
   const minimum = base * MIN_SHRINK;
   let fontSize = base;
@@ -58,7 +62,7 @@ function drawBlock(ctx: CanvasRenderingContext2D, block: Block, region: { width:
   let advance = 0;
   ctx.textBaseline = "alphabetic";
   while (true) {
-    ctx.font = `${block.kind === "heading" ? 600 : 400} ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+    ctx.font = `${block.kind === "heading" ? 600 : 400} ${fontSize}px ${fontFamily}`;
     lines = wrapText(ctx, block.translated, region.width);
     const metrics = lines.map((line) => ctx.measureText(line || "M"));
     ascent = Math.max(...metrics.map((m) => m.actualBoundingBoxAscent));
@@ -87,10 +91,16 @@ function drawBlock(ctx: CanvasRenderingContext2D, block: Block, region: { width:
   ctx.restore();
 }
 
+export type RenderOptions = {
+  /** CSS font-family for translated text. Tests pin a bundled font so measurement is OS independent. */
+  fontFamily?: string;
+};
+
 /** One renderer for the live result, clipboard, saved image, and history. */
 export async function renderTranslatedImage(
   imageSrc: string,
   translation: Translation,
+  options: RenderOptions = {},
 ): Promise<string> {
   const img = new Image();
   img.crossOrigin = "anonymous";
@@ -116,6 +126,7 @@ export async function renderTranslatedImage(
     const region = regions[index];
     ctx.fillRect(block.x - pad, block.y - pad, region.width + 2 * pad, region.height + 2 * pad);
   });
-  blocks.forEach((block, index) => drawBlock(ctx, block, regions[index]));
+  const fontFamily = options.fontFamily ?? SYSTEM_FONT;
+  blocks.forEach((block, index) => drawBlock(ctx, block, regions[index], fontFamily));
   return canvas.toDataURL("image/png");
 }
