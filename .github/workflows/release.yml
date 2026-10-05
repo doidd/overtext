@@ -37,11 +37,16 @@ jobs:
         with:
           python-version: '3.12'
 
+      # Same gates as CI (.github/workflows/build.yml): an installer must never ship from a
+      # commit that would fail there.
       - run: npm ci
       - run: python scripts/test-paddleocr-worker.py
-      - run: node --test "scripts/*.mjs"
+      - run: python scripts/test-rapidocr-worker.py
+      - run: node --test scripts/test-settings-i18n.mjs scripts/test-translation.mjs
       - run: npm run build
-      - run: cargo test --manifest-path src-tauri/Cargo.toml --locked
+      - run: npx playwright install chromium
+      - run: npm run test:render
+      - run: cargo test --manifest-path src-tauri/Cargo.toml --test desktop --locked
 
       - uses: tauri-apps/tauri-action@v0
         env:
@@ -51,6 +56,7 @@ jobs:
           releaseName: OverText ${{ github.ref_name }}
           releaseBody: |
             Pre-release. **Not code-signed**: see "Installing an unsigned build" in the README.
+            macOS: Apple Silicon, macOS 13+. Windows: 10/11 (OCR engine is installed from Settings).
             See CHANGELOG.md for what is included and the known limitations.
           releaseDraft: true
           prerelease: true
