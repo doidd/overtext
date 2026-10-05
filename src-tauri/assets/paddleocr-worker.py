@@ -9,6 +9,13 @@ import traceback
 ENABLE_MKLDNN = os.environ.get("OVERTEXT_OCR_MKLDNN", "1") != "0"
 
 
+def upscale_factor(width, height, target):
+    """Benchmark override; zero keeps native pixels, default policy stays 1200."""
+    if not 0 <= target <= 1600:
+        raise ValueError("OCR upscale side must be between 0 and 1600")
+    return max(1.0, min(3.0, target / max(width, height)))
+
+
 class TimedPredictor:
     """Time lazy model execution without including time spent by its consumer."""
     def __init__(self, predictor):
@@ -50,7 +57,10 @@ def instrument_models(engine):
 def model_for_language(language):
     tag = language.lower().split("-")[0]
     if tag in ("", "ja", "zh"):
-        return "PP-OCRv5_server_rec"
+        model = os.environ.get("OVERTEXT_OCR_MULTILINGUAL_MODEL", "PP-OCRv5_server_rec")
+        if model not in ("PP-OCRv5_server_rec", "PP-OCRv5_mobile_rec"):
+            raise ValueError("Unsupported multilingual OCR model")
+        return model
     if tag == "en":
         return "en_PP-OCRv5_mobile_rec"
     family = {
@@ -132,11 +142,13 @@ def main():
             timings["input_size"] = [width, height]
             timings["decode_ms"] = (time.perf_counter() - stage) * 1000
             stage = time.perf_counter()
-            if max(width, height) < 1200:
-                scale = min(3.0, 1200 / max(width, height))
+            target = int(os.environ.get("OVERTEXT_OCR_UPSCALE_SIDE", "1200"))
+            scale = upscale_factor(width, height, target)
+            if scale > 1:
                 image = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
             height, width = image.shape[:2]
             timings["ocr_size"] = [width, height]
+            timings["upscale_target"] = target
             timings["resize_ms"] = (time.perf_counter() - stage) * 1000
             lines = []
             normalize_ms = 0.0

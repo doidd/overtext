@@ -34,14 +34,32 @@ pub enum Provider {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum OcrEngine {
+    RapidMobile,
+    RapidServer,
+    Windows,
+    Paddle,
+}
+
+#[cfg(target_os = "windows")]
+impl OcrEngine {
+    pub fn rapid_model(&self) -> Option<&'static str> {
+        match self {
+            Self::RapidMobile => Some("mobile"), Self::RapidServer => Some("server"), _ => None,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", default)]
 pub struct Settings {
     /// Settings interface language; independent of OCR and translation.
     pub ui_lang: String,
     pub target_lang: String,
-    /// Windows OCR source language (BCP-47); empty prefers installed PaddleOCR
-    /// for Japanese/Chinese/English, otherwise uses Windows preferences.
+    /// OCR source hint (BCP-47); the Windows engine is independently selected.
     pub ocr_lang: String,
+    pub ocr_engine: OcrEngine,
     pub provider: Provider,
     pub base_url: String,
     pub model: String,
@@ -53,6 +71,7 @@ impl Default for Settings {
             ui_lang: "system".into(),
             target_lang: "vi".into(),
             ocr_lang: String::new(),
+            ocr_engine: OcrEngine::RapidMobile,
             provider: Provider::Free,
             base_url: "https://api.openai.com/v1".into(),
             model: "gpt-4o-mini".into(),
@@ -160,6 +179,17 @@ pub use keychain::{get as api_key, set as set_api_key};
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn old_settings_default_to_rapid_mobile_and_engine_choices_round_trip() {
+        let old: super::Settings = serde_json::from_str(r#"{"targetLang":"en","ocrLang":"ja-JP"}"#).unwrap();
+        assert!(matches!(old.ocr_engine, super::OcrEngine::RapidMobile));
+        assert_eq!(old.ocr_lang, "ja-JP");
+        for value in ["rapid-mobile", "rapid-server", "windows", "paddle"] {
+            let settings: super::Settings = serde_json::from_value(serde_json::json!({"ocrEngine": value})).unwrap();
+            assert_eq!(serde_json::to_value(settings).unwrap()["ocrEngine"], value);
+        }
+        assert!(serde_json::from_value::<super::Settings>(serde_json::json!({"ocrEngine": "unknown"})).is_err());
+    }
     use super::*;
 
     #[test]

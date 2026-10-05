@@ -63,13 +63,13 @@ async fn recognize_capture(app: AppHandle, image_path: PathBuf) -> Result<Recogn
     if !path.starts_with(dir.canonicalize().map_err(|e| e.to_string())?) {
         return Err("image is outside the captures directory".into());
     }
-    let ocr_language = app.state::<AppState>().settings.lock().ocr_lang.clone();
+    let ocr_settings = app.state::<AppState>().settings.lock().clone();
     tauri::async_runtime::spawn_blocking(move || {
         let started = Instant::now();
         let image = image::open(&path).map_err(|e| e.to_string())?.to_rgba8();
         let decode = started.elapsed();
         let recognize_started = Instant::now();
-        let lines = ocr::recognize(&path, &ocr_language)?;
+        let lines = ocr::recognize_configured(&path, &ocr_settings.ocr_lang, &ocr_settings.ocr_engine)?;
         let recognize = recognize_started.elapsed();
         let layout_started = Instant::now();
         let blocks = layout::build_blocks(&lines, &image);
@@ -154,6 +154,8 @@ struct SettingsView {
     languages: Vec<(&'static str, &'static str)>,
     ocr_languages: Option<Vec<String>>,
     paddleocr_installed: bool,
+    rapid_mobile_installed: bool,
+    rapid_server_installed: bool,
 }
 
 #[tauri::command]
@@ -167,7 +169,22 @@ async fn get_settings(app: AppHandle) -> Result<SettingsView, String> {
     let paddleocr_installed = ocr::paddleocr_installed();
     #[cfg(not(target_os = "windows"))]
     let paddleocr_installed = false;
-    Ok(SettingsView { settings: app.state::<AppState>().settings.lock().clone(), languages: settings::LANGUAGES.to_vec(), ocr_languages, paddleocr_installed })
+    #[cfg(target_os = "windows")]
+    let (rapid_mobile_installed, rapid_server_installed) = (ocr::rapidocr_installed("mobile"), ocr::rapidocr_installed("server"));
+    #[cfg(not(target_os = "windows"))]
+    let (rapid_mobile_installed, rapid_server_installed) = (false, false);
+    Ok(SettingsView { settings: app.state::<AppState>().settings.lock().clone(), languages: settings::LANGUAGES.to_vec(), ocr_languages, paddleocr_installed, rapid_mobile_installed, rapid_server_installed })
+}
+
+#[tauri::command]
+async fn install_rapidocr(model: String) -> Result<(), String> {
+    #[cfg(target_os = "windows")]
+    return tauri::async_runtime::spawn_blocking(move || ocr::install_rapidocr(&model)).await.map_err(|e| e.to_string())?;
+    #[cfg(not(target_os = "windows"))]
+    {
+        let _ = model;
+        Err(i18n::current("rapidWindows").into())
+    }
 }
 
 #[tauri::command]
@@ -724,9 +741,10 @@ pub fn run() {
                     Err(e) => eprintln!("failed to initialize translation cache: {e}"),
                 }
             }
-            std::thread::spawn(|| {
+            let warmup_engine = handle.state::<AppState>().settings.lock().ocr_engine.clone();
+            std::thread::spawn(move || {
                 let started = Instant::now();
-                match ocr::warm_up() {
+                match ocr::warm_up_configured(&warmup_engine) {
                     Ok(lines) => eprintln!("ocr warm-up: {lines} lines in {:?}", started.elapsed()),
                     Err(err) => eprintln!("ocr warm-up failed: {err}"),
                 }
@@ -742,6 +760,7 @@ pub fn run() {
             get_settings,
             get_ui_locale,
             install_paddleocr,
+            install_rapidocr,
             has_api_key,
             save_settings,
             copy_image_to_clipboard,
@@ -757,6 +776,7 @@ pub fn run() {
             #[cfg(target_os = "windows")]
             if let RunEvent::Exit = event {
                 ocr::shutdown_paddleocr();
+                ocr::shutdown_rapidocr();
             }
             // Tray app: closing the last window must not quit.
             if let RunEvent::ExitRequested { code: None, api, .. } = event {

@@ -95,7 +95,7 @@ mod vision {
     }
 }
 
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", test))]
 pub fn recognize(path: &Path, language: &str) -> Result<Vec<OcrLine>, String> {
     let image = image::open(path).map_err(|e| e.to_string())?.to_rgba8();
     // An installed English Windows pack says nothing about the screenshot's
@@ -122,12 +122,56 @@ pub fn recognize(path: &Path, language: &str) -> Result<Vec<OcrLine>, String> {
 mod paddle;
 
 #[cfg(target_os = "windows")]
+#[path = "rapid.rs"]
+mod rapid;
+
+#[cfg(target_os = "windows")]
+pub use rapid::{install as install_rapidocr, installed as rapidocr_installed, shutdown as shutdown_rapidocr};
+
+pub fn warm_up_configured(engine: &crate::settings::OcrEngine) -> Result<usize, String> {
+    #[cfg(target_os = "windows")]
+    if let Some(model) = engine.rapid_model() {
+        return rapid::warm_up(model);
+    }
+    #[cfg(not(target_os = "windows"))]
+    let _ = engine;
+    warm_up()
+}
+
+pub fn recognize_configured(path: &Path, language: &str, engine: &crate::settings::OcrEngine) -> Result<Vec<OcrLine>, String> {
+    #[cfg(target_os = "windows")]
+    {
+        if let Some(model) = engine.rapid_model() {
+            let tag = language.split('-').next().unwrap_or_default().to_lowercase();
+            if !["", "ja", "zh", "en"].contains(&tag.as_str()) {
+                return Err(crate::i18n::current("rapidLanguage").into());
+            }
+            eprintln!("ocr engine: RapidOCR {model}/ONNX CPU; source language: {language:?}");
+            return rapid::recognize(path, model);
+        }
+        if matches!(engine, crate::settings::OcrEngine::Paddle) {
+            return paddle::recognize(path, language);
+        }
+        if !windows_ocr::language_supported(language)? {
+            return Err(crate::i18n::current("missingOcr").into());
+        }
+        let image = image::open(path).map_err(|e| e.to_string())?.to_rgba8();
+        windows_ocr::recognize(image, language)
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        let _ = engine;
+        recognize(path, language)
+    }
+}
+
+#[cfg(target_os = "windows")]
 #[cfg_attr(test, allow(unused_imports))]
 pub use paddle::{
     install as install_paddleocr, installed as paddleocr_installed, shutdown as shutdown_paddleocr,
 };
 
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", test))]
 fn route_windows_ocr<T>(
     supported: bool,
     native: impl FnOnce() -> Result<T, String>,

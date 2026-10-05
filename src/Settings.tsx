@@ -6,8 +6,9 @@ import { useAppLocale } from "./useAppLocale";
 import { languageName, messages, nativeOcrAvailable, resolveLocale, type MessageKey, type UiLanguage } from "./settingsI18n";
 
 type Provider = "free" | "openai";
-type SettingsData = { uiLang: UiLanguage; targetLang: string; ocrLang: string; provider: Provider; baseUrl: string; model: string };
-type View = { settings: SettingsData; languages: [string, string][]; ocrLanguages: string[] | null; paddleocrInstalled: boolean };
+type OcrEngine = "rapid-mobile" | "rapid-server" | "windows" | "paddle";
+type SettingsData = { uiLang: UiLanguage; targetLang: string; ocrLang: string; ocrEngine: OcrEngine; provider: Provider; baseUrl: string; model: string };
+type View = { settings: SettingsData; languages: [string, string][]; ocrLanguages: string[] | null; paddleocrInstalled: boolean; rapidMobileInstalled: boolean; rapidServerInstalled: boolean };
 
 const OCR_LANGUAGES: [string, string][] = [
   ["ja-JP", "Japanese"], ["en-US", "English"],
@@ -51,7 +52,7 @@ export function Settings() {
   useEffect(() => {
     invoke<View>("get_settings").then((v) => {
       setView(v);
-      setS({ ...v.settings, uiLang: v.settings.uiLang ?? "system" });
+      setS({ ...v.settings, uiLang: v.settings.uiLang ?? "system", ocrEngine: v.settings.ocrEngine ?? "rapid-mobile" });
       if (v.settings.provider === "openai") checkKey(v.settings.baseUrl);
     }).catch((e) => setStatus({ ok: false, key: "loadError", detail: String(e) }));
   }, []);
@@ -60,6 +61,7 @@ export function Settings() {
   if (!view || !s) return <p className={status ? "error" : "hint"}>{status ? statusText : t.loading}</p>;
   const set = (patch: Partial<SettingsData>) => setS({ ...s, ...patch });
   const preset = PRESETS.find((p) => p.baseUrl === s.baseUrl);
+  const rapid = s.ocrEngine.startsWith("rapid-");
   const ocrOptions = [...OCR_LANGUAGES, ...(view.ocrLanguages ?? [])
     .filter((tag) => tag === s.ocrLang || !OCR_LANGUAGES.some(([code]) => nativeOcrAvailable(code, [tag]))).map((tag): [string, string] => [tag, tag])];
 
@@ -69,6 +71,20 @@ export function Settings() {
     try {
       await invoke("install_paddleocr");
       setView({ ...view, paddleocrInstalled: true });
+      setStatus({ ok: true, key: "installDone" });
+    } catch (e) {
+      setStatus({ ok: false, key: "installError", detail: String(e) });
+    } finally {
+      setInstallingOcr(false);
+    }
+  };
+
+  const installRapid = async (model: "mobile" | "server") => {
+    setInstallingOcr(true);
+    setStatus({ ok: true, key: "installProgress" });
+    try {
+      await invoke("install_rapidocr", { model });
+      setView(await invoke<View>("get_settings"));
       setStatus({ ok: true, key: "installDone" });
     } catch (e) {
       setStatus({ ok: false, key: "installError", detail: String(e) });
@@ -109,24 +125,33 @@ export function Settings() {
       {view.ocrLanguages !== null && (
         <>
           <label>
+            {t.ocrEngine}
+            <select value={s.ocrEngine} onChange={(e) => set({ ocrEngine: e.target.value as OcrEngine })} disabled={installingOcr}>
+              <option value="rapid-mobile">{t.rapidMobile}</option>
+              <option value="rapid-server">{t.rapidServer}</option>
+              <option value="windows">Windows OCR</option>
+              <option value="paddle">PaddleOCR</option>
+            </select>
+          </label>
+          <label>
             {t.ocrLanguage}
             <select value={s.ocrLang} onChange={(e) => set({ ocrLang: e.target.value })}>
-              <option value="">{view.paddleocrInstalled ? t.autoOcr : t.windowsOcr}</option>
-              {ocrOptions.map(([code, name]) => <option key={code} value={code}>
-                {languageName(code, name, locale)}{nativeOcrAvailable(code, view.ocrLanguages ?? []) ? "" : " (PaddleOCR)"}
+              <option value="">{rapid ? t.rapidAuto : s.ocrEngine === "paddle" ? t.autoOcr : t.windowsOcr}</option>
+              {ocrOptions.filter(([code]) => !rapid || /^(ja|en|zh)(-|$)/i.test(code) || code === s.ocrLang).map(([code, name]) => <option key={code} value={code}>
+                {languageName(code, name, locale)}
               </option>)}
             </select>
           </label>
-          <p className="hint">
+          {rapid ? <>
+            <p className="hint">{t.rapidHint}</p>
+            <p className="hint">{t.rapidMobile}: {view.rapidMobileInstalled ? t.rapidReady : t.none}. {t.rapidServer}: {view.rapidServerInstalled ? t.rapidReady : t.none}.</p>
+            {s.ocrLang && !/^(ja|en|zh)(-|$)/i.test(s.ocrLang) && <p className="error">{t.rapidLanguage}</p>}
+            {!view.rapidMobileInstalled && <button onClick={() => installRapid("mobile")} disabled={installingOcr}>{installingOcr ? t.installing : t.rapidInstallMobile}</button>}
+            {!view.rapidServerInstalled && <button onClick={() => installRapid("server")} disabled={installingOcr}>{installingOcr ? t.installing : t.rapidInstallServer}</button>}
+          </> : s.ocrEngine === "windows" ? <p className="hint">
             {t.installedOcr} {view.ocrLanguages.length ? view.ocrLanguages.map(code => languageName(code, code, locale)).join(", ") : t.none}.
-            {!s.ocrLang
-              ? view.paddleocrInstalled
-                ? " " + t.autoHint
-                : " " + t.windowsHint
-              : !nativeOcrAvailable(s.ocrLang, view.ocrLanguages)
-              ? " " + t.fallbackHint
-              : " " + t.sourceHint}
-          </p>
+            {" " + (!s.ocrLang ? t.windowsHint : t.sourceHint)}
+          </p> : <>
           <p className="hint">
             {view.paddleocrInstalled
               ? t.paddleInstalled
@@ -135,6 +160,7 @@ export function Settings() {
           {!view.paddleocrInstalled && <button onClick={installOcr} disabled={installingOcr}>
             {installingOcr ? t.installing : t.install}
           </button>}
+          </>}
         </>
       )}
       <label>

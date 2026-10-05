@@ -49,36 +49,42 @@ npm run tauri dev
 - Requires Windows 10/11 and Microsoft Edge WebView2 Runtime.
 - For development, install Rust (stable MSVC), Visual Studio Build Tools with
   **Desktop development with C++**, and a Windows SDK. Then run the commands above.
-- OCR uses `Windows.Media.Ocr` locally. Choose the source language in
-  **Cài đặt › Ngôn ngữ trong ảnh (OCR)**. The app lists installed OCR languages and
-  reports missing language packs rather than recognizing Japanese with an English model.
-  With PaddleOCR installed, the default reads Japanese, Chinese, and English with
-  PaddleOCR's shared recognizer. Otherwise it follows Windows language preferences,
-  then the first installed OCR language; an English pack cannot read Japanese.
-  Install the **Optical character recognition** language feature for the source language
-  in **Settings › Time & language › Language & region**. The translation target language
-  is independent of the OCR language. Windows OCR does not automatically detect arbitrary
-  source languages; select Japanese (`ja-JP`) for Japanese screenshots. When the selected
-  language pack is missing, OverText falls back to PaddleOCR (see below). Small images
-  are enlarged up to 3× before OCR to improve recognition of tiny text.
+- Windows defaults to **RapidOCR Mobile (ONNX, CPU)**. In Settings, choose the OCR
+  engine independently of the translation language. Mobile and Server support Japanese,
+  Chinese and English without Windows language packs. Existing settings without an engine
+  selection migrate to Mobile; macOS continues to use Vision.
+- Click **Download and install Mobile/Server** in Settings to install the isolated
+  Python runtime and download/verify the chosen models. Server is optional and shares
+  the detector/runtime with Mobile. Downloads require internet and no administrator rights.
+  Models are not bundled in the app installer. Capture uses installed models offline;
+  it reports a missing installation rather than downloading during recognition.
+- Windows OCR and PaddleOCR remain explicit engine choices. Windows OCR requires the
+  source language's **Optical character recognition** feature in Windows Settings;
+  installing a keyboard alone is insufficient. RapidOCR/PaddleOCR do not need this feature.
 - Screenshots and window placement use physical desktop coordinates; selections and
   translated text use CSS pixels. This supports scaled monitors and negative desktop origins.
 - Image copy uses the native Windows clipboard; image save opens a native PNG save dialog.
 - Build installers with `npm run tauri build` (NSIS/MSI). Signing and auto-update remain pending.
 
-### PaddleOCR fallback on Windows
+### RapidOCR installation and operation
 
-In Settings, click **Cài PaddleOCR** once, select the source language (for example
-Japanese `ja-JP`), and save. Installation uses an isolated Python 3.12 CPU runtime in
-`%LOCALAPPDATA%/OverText/paddleocr`; it needs internet but no administrator rights,
-and does not modify system Python or PATH. Developers can also run `npm run ocr:setup`.
+RapidOCR 3.9.2 / ONNX Runtime 1.30.0 are pinned. PP-OCRv5 mobile detection is shared;
+recognition uses the selected Mobile or Server model. Settings installs into
+`%LOCALAPPDATA%/OverText/rapidocr`, without modifying system Python or PATH.
+Installation runs a real OCR verification before marking a model ready. Failed downloads
+can be retried. Logs are `install.log` and `worker.log` in this directory.
+The worker retains the active model between captures, records timings without recognized
+text, and restarts after errors or a 60-second timeout. Switching models replaces the
+resident recognizer. Mobile prioritizes speed; Server can improve accuracy on some small
+Japanese text, but benchmark results vary by image. No engine is silently substituted.
 
-With an explicit source language, Windows OCR remains the first choice if it supports that language.
-If that language is unavailable (or no native OCR packs are installed), PaddleOCR
-receives the same image and returns normalized line boxes for the existing overlay.
-Other native errors are reported directly. With the default source language and
-PaddleOCR installed, the app uses its Japanese/Chinese/English recognizer even when
-Windows has an English OCR pack. Select other source languages explicitly.
+### PaddleOCR alternative on Windows
+
+In Settings, select PaddleOCR and click its install button once. Installation uses
+an isolated Python 3.12 CPU runtime in `%LOCALAPPDATA%/OverText/paddleocr`; it needs
+internet but no administrator rights, and does not modify system Python or PATH.
+Developers can also run `npm run ocr:setup`. The source-language selection is passed
+to PaddleOCR directly; Windows language packs do not control this engine.
 
 PaddleOCR 3.3.2 / PaddlePaddle 3.2.2 are pinned. Japanese uses PP-OCRv5 mobile detection
 and server recognition, with a shared Japanese/Chinese/English recognizer. Models
@@ -110,9 +116,13 @@ node --test scripts/test-settings-i18n.mjs scripts/test-translation.mjs
 npx playwright install chromium
 npm run test:render
 python scripts/test-paddleocr-worker.py
+python scripts/test-rapidocr-worker.py
 cargo test --manifest-path src-tauri/Cargo.toml --test desktop --locked
 npm run tauri build -- --no-bundle
 ```
+
+To verify the real RapidOCR installer and Mobile → Server → Mobile switching, run
+`cargo test --manifest-path src-tauri/Cargo.toml --test desktop rapidocr_install_and_switch_models --locked -- --ignored --nocapture` (downloads missing dependencies/models).
 
 The Windows OCR test recognizes the bundled warm-up image and checks its line boxes;
 it requires an installed OCR language that can read that image (for example English).
@@ -129,6 +139,8 @@ reopen history, and save/relaunch/remove a provider key. Verify placement on mon
 100%, 125%, and 150%, including a secondary monitor to the left of the primary.
 
 ## Layout
+
+Windows OCR resize/model comparisons and reproduction commands are documented in [docs/ocr-performance.md](docs/ocr-performance.md).
 
 Layout rule priorities and regression cases are documented in [docs/layout-rules.md](docs/layout-rules.md). Standalone website/URL labels are preserved; titles and descriptions are translated as separate blocks.
 

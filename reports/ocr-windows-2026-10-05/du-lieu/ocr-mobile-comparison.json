@@ -1,0 +1,1097 @@
+{
+  "repeats": 3,
+  "model": "mobile",
+  "cases": {
+    "1200": {
+      "replies": [
+        {
+          "lines": [
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.287223823246878,
+              "y": 0.13008130081300814,
+              "width": 0.4207492795389049,
+              "height": 0.13821138211382114
+            },
+            {
+              "text": "·社側で保持していない项目の付加（例：重要度）",
+              "x": 0.08069164265129683,
+              "y": 0.34959349593495936,
+              "width": 0.8395773294908742,
+              "height": 0.09349593495934959
+            },
+            {
+              "text": "分類/名寄せ、集計軸の整備",
+              "x": 0.08261287223823247,
+              "y": 0.5,
+              "width": 0.49375600384245916,
+              "height": 0.09146341463414634
+            },
+            {
+              "text": "·現デ一タと過去データの统合(共通指摘ID)",
+              "x": 0.08069164265129683,
+              "y": 0.6422764227642277,
+              "width": 0.733909702209414,
+              "height": 0.09959349593495935
+            },
+            {
+              "text": "·分析要件に合わせた加工",
+              "x": 0.08165225744476465,
+              "y": 0.790650406504065,
+              "width": 0.42459173871277617,
+              "height": 0.09349593495934959
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.287223823246878,
+              "y": 0.13008130081300814,
+              "width": 0.4207492795389049,
+              "height": 0.13821138211382114
+            },
+            {
+              "text": "·社側で保持していない项目の付加（例：重要度）",
+              "x": 0.08069164265129683,
+              "y": 0.34959349593495936,
+              "width": 0.8395773294908742,
+              "height": 0.09349593495934959
+            },
+            {
+              "text": "分類/名寄せ、集計軸の整備",
+              "x": 0.08261287223823247,
+              "y": 0.5,
+              "width": 0.49375600384245916,
+              "height": 0.09146341463414634
+            },
+            {
+              "text": "·現デ一タと過去データの统合(共通指摘ID)",
+              "x": 0.08069164265129683,
+              "y": 0.6422764227642277,
+              "width": 0.733909702209414,
+              "height": 0.09959349593495935
+            },
+            {
+              "text": "·分析要件に合わせた加工",
+              "x": 0.08165225744476465,
+              "y": 0.790650406504065,
+              "width": 0.42459173871277617,
+              "height": 0.09349593495934959
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.287223823246878,
+              "y": 0.13008130081300814,
+              "width": 0.4207492795389049,
+              "height": 0.13821138211382114
+            },
+            {
+              "text": "·社側で保持していない项目の付加（例：重要度）",
+              "x": 0.08069164265129683,
+              "y": 0.34959349593495936,
+              "width": 0.8395773294908742,
+              "height": 0.09349593495934959
+            },
+            {
+              "text": "分類/名寄せ、集計軸の整備",
+              "x": 0.08261287223823247,
+              "y": 0.5,
+              "width": 0.49375600384245916,
+              "height": 0.09146341463414634
+            },
+            {
+              "text": "·現デ一タと過去データの统合(共通指摘ID)",
+              "x": 0.08069164265129683,
+              "y": 0.6422764227642277,
+              "width": 0.733909702209414,
+              "height": 0.09959349593495935
+            },
+            {
+              "text": "·分析要件に合わせた加工",
+              "x": 0.08165225744476465,
+              "y": 0.790650406504065,
+              "width": 0.42459173871277617,
+              "height": 0.09349593495934959
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.28338136407300674,
+              "y": 0.11044176706827309,
+              "width": 0.41786743515850144,
+              "height": 0.12248995983935743
+            },
+            {
+              "text": "弊社側で保持していない項目の付加（例：重要度）",
+              "x": 0.07588856868395773,
+              "y": 0.3253012048192771,
+              "width": 0.7896253602305475,
+              "height": 0.08634538152610442
+            },
+            {
+              "text": "分類ノ名寄せ、集計軸の整借",
+              "x": 0.07684918347742556,
+              "y": 0.4738955823293173,
+              "width": 0.46397694524495675,
+              "height": 0.08032128514056225
+            },
+            {
+              "text": "現データと過去データの統合（共通指摘ID）",
+              "x": 0.07492795389048991,
+              "y": 0.6104417670682731,
+              "width": 0.6935638808837656,
+              "height": 0.09036144578313253
+            },
+            {
+              "text": "分祈要件に合わせた加工",
+              "x": 0.07780979827089338,
+              "y": 0.7630522088353414,
+              "width": 0.38904899135446686,
+              "height": 0.08032128514056225
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.28338136407300674,
+              "y": 0.11044176706827309,
+              "width": 0.41786743515850144,
+              "height": 0.12248995983935743
+            },
+            {
+              "text": "弊社側で保持していない項目の付加（例：重要度）",
+              "x": 0.07588856868395773,
+              "y": 0.3253012048192771,
+              "width": 0.7896253602305475,
+              "height": 0.08634538152610442
+            },
+            {
+              "text": "分類ノ名寄せ、集計軸の整借",
+              "x": 0.07684918347742556,
+              "y": 0.4738955823293173,
+              "width": 0.46397694524495675,
+              "height": 0.08032128514056225
+            },
+            {
+              "text": "現データと過去データの統合（共通指摘ID）",
+              "x": 0.07492795389048991,
+              "y": 0.6104417670682731,
+              "width": 0.6935638808837656,
+              "height": 0.09036144578313253
+            },
+            {
+              "text": "分祈要件に合わせた加工",
+              "x": 0.07780979827089338,
+              "y": 0.7630522088353414,
+              "width": 0.38904899135446686,
+              "height": 0.08032128514056225
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.28338136407300674,
+              "y": 0.11044176706827309,
+              "width": 0.41786743515850144,
+              "height": 0.12248995983935743
+            },
+            {
+              "text": "弊社側で保持していない項目の付加（例：重要度）",
+              "x": 0.07588856868395773,
+              "y": 0.3253012048192771,
+              "width": 0.7896253602305475,
+              "height": 0.08634538152610442
+            },
+            {
+              "text": "分類ノ名寄せ、集計軸の整借",
+              "x": 0.07684918347742556,
+              "y": 0.4738955823293173,
+              "width": 0.46397694524495675,
+              "height": 0.08032128514056225
+            },
+            {
+              "text": "現データと過去データの統合（共通指摘ID）",
+              "x": 0.07492795389048991,
+              "y": 0.6104417670682731,
+              "width": 0.6935638808837656,
+              "height": 0.09036144578313253
+            },
+            {
+              "text": "分祈要件に合わせた加工",
+              "x": 0.07780979827089338,
+              "y": 0.7630522088353414,
+              "width": 0.38904899135446686,
+              "height": 0.08032128514056225
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "4",
+              "x": 0.9191666666666667,
+              "y": 0.14166666666666666,
+              "width": 0.0225,
+              "height": 0.04833333333333333
+            },
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.2916666666666667,
+              "y": 0.165,
+              "width": 0.4125,
+              "height": 0.12666666666666668
+            },
+            {
+              "text": "・社側で保持していない項目の付加（例：重要度）",
+              "x": 0.08916666666666667,
+              "y": 0.37,
+              "width": 0.8175,
+              "height": 0.08666666666666667
+            },
+            {
+              "text": "・分類/名寄せ、集計軸の整備",
+              "x": 0.09166666666666666,
+              "y": 0.5116666666666667,
+              "width": 0.4841666666666667,
+              "height": 0.08333333333333333
+            },
+            {
+              "text": "·現データと過去データの統合 (共通指摘ID)",
+              "x": 0.09,
+              "y": 0.6383333333333333,
+              "width": 0.7166666666666667,
+              "height": 0.09166666666666666
+            },
+            {
+              "text": "・分析要件に合わせた加工",
+              "x": 0.09083333333333334,
+              "y": 0.7733333333333333,
+              "width": 0.41583333333333333,
+              "height": 0.08666666666666667
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "4",
+              "x": 0.9191666666666667,
+              "y": 0.14166666666666666,
+              "width": 0.0225,
+              "height": 0.04833333333333333
+            },
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.2916666666666667,
+              "y": 0.165,
+              "width": 0.4125,
+              "height": 0.12666666666666668
+            },
+            {
+              "text": "・社側で保持していない項目の付加（例：重要度）",
+              "x": 0.08916666666666667,
+              "y": 0.37,
+              "width": 0.8175,
+              "height": 0.08666666666666667
+            },
+            {
+              "text": "・分類/名寄せ、集計軸の整備",
+              "x": 0.09166666666666666,
+              "y": 0.5116666666666667,
+              "width": 0.4841666666666667,
+              "height": 0.08333333333333333
+            },
+            {
+              "text": "·現データと過去データの統合 (共通指摘ID)",
+              "x": 0.09,
+              "y": 0.6383333333333333,
+              "width": 0.7166666666666667,
+              "height": 0.09166666666666666
+            },
+            {
+              "text": "・分析要件に合わせた加工",
+              "x": 0.09083333333333334,
+              "y": 0.7733333333333333,
+              "width": 0.41583333333333333,
+              "height": 0.08666666666666667
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "4",
+              "x": 0.9191666666666667,
+              "y": 0.14166666666666666,
+              "width": 0.0225,
+              "height": 0.04833333333333333
+            },
+            {
+              "text": "デ一タ加工・整理",
+              "x": 0.2916666666666667,
+              "y": 0.165,
+              "width": 0.4125,
+              "height": 0.12666666666666668
+            },
+            {
+              "text": "・社側で保持していない項目の付加（例：重要度）",
+              "x": 0.08916666666666667,
+              "y": 0.37,
+              "width": 0.8175,
+              "height": 0.08666666666666667
+            },
+            {
+              "text": "・分類/名寄せ、集計軸の整備",
+              "x": 0.09166666666666666,
+              "y": 0.5116666666666667,
+              "width": 0.4841666666666667,
+              "height": 0.08333333333333333
+            },
+            {
+              "text": "·現データと過去データの統合 (共通指摘ID)",
+              "x": 0.09,
+              "y": 0.6383333333333333,
+              "width": 0.7166666666666667,
+              "height": 0.09166666666666666
+            },
+            {
+              "text": "・分析要件に合わせた加工",
+              "x": 0.09083333333333334,
+              "y": 0.7733333333333333,
+              "width": 0.41583333333333333,
+              "height": 0.08666666666666667
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "drupalreleases.com",
+              "x": 0.08,
+              "y": 0.042105263157894736,
+              "width": 0.17666666666666667,
+              "height": 0.061052631578947365
+            },
+            {
+              "text": "https://www.drupalreleases.com > project , simple-crawler",
+              "x": 0.08166666666666667,
+              "y": 0.10947368421052632,
+              "width": 0.5083333333333333,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "Simple Crawler - Drupal Module | Drupal Releases",
+              "x": 0.030833333333333334,
+              "y": 0.21473684210526317,
+              "width": 0.6191666666666666,
+              "height": 0.07157894736842105
+            },
+            {
+              "text": "Simple Crawler helps you scrape or even crawl webpages and websites for context, research or",
+              "x": 0.030833333333333334,
+              "y": 0.3031578947368421,
+              "width": 0.8325,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "migrations. It just a wrapper around .",
+              "x": 0.03,
+              "y": 0.38105263157894737,
+              "width": 0.33166666666666667,
+              "height": 0.05894736842105263
+            },
+            {
+              "text": "whatisdrupal.com",
+              "x": 0.030833333333333334,
+              "y": 0.5621052631578948,
+              "width": 0.15916666666666668,
+              "height": 0.05052631578947368
+            },
+            {
+              "text": "https://whatisdrupal.com > how-to-optimize-your...",
+              "x": 0.030833333333333334,
+              "y": 0.6273684210526316,
+              "width": 0.43666666666666665,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "How to Optimize Your Drupal Website for AI Crawlers and Data",
+              "x": 0.030833333333333334,
+              "y": 0.728421052631579,
+              "width": 0.7883333333333333,
+              "height": 0.07157894736842105
+            },
+            {
+              "text": "Optimizing a Drupal website for Al crawlers requires a clean and organized content management",
+              "x": 0.03,
+              "y": 0.8168421052631579,
+              "width": 0.8483333333333334,
+              "height": 0.06315789473684211
+            },
+            {
+              "text": "foundation that adheres to ..",
+              "x": 0.029166666666666667,
+              "y": 0.8905263157894737,
+              "width": 0.25583333333333336,
+              "height": 0.06526315789473684
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "drupalreleases.com",
+              "x": 0.08,
+              "y": 0.042105263157894736,
+              "width": 0.17666666666666667,
+              "height": 0.061052631578947365
+            },
+            {
+              "text": "https://www.drupalreleases.com > project , simple-crawler",
+              "x": 0.08166666666666667,
+              "y": 0.10947368421052632,
+              "width": 0.5083333333333333,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "Simple Crawler - Drupal Module | Drupal Releases",
+              "x": 0.030833333333333334,
+              "y": 0.21473684210526317,
+              "width": 0.6191666666666666,
+              "height": 0.07157894736842105
+            },
+            {
+              "text": "Simple Crawler helps you scrape or even crawl webpages and websites for context, research or",
+              "x": 0.030833333333333334,
+              "y": 0.3031578947368421,
+              "width": 0.8325,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "migrations. It just a wrapper around .",
+              "x": 0.03,
+              "y": 0.38105263157894737,
+              "width": 0.33166666666666667,
+              "height": 0.05894736842105263
+            },
+            {
+              "text": "whatisdrupal.com",
+              "x": 0.030833333333333334,
+              "y": 0.5621052631578948,
+              "width": 0.15916666666666668,
+              "height": 0.05052631578947368
+            },
+            {
+              "text": "https://whatisdrupal.com > how-to-optimize-your...",
+              "x": 0.030833333333333334,
+              "y": 0.6273684210526316,
+              "width": 0.43666666666666665,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "How to Optimize Your Drupal Website for AI Crawlers and Data",
+              "x": 0.030833333333333334,
+              "y": 0.728421052631579,
+              "width": 0.7883333333333333,
+              "height": 0.07157894736842105
+            },
+            {
+              "text": "Optimizing a Drupal website for Al crawlers requires a clean and organized content management",
+              "x": 0.03,
+              "y": 0.8168421052631579,
+              "width": 0.8483333333333334,
+              "height": 0.06315789473684211
+            },
+            {
+              "text": "foundation that adheres to ..",
+              "x": 0.029166666666666667,
+              "y": 0.8905263157894737,
+              "width": 0.25583333333333336,
+              "height": 0.06526315789473684
+            }
+          ]
+        },
+        {
+          "lines": [
+            {
+              "text": "drupalreleases.com",
+              "x": 0.08,
+              "y": 0.042105263157894736,
+              "width": 0.17666666666666667,
+              "height": 0.061052631578947365
+            },
+            {
+              "text": "https://www.drupalreleases.com > project , simple-crawler",
+              "x": 0.08166666666666667,
+              "y": 0.10947368421052632,
+              "width": 0.5083333333333333,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "Simple Crawler - Drupal Module | Drupal Releases",
+              "x": 0.030833333333333334,
+              "y": 0.21473684210526317,
+              "width": 0.6191666666666666,
+              "height": 0.07157894736842105
+            },
+            {
+              "text": "Simple Crawler helps you scrape or even crawl webpages and websites for context, research or",
+              "x": 0.030833333333333334,
+              "y": 0.3031578947368421,
+              "width": 0.8325,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "migrations. It just a wrapper around .",
+              "x": 0.03,
+              "y": 0.38105263157894737,
+              "width": 0.33166666666666667,
+              "height": 0.05894736842105263
+            },
+            {
+              "text": "whatisdrupal.com",
+              "x": 0.030833333333333334,
+              "y": 0.5621052631578948,
+              "width": 0.15916666666666668,
+              "height": 0.05052631578947368
+            },
+            {
+              "text": "https://whatisdrupal.com > how-to-optimize-your...",
+              "x": 0.030833333333333334,
+              "y": 0.6273684210526316,
+              "width": 0.43666666666666665,
+              "height": 0.056842105263157895
+            },
+            {
+              "text": "How to Optimize Your Drupal Website for AI Crawlers and Data",
+              "x": 0.030833333333333334,
+              "y": 0.728421052631579,
+              "width": 0.7883333333333333,
+              "height": 0.07157894736842105
+            },
+            {
+              "text": "Optimizing a Drupal website for Al crawlers requires a clean and organized content management",
+              "x": 0.03,
+              "y": 0.8168421052631579,
+              "width": 0.8483333333333334,
+              "height": 0.06315789473684211
+            },
+            {
+              "text": "foundation that adheres to ..",
+              "x": 0.029166666666666667,
+              "y": 0.8905263157894737,
+              "width": 0.25583333333333336,
+              "height": 0.06526315789473684
+            }
+          ]
+        }
+      ],
+      "timings": [
+        {
+          "request_id": 1,
+          "imports_ms": 1087.95,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": false,
+          "model_init_ms": 5625.44,
+          "input_size": [
+            347,
+            164
+          ],
+          "decode_ms": 1.02,
+          "ocr_size": [
+            1041,
+            492
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 3.28,
+          "predict_ms": 511.65,
+          "detection_ms": 150.15,
+          "recognition_ms": 359.25,
+          "normalize_ms": 0.04,
+          "detected_regions": 5,
+          "recognized_regions": 5,
+          "retained_lines": 5,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 7229.36
+        },
+        {
+          "request_id": 5,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            347,
+            164
+          ],
+          "decode_ms": 0.65,
+          "ocr_size": [
+            1041,
+            492
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 0.73,
+          "predict_ms": 394.73,
+          "detection_ms": 111.98,
+          "recognition_ms": 280.52,
+          "normalize_ms": 0.03,
+          "detected_regions": 5,
+          "recognized_regions": 5,
+          "retained_lines": 5,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 396.13
+        },
+        {
+          "request_id": 9,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            347,
+            164
+          ],
+          "decode_ms": 0.59,
+          "ocr_size": [
+            1041,
+            492
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 0.72,
+          "predict_ms": 306.87,
+          "detection_ms": 87.16,
+          "recognition_ms": 217.38,
+          "normalize_ms": 0.03,
+          "detected_regions": 5,
+          "recognized_regions": 5,
+          "retained_lines": 5,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 308.22
+        },
+        {
+          "request_id": 2,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            347,
+            166
+          ],
+          "decode_ms": 0.59,
+          "ocr_size": [
+            1041,
+            498
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 0.73,
+          "predict_ms": 432.21,
+          "detection_ms": 139.07,
+          "recognition_ms": 291.15,
+          "normalize_ms": 0.03,
+          "detected_regions": 5,
+          "recognized_regions": 5,
+          "retained_lines": 5,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 433.56
+        },
+        {
+          "request_id": 6,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            347,
+            166
+          ],
+          "decode_ms": 0.57,
+          "ocr_size": [
+            1041,
+            498
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 0.75,
+          "predict_ms": 309.78,
+          "detection_ms": 97.26,
+          "recognition_ms": 209.86,
+          "normalize_ms": 0.03,
+          "detected_regions": 5,
+          "recognized_regions": 5,
+          "retained_lines": 5,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 311.13
+        },
+        {
+          "request_id": 10,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            347,
+            166
+          ],
+          "decode_ms": 0.54,
+          "ocr_size": [
+            1041,
+            498
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 0.75,
+          "predict_ms": 305.01,
+          "detection_ms": 93.95,
+          "recognition_ms": 209.04,
+          "normalize_ms": 0.03,
+          "detected_regions": 5,
+          "recognized_regions": 5,
+          "retained_lines": 5,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 306.33
+        },
+        {
+          "request_id": 3,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            408,
+            204
+          ],
+          "decode_ms": 0.76,
+          "ocr_size": [
+            1200,
+            600
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 0.99,
+          "predict_ms": 480.59,
+          "detection_ms": 177.63,
+          "recognition_ms": 299.99,
+          "normalize_ms": 0.04,
+          "detected_regions": 6,
+          "recognized_regions": 6,
+          "retained_lines": 6,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 482.37
+        },
+        {
+          "request_id": 7,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            408,
+            204
+          ],
+          "decode_ms": 0.76,
+          "ocr_size": [
+            1200,
+            600
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 0.99,
+          "predict_ms": 410.72,
+          "detection_ms": 140.8,
+          "recognition_ms": 267.16,
+          "normalize_ms": 0.04,
+          "detected_regions": 6,
+          "recognized_regions": 6,
+          "retained_lines": 6,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 412.49
+        },
+        {
+          "request_id": 11,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            408,
+            204
+          ],
+          "decode_ms": 0.77,
+          "ocr_size": [
+            1200,
+            600
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 1.02,
+          "predict_ms": 446.62,
+          "detection_ms": 167.15,
+          "recognition_ms": 276.61,
+          "normalize_ms": 0.03,
+          "detected_regions": 6,
+          "recognized_regions": 6,
+          "retained_lines": 6,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 448.44
+        },
+        {
+          "request_id": 4,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            707,
+            280
+          ],
+          "decode_ms": 1.19,
+          "ocr_size": [
+            1200,
+            475
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 1.31,
+          "predict_ms": 926.7,
+          "detection_ms": 139.31,
+          "recognition_ms": 784.51,
+          "normalize_ms": 0.06,
+          "detected_regions": 10,
+          "recognized_regions": 10,
+          "retained_lines": 10,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 929.23
+        },
+        {
+          "request_id": 8,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            707,
+            280
+          ],
+          "decode_ms": 1.22,
+          "ocr_size": [
+            1200,
+            475
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 1.32,
+          "predict_ms": 738.62,
+          "detection_ms": 102.36,
+          "recognition_ms": 633.51,
+          "normalize_ms": 0.05,
+          "detected_regions": 10,
+          "recognized_regions": 10,
+          "retained_lines": 10,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 741.2
+        },
+        {
+          "request_id": 12,
+          "imports_ms": 0.01,
+          "model": "PP-OCRv5_mobile_rec",
+          "model_reused": true,
+          "model_init_ms": 0,
+          "input_size": [
+            707,
+            280
+          ],
+          "decode_ms": 1.1,
+          "ocr_size": [
+            1200,
+            475
+          ],
+          "upscale_target": 1200,
+          "resize_ms": 1.27,
+          "predict_ms": 729.71,
+          "detection_ms": 101.46,
+          "recognition_ms": 625.41,
+          "normalize_ms": 0.05,
+          "detected_regions": 10,
+          "recognized_regions": 10,
+          "retained_lines": 10,
+          "device": "cpu",
+          "cpu_threads": 4,
+          "mkldnn": true,
+          "total_ms": 732.11
+        }
+      ],
+      "summary": {
+        "ocr-japanese-card.png": {
+          "initial_ms": 7229.36,
+          "warm_ms": 352.175,
+          "recognition_ms": 248.95,
+          "line_counts": [
+            5,
+            5,
+            5
+          ],
+          "scores": [
+            {
+              "text": "デ一タ加工・整理\n·社側で保持していない项目の付加（例：重要度）\n分類/名寄せ、集計軸の整備\n·現デ一タと過去データの统合(共通指摘ID)\n·分析要件に合わせた加工",
+              "character_errors": 5,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工"
+              ]
+            },
+            {
+              "text": "デ一タ加工・整理\n·社側で保持していない项目の付加（例：重要度）\n分類/名寄せ、集計軸の整備\n·現デ一タと過去データの统合(共通指摘ID)\n·分析要件に合わせた加工",
+              "character_errors": 5,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工"
+              ]
+            },
+            {
+              "text": "デ一タ加工・整理\n·社側で保持していない项目の付加（例：重要度）\n分類/名寄せ、集計軸の整備\n·現デ一タと過去データの统合(共通指摘ID)\n·分析要件に合わせた加工",
+              "character_errors": 5,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工"
+              ]
+            }
+          ]
+        },
+        "ocr-japanese.png": {
+          "initial_ms": 433.56,
+          "warm_ms": 308.73,
+          "recognition_ms": 209.45,
+          "line_counts": [
+            5,
+            5,
+            5
+          ],
+          "scores": [
+            {
+              "text": "デ一タ加工・整理\n弊社側で保持していない項目の付加（例：重要度）\n分類ノ名寄せ、集計軸の整借\n現データと過去データの統合（共通指摘ID）\n分祈要件に合わせた加工",
+              "character_errors": 4,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工",
+                "分析要件"
+              ]
+            },
+            {
+              "text": "デ一タ加工・整理\n弊社側で保持していない項目の付加（例：重要度）\n分類ノ名寄せ、集計軸の整借\n現データと過去データの統合（共通指摘ID）\n分祈要件に合わせた加工",
+              "character_errors": 4,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工",
+                "分析要件"
+              ]
+            },
+            {
+              "text": "デ一タ加工・整理\n弊社側で保持していない項目の付加（例：重要度）\n分類ノ名寄せ、集計軸の整借\n現データと過去データの統合（共通指摘ID）\n分祈要件に合わせた加工",
+              "character_errors": 4,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工",
+                "分析要件"
+              ]
+            }
+          ]
+        },
+        "ocr-japanese-list.png": {
+          "initial_ms": 482.37,
+          "warm_ms": 430.46500000000003,
+          "recognition_ms": 271.885,
+          "line_counts": [
+            6,
+            6,
+            6
+          ],
+          "scores": [
+            {
+              "text": "デ一タ加工・整理\n・社側で保持していない項目の付加（例：重要度）\n・分類/名寄せ、集計軸の整備\n·現データと過去データの統合 (共通指摘ID)\n・分析要件に合わせた加工",
+              "character_errors": 2,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工"
+              ]
+            },
+            {
+              "text": "デ一タ加工・整理\n・社側で保持していない項目の付加（例：重要度）\n・分類/名寄せ、集計軸の整備\n·現データと過去データの統合 (共通指摘ID)\n・分析要件に合わせた加工",
+              "character_errors": 2,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工"
+              ]
+            },
+            {
+              "text": "デ一タ加工・整理\n・社側で保持していない項目の付加（例：重要度）\n・分類/名寄せ、集計軸の整備\n·現データと過去データの統合 (共通指摘ID)\n・分析要件に合わせた加工",
+              "character_errors": 2,
+              "reference_characters": 68,
+              "missing_keywords": [
+                "データ加工"
+              ]
+            }
+          ]
+        },
+        "ocr-search-results.png": {
+          "initial_ms": 929.23,
+          "warm_ms": 736.655,
+          "recognition_ms": 629.46,
+          "line_counts": [
+            10,
+            10,
+            10
+          ],
+          "scores": [
+            {
+              "text": "drupalreleases.com\nhttps://www.drupalreleases.com > project , simple-crawler\nSimple Crawler - Drupal Module | Drupal Releases\nSimple Crawler helps you scrape or even crawl webpages and websites for context, research or\nmigrations. It just a wrapper around .\nwhatisdrupal.com\nhttps://whatisdrupal.com > how-to-optimize-your...\nHow to Optimize Your Drupal Website for AI Crawlers and Data\nOptimizing a Drupal website for Al crawlers requires a clean and organized content management\nfoundation that adheres to ..",
+              "character_errors": 1,
+              "reference_characters": 413,
+              "missing_keywords": []
+            },
+            {
+              "text": "drupalreleases.com\nhttps://www.drupalreleases.com > project , simple-crawler\nSimple Crawler - Drupal Module | Drupal Releases\nSimple Crawler helps you scrape or even crawl webpages and websites for context, research or\nmigrations. It just a wrapper around .\nwhatisdrupal.com\nhttps://whatisdrupal.com > how-to-optimize-your...\nHow to Optimize Your Drupal Website for AI Crawlers and Data\nOptimizing a Drupal website for Al crawlers requires a clean and organized content management\nfoundation that adheres to ..",
+              "character_errors": 1,
+              "reference_characters": 413,
+              "missing_keywords": []
+            },
+            {
+              "text": "drupalreleases.com\nhttps://www.drupalreleases.com > project , simple-crawler\nSimple Crawler - Drupal Module | Drupal Releases\nSimple Crawler helps you scrape or even crawl webpages and websites for context, research or\nmigrations. It just a wrapper around .\nwhatisdrupal.com\nhttps://whatisdrupal.com > how-to-optimize-your...\nHow to Optimize Your Drupal Website for AI Crawlers and Data\nOptimizing a Drupal website for Al crawlers requires a clean and organized content management\nfoundation that adheres to ..",
+              "character_errors": 1,
+              "reference_characters": 413,
+              "missing_keywords": []
+            }
+          ]
+        }
+      }
+    }
+  }
+}

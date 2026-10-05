@@ -1,0 +1,131 @@
+{
+  "ocr-japanese-card.png": {
+    "warm_ms": 253.48895,
+    "scores": [
+      {
+        "text": "デ ー タ 加 工 ・ 整 理\n・ 弊 社 側 で 保 持 し て い な い 項 目 の 付 加 ( 例 : 重 要 度 )\n・ 分 類 / 名 寄 せ 、 集 計 軸 の 整 備\n・ 現 デ ー タ と 過 去 デ ー タ の 統 合 ( 共 通 指 郷 D )\n・ 分 析 要 件 に 合 わ せ た 加 工",
+        "character_errors": 2,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "共通指摘ID"
+        ]
+      },
+      {
+        "text": "デ ー タ 加 工 ・ 整 理\n・ 弊 社 側 で 保 持 し て い な い 項 目 の 付 加 ( 例 : 重 要 度 )\n・ 分 類 / 名 寄 せ 、 集 計 軸 の 整 備\n・ 現 デ ー タ と 過 去 デ ー タ の 統 合 ( 共 通 指 郷 D )\n・ 分 析 要 件 に 合 わ せ た 加 工",
+        "character_errors": 2,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "共通指摘ID"
+        ]
+      },
+      {
+        "text": "デ ー タ 加 工 ・ 整 理\n・ 弊 社 側 で 保 持 し て い な い 項 目 の 付 加 ( 例 : 重 要 度 )\n・ 分 類 / 名 寄 せ 、 集 計 軸 の 整 備\n・ 現 デ ー タ と 過 去 デ ー タ の 統 合 ( 共 通 指 郷 D )\n・ 分 析 要 件 に 合 わ せ た 加 工",
+        "character_errors": 2,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "共通指摘ID"
+        ]
+      }
+    ],
+    "quality_pass": false
+  },
+  "ocr-japanese.png": {
+    "warm_ms": 255.27640000000002,
+    "scores": [
+      {
+        "text": "テ ー タ 加 工 ・ 整 理\n弊 社 て 保 し て い な い 目 の 付 加 ( 例 ・ 重 要\n分 / 名 せ 、 三 計 の\n現 デ ー タ と 過 テ デ ー タ の 続 会 ( キ 住 指 )\n分 要 件 に 会 わ せ た 加 工",
+        "character_errors": 22,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "データ加工",
+          "重要度",
+          "分類",
+          "集計軸",
+          "共通指摘ID",
+          "分析要件"
+        ]
+      },
+      {
+        "text": "テ ー タ 加 工 ・ 整 理\n弊 社 て 保 し て い な い 目 の 付 加 ( 例 ・ 重 要\n分 / 名 せ 、 三 計 の\n現 デ ー タ と 過 テ デ ー タ の 続 会 ( キ 住 指 )\n分 要 件 に 会 わ せ た 加 工",
+        "character_errors": 22,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "データ加工",
+          "重要度",
+          "分類",
+          "集計軸",
+          "共通指摘ID",
+          "分析要件"
+        ]
+      },
+      {
+        "text": "テ ー タ 加 工 ・ 整 理\n弊 社 て 保 し て い な い 目 の 付 加 ( 例 ・ 重 要\n分 / 名 せ 、 三 計 の\n現 デ ー タ と 過 テ デ ー タ の 続 会 ( キ 住 指 )\n分 要 件 に 会 わ せ た 加 工",
+        "character_errors": 22,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "データ加工",
+          "重要度",
+          "分類",
+          "集計軸",
+          "共通指摘ID",
+          "分析要件"
+        ]
+      }
+    ],
+    "quality_pass": false
+  },
+  "ocr-japanese-list.png": {
+    "warm_ms": 349.55355,
+    "scores": [
+      {
+        "text": "デ ー タ 加 工 ・ 整 理\n・ 弊 社 側 で 保 持 し て い な い 項 目 の 付 加 ( 例 : 重 要 度 )\n・ 分 類 / 名 寄 せ 、 集 計 軸 の 整 備\n・ 現 デ ー タ と 過 去 デ ー タ の 統 合 ( 共 通 指 川 D )\n・ 分 析 要 件 に 合 わ せ た 加 工",
+        "character_errors": 2,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "共通指摘ID"
+        ]
+      },
+      {
+        "text": "デ ー タ 加 工 ・ 整 理\n・ 弊 社 側 で 保 持 し て い な い 項 目 の 付 加 ( 例 : 重 要 度 )\n・ 分 類 / 名 寄 せ 、 集 計 軸 の 整 備\n・ 現 デ ー タ と 過 去 デ ー タ の 統 合 ( 共 通 指 川 D )\n・ 分 析 要 件 に 合 わ せ た 加 工",
+        "character_errors": 2,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "共通指摘ID"
+        ]
+      },
+      {
+        "text": "デ ー タ 加 工 ・ 整 理\n・ 弊 社 側 で 保 持 し て い な い 項 目 の 付 加 ( 例 : 重 要 度 )\n・ 分 類 / 名 寄 せ 、 集 計 軸 の 整 備\n・ 現 デ ー タ と 過 去 デ ー タ の 統 合 ( 共 通 指 川 D )\n・ 分 析 要 件 に 合 わ せ た 加 工",
+        "character_errors": 2,
+        "reference_characters": 68,
+        "missing_keywords": [
+          "共通指摘ID"
+        ]
+      }
+    ],
+    "quality_pass": false
+  },
+  "ocr-search-results.png": {
+    "warm_ms": 425.22299999999996,
+    "scores": [
+      {
+        "text": "drupalreleases.com\nhttps://www.drupalreleases.com project simple-crawler\nSimple Crawler - Drupal Module I Drupal Releases\nSimple Crawler helps you scrape or even crawl webpages and websites for context, research or\nmigrations. It just a wrapper around .\nwhatisdrupal.com\nhttps://whatisdrupal.com > how-to-optimize-your...\nHow to Optimize Your Drupal Website for Al Crawlers and Data ..\nOptimizing a Drupal website for Al crawlers requires a clean and organized content management\nfoundation that adheres to",
+        "character_errors": 3,
+        "reference_characters": 413,
+        "missing_keywords": []
+      },
+      {
+        "text": "drupalreleases.com\nhttps://www.drupalreleases.com project simple-crawler\nSimple Crawler - Drupal Module I Drupal Releases\nSimple Crawler helps you scrape or even crawl webpages and websites for context, research or\nmigrations. It just a wrapper around .\nwhatisdrupal.com\nhttps://whatisdrupal.com > how-to-optimize-your...\nHow to Optimize Your Drupal Website for Al Crawlers and Data ..\nOptimizing a Drupal website for Al crawlers requires a clean and organized content management\nfoundation that adheres to",
+        "character_errors": 3,
+        "reference_characters": 413,
+        "missing_keywords": []
+      },
+      {
+        "text": "drupalreleases.com\nhttps://www.drupalreleases.com project simple-crawler\nSimple Crawler - Drupal Module I Drupal Releases\nSimple Crawler helps you scrape or even crawl webpages and websites for context, research or\nmigrations. It just a wrapper around .\nwhatisdrupal.com\nhttps://whatisdrupal.com > how-to-optimize-your...\nHow to Optimize Your Drupal Website for Al Crawlers and Data ..\nOptimizing a Drupal website for Al crawlers requires a clean and organized content management\nfoundation that adheres to",
+        "character_errors": 3,
+        "reference_characters": 413,
+        "missing_keywords": []
+      }
+    ],
+    "quality_pass": false
+  }
+}

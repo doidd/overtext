@@ -23,6 +23,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/test-paddleocr-worker.py
+      - run: python scripts/test-rapidocr-worker.py
       - run: npm run build
       - run: node --test scripts/test-settings-i18n.mjs scripts/test-translation.mjs
       - run: npx playwright install chromium
