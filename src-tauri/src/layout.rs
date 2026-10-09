@@ -207,9 +207,12 @@ fn starts_list_item(text: &str) -> bool {
     match chars.next() {
         // OCR often attaches a Japanese bullet directly to the first glyph.
         // Keep ordinary hyphens/asterisks conservative (e.g. -1, *pointer).
-        Some('•' | '·' | '・' | '▪' | '◦' | '‣' | '●' | '○' | '■') => {
+        Some('•' | '·' | '・' | '▪' | '◦' | '‣' | '●' | '○' | '■' | '✓' | '✔') => {
             chars.next().is_some()
         }
+        // A checkmark is sometimes recognized as a square-root sign. Avoid
+        // treating ordinary expressions such as √x or √2 as list markers.
+        Some('√') => chars.next().is_some_and(|c| c.is_whitespace() || c.is_uppercase()),
         Some('–' | '-' | '*') => {
             chars.next().is_some_and(char::is_whitespace)
         }
@@ -368,6 +371,75 @@ fn is_cjk(c: Option<char>) -> bool {
     c.is_some_and(|c| matches!(c as u32, 0x3040..=0x30FF | 0x3400..=0x9FFF | 0xAC00..=0xD7AF | 0xF900..=0xFAFF))
 }
 
+/// Detectors may return words/phrases instead of complete rows. Reconstruct
+/// nearby fragments on the same baseline before role/code/paragraph decisions.
+/// Vertical proximity alone cannot merge columns: split every band at a wide
+/// horizontal gap, and reject heavily overlapping boxes (possible duplicates).
+fn coalesce_rows(lines: Vec<Line>, image: &RgbaImage) -> Vec<Line> {
+    let mut bands: Vec<Vec<Line>> = Vec::new();
+    for line in lines {
+        let band = bands.iter().rposition(|band| {
+            let h = median(band.iter().map(|l| l.h).collect()).max(1.0);
+            let center = median(band.iter().map(|l| l.y + l.h / 2.0).collect());
+            let overlap = (center + h / 2.0).min(line.bottom())
+                - (center - h / 2.0).max(line.y);
+            (0.45..=2.2).contains(&(line.h / h))
+                && (line.y + line.h / 2.0 - center).abs() <= 0.35 * h.max(line.h)
+                && overlap >= 0.55 * h.min(line.h)
+        });
+        match band {
+            Some(i) => bands[i].push(line),
+            None => bands.push(vec![line]),
+        }
+    }
+    let mut rows = Vec::new();
+    for mut band in bands {
+        band.sort_by(|a, b| a.x.total_cmp(&b.x));
+        let mut row: Option<Line> = None;
+        let mut pieces = 0;
+        for line in band {
+            let joins = row.as_ref().is_some_and(|row| {
+                let gap = line.x - row.right();
+                gap <= 0.75 * row.h.min(line.h)
+                    && gap >= -0.5 * row.w.min(line.w)
+            });
+            if joins {
+                let row = row.as_mut().unwrap();
+                let text = line.text.trim();
+                if !row.text.is_empty() && !is_cjk(row.text.chars().last())
+                    && !is_cjk(text.chars().next()) && !row.text.ends_with('-') {
+                    row.text.push(' ');
+                }
+                row.text.push_str(text);
+                let right = row.right().max(line.right());
+                let bottom = row.bottom().max(line.bottom());
+                row.y = row.y.min(line.y);
+                row.w = right - row.x;
+                row.h = bottom - row.y;
+                pieces += 1;
+            } else {
+                if let Some(previous) = row.take() { rows.push(previous); }
+                let mut line = line;
+                line.text = line.text.trim().to_owned();
+                row = Some(line);
+                pieces = 1;
+            }
+            if pieces > 1 {
+                let row = row.as_mut().unwrap();
+                let (foreground, background) = sample_colors(image, row.x, row.y, row.w, row.h);
+                row.foreground = rgb(&foreground);
+                row.background = rgb(&background);
+            }
+        }
+        if let Some(row) = row { rows.push(row); }
+    }
+    rows.sort_by(|a, b| a.y.total_cmp(&b.y).then(a.x.total_cmp(&b.x)));
+    if cfg!(debug_assertions) {
+        eprintln!("layout: reconstructed {} visual rows", rows.len());
+    }
+    rows
+}
+
 /// Groups OCR lines into blocks in reading order and samples their colors.
 pub fn build_blocks(lines: &[OcrLine], image: &RgbaImage) -> Vec<Block> {
     let (iw, ih) = (f64::from(image.width()), f64::from(image.height()));
@@ -381,6 +453,7 @@ pub fn build_blocks(lines: &[OcrLine], image: &RgbaImage) -> Vec<Block> {
         })
         .collect();
     lines.sort_by(|a, b| a.y.total_cmp(&b.y).then(a.x.total_cmp(&b.x)));
+    let mut lines = coalesce_rows(lines, image);
     classify_code(&mut lines);
     classify_roles(&mut lines);
 
@@ -573,6 +646,64 @@ mod tests {
         assert!(blocks[1].line_height > blocks[2].line_height);
         assert!(blocks[4].line_height > blocks[5].line_height);
         eprintln!("search layout preview: {}", serde_json::to_string(&blocks).unwrap());
+    }
+
+    #[test]
+    fn real_rapid_textract_fragments_form_rows_before_paragraphs() {
+        let lines: Vec<OcrLine> = serde_json::from_str(include_str!("../assets/ocr-textract.json")).unwrap();
+        let image = image::load_from_memory(include_bytes!("../assets/ocr-textract.png")).unwrap().to_rgba8();
+        let blocks = build_blocks(&lines, &image);
+        assert_eq!(blocks.iter().map(|b| b.line_count).collect::<Vec<_>>(), [1, 3, 2, 3, 3]);
+        assert_eq!(blocks[0].text, "What is Amazon Textract?");
+        assert_eq!(blocks[0].kind, Kind::Heading);
+        assert!(blocks[1..4].iter().all(|b| b.kind == Kind::List));
+        assert!(blocks[1].text.contains("templates necessary."));
+        assert!(blocks[2].text.contains("text from documents."));
+        assert!(blocks[3].text.contains("HIPAA, GDPR,"));
+        assert!(blocks[4].text.ends_with("predictions."));
+        eprintln!("textract layout preview: {}", serde_json::to_string(&blocks).unwrap());
+    }
+
+    #[test]
+    fn same_row_fragments_keep_horizontal_order_and_inline_hyphens() {
+        let lines = [
+            line("example", 144.0, 12.0, 65.0, 20.0),
+            line("A well-", 10.0, 10.0, 70.0, 20.0),
+            line("known", 82.0, 11.0, 57.0, 20.0),
+        ];
+        let blocks = build_blocks(&lines, &white());
+        assert_eq!(blocks.len(), 1);
+        assert_eq!(blocks[0].text, "A well-known example");
+        assert_eq!(blocks[0].line_count, 1);
+    }
+
+    #[test]
+    fn same_baseline_does_not_bridge_a_column_gutter() {
+        let lines = [
+            line("Left column", 10.0, 10.0, 150.0, 20.0),
+            line("Right column", 180.0, 11.0, 150.0, 20.0),
+            line("continues on the left", 10.0, 34.0, 150.0, 20.0),
+            line("continues on the right", 180.0, 35.0, 150.0, 20.0),
+        ];
+        let blocks = build_blocks(&lines, &white());
+        assert_eq!(blocks.len(), 2);
+        assert!(blocks.iter().all(|b| b.line_count == 2));
+        assert!(!blocks[0].text.contains("Right"));
+        assert!(!blocks[1].text.contains("Left"));
+    }
+
+    #[test]
+    fn separate_rows_and_checkmarked_items_remain_separate() {
+        let lines = [
+            line("✓First", 10.0, 10.0, 150.0, 20.0),
+            line("✔Second", 10.0, 34.0, 150.0, 20.0),
+            line("√Third", 10.0, 58.0, 150.0, 20.0),
+        ];
+        let blocks = build_blocks(&lines, &white());
+        assert_eq!(blocks.len(), 3);
+        assert!(blocks.iter().all(|b| b.kind == Kind::List && b.line_count == 1));
+        assert!(!starts_list_item("√x"));
+        assert!(!starts_list_item("√2"));
     }
 
     #[test]

@@ -6,7 +6,7 @@ import { useAppLocale } from "./useAppLocale";
 import { renderTranslatedImage } from "./renderImage";
 
 type Props = { imagePath: string; width: number; height: number };
-type View = "image" | "text" | "original";
+type View = "image" | "text" | "original" | "source";
 
 export function Result({ imagePath }: Props) {
   const { t } = useAppLocale();
@@ -76,9 +76,10 @@ export function Result({ imagePath }: Props) {
 
   const errorText = error ? (error.key ? t[error.key] + ": " : "") + error.detail : "";
   const markdown = translation ? toMarkdown(translation.blocks) : "";
+  const sourceText = translation ? translation.blocks.map((b) => b.text).join("\n\n") : "";
 
   const copyText = async () => {
-    try { await navigator.clipboard.writeText(markdown); }
+    try { await navigator.clipboard.writeText(view === "source" ? sourceText : markdown); }
     catch (e) { setError({ detail: String(e) }); return; }
     setCopiedText(true);
     setTimeout(() => setCopiedText(false), 1200);
@@ -138,9 +139,9 @@ export function Result({ imagePath }: Props) {
         />
       )}
 
-      {translation && view === "text" && (
+      {translation && (view === "text" || view === "source") && (
         <div className="text-view">
-          {translation.blocks.length === 0 ? <p className="muted">{t.noText}</p> : <pre>{markdown}</pre>}
+          {translation.blocks.length === 0 ? <p className="muted">{t.noText}</p> : <pre>{view === "source" ? sourceText : markdown}</pre>}
         </div>
       )}
 
@@ -160,9 +161,9 @@ export function Result({ imagePath }: Props) {
         </span>}
         {translation && (
           <>
-            {(["image", "text", "original"] as const).map((v) => (
-              <button key={v} className={view === v ? "active" : ""} onClick={() => setView(v)}>
-                {v === "image" ? t.translatedImage : v === "text" ? t.textView : t.original}
+            {(["image", "text", "original", "source"] as const).map((v) => (
+              <button key={v} className={view === v ? "active" : ""} onClick={() => { setView(v); setCopiedText(false); }}>
+                {v === "image" ? t.translatedImage : v === "text" ? t.textView : v === "original" ? t.original : t.ocrText}
               </button>
             ))}
             <button onClick={copyImage} title={t.copyImageHint}>
@@ -171,8 +172,8 @@ export function Result({ imagePath }: Props) {
             <button onClick={saveImage} title={t.saveImageHint}>
               {savedImage ? t.savedImage : t.saveImage}
             </button>
-            <button onClick={copyText} title={t.copyTextHint}>
-              {copiedText ? t.copiedText : t.copyText}
+            <button onClick={copyText} title={view === "source" ? t.copySource : t.copyTextHint}>
+              {view === "source" ? (copiedText ? t.copiedSource : t.copySource) : (copiedText ? t.copiedText : t.copyText)}
             </button>
           </>
         )}

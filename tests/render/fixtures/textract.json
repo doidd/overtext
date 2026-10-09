@@ -1,0 +1,83 @@
+{
+  "width": 569,
+  "height": 458,
+  "allowedHeights": [
+    30.343685300207046,
+    73.0144927536232,
+    63.30451345755695,
+    73.01449275362319,
+    73.01449275362324
+  ],
+  "blocks": [
+    {
+      "x": 43.149166666666666,
+      "y": 27.498964803312628,
+      "width": 372.695,
+      "height": 30.343685300207046,
+      "lineHeight": 30.343685300207046,
+      "lineCount": 1,
+      "kind": "heading",
+      "align": "left",
+      "color": "#272635",
+      "background": "#ffffff",
+      "text": "What is Amazon Textract?",
+      "translated": "Amazon Textract là gì?"
+    },
+    {
+      "x": 41.2525,
+      "y": 100.03933747412007,
+      "width": 468.4766666666667,
+      "height": 73.0144927536232,
+      "lineHeight": 19.91304347826086,
+      "lineCount": 3,
+      "kind": "list",
+      "align": "left",
+      "color": "#474158",
+      "background": "#ffffff",
+      "text": "√ Extract text and structured data such as tables and forms from documents using artificial intelligence (Al)—no configuration or templates necessary.",
+      "translated": "✓ Trích xuất văn bản và dữ liệu có cấu trúc như bảng và biểu mẫu từ tài liệu bằng trí tuệ nhân tạo (AI), không cần cấu hình hay mẫu."
+    },
+    {
+      "x": 41.72666666666667,
+      "y": 192.4927536231884,
+      "width": 433.8625,
+      "height": 49.30848861283644,
+      "lineHeight": 24.654244306418235,
+      "lineCount": 2,
+      "kind": "list",
+      "align": "left",
+      "color": "#4b445b",
+      "background": "#ffffff",
+      "text": "√ Go beyond simple : optical character recognition (OCR) by extracting J relationships, structure, and text from documents.",
+      "translated": "✓ Vượt xa nhận dạng ký tự quang học (OCR) bằng cách trích xuất các mối quan hệ, cấu trúc và văn bản từ tài liệu."
+    },
+    {
+      "x": 40.778333333333336,
+      "y": 261.7142857142857,
+      "width": 463.2608333333334,
+      "height": 73.01449275362319,
+      "lineHeight": 22.28364389233957,
+      "lineCount": 3,
+      "kind": "list",
+      "align": "left",
+      "color": "#4b425b",
+      "background": "#ffffff",
+      "text": "√Improve security ' and compliance through robust data privacy, encryption, security controls, , and support compliance standards such as HIPAA, GDPR, and more.",
+      "translated": "✓ Tăng cường bảo mật và tuân thủ bằng quyền riêng tư dữ liệu, mã hóa, kiểm soát bảo mật và hỗ trợ các tiêu chuẩn như HIPAA, GDPR."
+    },
+    {
+      "x": 40.30416666666667,
+      "y": 357.0124223602484,
+      "width": 461.3641666666667,
+      "height": 73.01449275362324,
+      "lineHeight": 22.28364389233957,
+      "lineCount": 3,
+      "kind": "paragraph",
+      "align": "left",
+      "color": "#4c435d",
+      "background": "#ffffff",
+      "text": "Easily implement I human reviews with Amazon Augmented Al (A2l) to manage nuanced or sensitive workflows and audit predictions.",
+      "translated": "✓ Dễ dàng triển khai đánh giá của con người với Amazon Augmented AI (A2I) để quản lý các quy trình phức tạp hoặc nhạy cảm và kiểm tra dự đoán."
+    }
+  ]
+}

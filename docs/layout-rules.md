@@ -2,6 +2,7 @@ Layout decisions use a fixed priority order. Sentence continuation may relax OCR
 
 | Priority | Rule | Effect |
 | --- | --- | --- |
+| 0 | OCR fragments share a baseline and have only a word-sized horizontal gap | Reconstruct the visual row before code/role/paragraph classification. Sort fragments left to right, preserve inline hyphens, and keep wide column gutters separate. This does not relax vertical paragraph boundaries. |
 | 1 | An intervening block overlaps the candidate's column | Do not jump back across it. Interleaved, separate columns may still join. |
 | 2 | Maximum block length, code/prose transition, or a new list marker | Start another block. Keep code indentation and syntax colors independent of prose rules. |
 | 3 | Website/URL metadata, heading, and body roles differ | Start another block. A URL mentioned in a sentence is body text, not metadata. |
@@ -19,6 +20,7 @@ Both OCR engines feed this same policy. Thresholds are relative to OCR line heig
 | Regression | Required result |
 | --- | --- |
 | Real PaddleOCR search-results fixture | Six blocks: metadata/title/body for each result; separate title and snippet colors |
+| Real RapidOCR Mobile Textract fixture | Thirty OCR fragments reconstruct twelve visual rows and five blocks: one title and four independent items. A missed checkmark does not join separate items across paragraph spacing. |
 | Real Vision paragraph with 13 rows | One paragraph despite varying OCR box heights |
 | Taller inline row / short or colored inline-code row | Continue the paragraph |
 | URL mentioned inside prose, including at the start of a sentence | Keep it in the translated paragraph |
@@ -48,3 +50,9 @@ differently on macOS and Windows. `tests/render/render.spec.ts` therefore runs t
   invariants must still hold (nothing outside the allowed regions, source fully erased).
 
 `renderTranslatedImage(src, translation, { fontFamily })` accepts the font so tests can pin it.
+
+Textract's recorded Mobile OCR fragments also exercise row reconstruction in Rust
+and the resulting five-block geometry in browser tests. The render fixture declares
+allowed heights explicitly: a multi-row list item can use a small blank gap below
+it, ending before the next item. If translated ink needs that gap, it starts at the
+block top; otherwise the whole paragraph stays centered in the source block.

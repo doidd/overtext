@@ -17,7 +17,7 @@ const PINNED = '"OverTextTest", sans-serif';
 const lengthen = (t: string) => { const w = t.split(" "); return `${t} ${w.slice(0, Math.ceil(w.length / 2)).join(" ")}`; };
 
 for (const mode of ["pinned-font", "system-font", "stress-long"] as const)
-for (const name of ["search-results", "japanese-list"]) {
+for (const name of ["search-results", "japanese-list", "textract"]) {
   const base = JSON.parse(readFileSync(`tests/render/fixtures/${name}.json`, "utf8"));
   const fixture = mode !== "stress-long" ? base : { ...base, blocks: base.blocks.map((b: any) =>
     b.translated.trim() === b.text.trim() ? b : { ...b, translated: lengthen(b.translated) }) };
@@ -80,7 +80,7 @@ for (const name of ["search-results", "japanese-list"]) {
       const listRight = Math.max(...fixture.blocks.filter((b: any) => b.kind === "list").map((b: any) => b.x + b.width));
       const areas = active.map((b: any) => ({ x: b.x, y: b.y,
         width: b.kind === "list" ? listRight - b.x : b.width,
-        height: b.height, pad: b.lineHeight * .12 }));
+        height: fixture.allowedHeights?.[fixture.blocks.indexOf(b)] ?? b.height, pad: b.lineHeight * .12 }));
       let outsideChanges = 0;
       for (let y = 0; y < fixture.height; y++) for (let x = 0; x < fixture.width; x++) {
         if (areas.some((a: any) => x + 1 > a.x - a.pad && x < a.x + a.width + a.pad
@@ -107,18 +107,19 @@ for (const name of ["search-results", "japanese-list"]) {
       }
       expect(joined).toBe(expected);
       const right = block.kind === "list" ? result.listRight : block.x + block.width;
+      const allowedHeight = fixture.allowedHeights?.[fixture.blocks.findIndex((b: any) => b.x === block.x && b.y === block.y)] ?? block.height;
       for (const line of lines) {
         expect(line.x).toBeGreaterThanOrEqual(block.x - .01);
         expect(line.x + line.width).toBeLessThanOrEqual(right + .01);
         expect(line.y - line.ascent).toBeGreaterThanOrEqual(block.y - .01);
-        expect(line.y + line.descent).toBeLessThanOrEqual(block.y + block.height + .01);
+        expect(line.y + line.descent).toBeLessThanOrEqual(block.y + allowedHeight + .01);
         expect(line.color.toLowerCase()).toBe(block.color.toLowerCase());
       }
       const top = Math.min(...lines.map(l => l.y - l.ascent));
       const bottom = Math.max(...lines.map(l => l.y + l.descent));
       // Accented glyphs differ between rows: allow two pixels of optical offset,
       // but reject centering only the first line of a multiline paragraph.
-      expect(Math.abs((top + bottom) / 2 - (block.y + block.height / 2))).toBeLessThanOrEqual(2);
+      expect(Math.abs((top + bottom) / 2 - (block.y + Math.max(block.height, bottom - top) / 2))).toBeLessThanOrEqual(2);
     }
     expect(cursor).toBe(result.draws.length);
   });

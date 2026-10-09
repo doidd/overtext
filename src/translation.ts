@@ -46,7 +46,7 @@ export function toMarkdown(blocks: Block[]): string {
     .map((b) => {
       const text = b.translated.trim();
       if (b.kind === "heading") return `## ${text}`;
-      if (b.kind === "list") return `- ${text.replace(/^([•·・▪◦‣●○■–\-*]|\d+[.)])\s*/, "")}`;
+      if (b.kind === "list") return `- ${text.replace(/^([•·・▪◦‣●○■✓✔√–\-*]|\d+[.)])\s*/, "")}`;
       if (b.kind === "code") return `\`\`\`\n${text}\n\`\`\``;
       return text;
     })

@@ -38,3 +38,9 @@ test("a capture containing only links never contacts a translation provider", as
   assert.equal(module.calls.length, 1);
   assert.equal(result.blocks[0].translated, "https://example.com");
 });
+
+test("checkmarked OCR items produce one Markdown list marker", async () => {
+  const module = await pipeline([], []);
+  assert.equal(module.toMarkdown(["✓ First", "✔Second", "√ Third"].map(translated => ({ kind: "list", translated }))),
+    "- First\n- Second\n- Third");
+});
