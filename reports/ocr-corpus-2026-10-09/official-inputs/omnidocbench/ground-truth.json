@@ -1,0 +1,374 @@
+[
+  {
+    "extra": {
+      "relation": []
+    },
+    "layout_dets": [
+      {
+        "anno_id": 1,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 1,
+        "poly": [
+          73.33333333333316,
+          368.00000000000045,
+          1873.3333333333337,
+          368.00000000000045,
+          1873.3333333333337,
+          532.9392133492249,
+          73.33333333333316,
+          532.9392133492249
+        ],
+        "text": "Mostly based on asking language learners and showed that language proficiency was seen as one important factor"
+      },
+      {
+        "anno_id": 2,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 2,
+        "poly": [
+          73.33333333333333,
+          558.6666666666666,
+          1905.3333333333333,
+          558.6666666666666,
+          1905.3333333333333,
+          718.6666666666666,
+          73.33333333333333,
+          718.6666666666666
+        ],
+        "text": "Eg: Girard (1977- French learners of English), teaches good pronunciation, explains clearly, speaks good English,"
+      },
+      {
+        "anno_id": 3,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 3,
+        "poly": [
+          76,
+          752,
+          586.6666666666666,
+          752,
+          586.6666666666666,
+          829.3333333333334,
+          76,
+          829.3333333333334
+        ],
+        "text": "Eg: Brosh (1996)"
+      },
+      {
+        "anno_id": 4,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 4,
+        "poly": [
+          73.33333333333333,
+          865.3333333333334,
+          1612,
+          865.3333333333334,
+          1612,
+          940,
+          73.33333333333333,
+          940
+        ],
+        "text": "· knowledge and command of the target language;"
+      },
+      {
+        "anno_id": 5,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 5,
+        "poly": [
+          64,
+          974.6666666666666,
+          1874.6666666666667,
+          974.6666666666666,
+          1874.6666666666667,
+          1212,
+          64,
+          1212
+        ],
+        "text": "Teacher Evaluation – context universal-Evaluation fairly\nsimple - based on visible behaviours/learner outcomes\nin ‘objective’ tests"
+      },
+      {
+        "anno_id": 6,
+        "attribute": {},
+        "category_type": "header",
+        "ignore": false,
+        "order": null,
+        "poly": [
+          53.90759703569547,
+          84.52546874674067,
+          1938.3308955004843,
+          84.52546874674067,
+          1938.3308955004843,
+          272.99596815627353,
+          53.90759703569547,
+          272.99596815627353
+        ],
+        "text": "Good Language Teachers                                       UNIVERSITY OF LEEDS"
+      }
+    ],
+    "page_info": {
+      "height": 1500,
+      "image_path": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_010.png",
+      "page_attribute": {
+        "data_source": "PPT2PDF",
+        "language": "english",
+        "layout": "single_column",
+        "special_issue": [
+          "None"
+        ],
+        "subset": "v1.5"
+      },
+      "page_no": 10,
+      "sample_id": 989,
+      "width": 2000
+    }
+  },
+  {
+    "extra": {
+      "relation": []
+    },
+    "layout_dets": [
+      {
+        "anno_id": 1,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 1,
+        "poly": [
+          73.33333333333333,
+          366.6666666666667,
+          1860,
+          366.6666666666667,
+          1860,
+          605.3333333333334,
+          73.33333333333333,
+          605.3333333333334
+        ],
+        "text": "Yilmaz 2011 looked at the relationships between Turkish\nprimary and secondary school teachers' perceptions of self-efficacy, English proficiency, and instructional strategies"
+      },
+      {
+        "anno_id": 2,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 2,
+        "poly": [
+          78.66666666666667,
+          640,
+          1802.6666666666667,
+          640,
+          1802.6666666666667,
+          797.3333333333334,
+          78.66666666666667,
+          797.3333333333334
+        ],
+        "text": "Results indicated that teachers' perceived efficacy was\ncorrelated with their self-reported English proficiency"
+      },
+      {
+        "anno_id": 3,
+        "attribute": {},
+        "category_type": "header",
+        "ignore": false,
+        "order": null,
+        "poly": [
+          69.93987780847516,
+          77.4449586055423,
+          1948.0710349596884,
+          77.4449586055423,
+          1948.0710349596884,
+          252.08648193302577,
+          69.93987780847516,
+          252.08648193302577
+        ],
+        "text": "Turkey  UNIVERSITY OF LEEDS"
+      }
+    ],
+    "page_info": {
+      "height": 1500,
+      "image_path": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_029.png",
+      "page_attribute": {
+        "data_source": "PPT2PDF",
+        "language": "english",
+        "layout": "single_column",
+        "special_issue": [
+          "None"
+        ],
+        "subset": "v1.5"
+      },
+      "page_no": 29,
+      "sample_id": 1335,
+      "width": 2000
+    }
+  },
+  {
+    "extra": {
+      "relation": []
+    },
+    "layout_dets": [
+      {
+        "anno_id": 1,
+        "attribute": {},
+        "category_type": "title",
+        "ignore": false,
+        "order": 1,
+        "poly": [
+          218.66666666666663,
+          360,
+          1788,
+          360,
+          1788,
+          549.3333333333334,
+          218.66666666666663,
+          549.3333333333334
+        ],
+        "text": "International Meeting on Languages, Applied Linguistics and Translation"
+      },
+      {
+        "anno_id": 2,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 2,
+        "poly": [
+          604,
+          581.3333333333334,
+          1396,
+          581.3333333333334,
+          1396,
+          640,
+          604,
+          640
+        ],
+        "text": "University of Évora, 6-7 December 2012"
+      },
+      {
+        "anno_id": 3,
+        "attribute": {},
+        "category_type": "title",
+        "ignore": false,
+        "order": 3,
+        "poly": [
+          256,
+          820,
+          1748,
+          820,
+          1748,
+          988,
+          256,
+          988
+        ],
+        "text": "Thirteen Fallacies about the Users and Uses of English as an International Language"
+      },
+      {
+        "anno_id": 4,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 4,
+        "poly": [
+          878.9238184771438,
+          1101.3333333333333,
+          1121.7479912257324,
+          1101.3333333333333,
+          1121.7479912257324,
+          1151.907425348228,
+          878.9238184771438,
+          1151.907425348228
+        ],
+        "text": "Luis Guerra"
+      },
+      {
+        "anno_id": 8,
+        "attribute": {},
+        "category_type": "text_block",
+        "ignore": false,
+        "order": 5,
+        "poly": [
+          710.0638314379502,
+          1157.8774895155748,
+          1280.0586884017405,
+          1157.8774895155748,
+          1280.0586884017405,
+          1213.459296084784,
+          710.0638314379502,
+          1213.459296084784
+        ],
+        "text": "University of Évora, Portugal"
+      },
+      {
+        "anno_id": 5,
+        "attribute": {},
+        "category_type": "abandon",
+        "ignore": false,
+        "order": null,
+        "poly": [
+          225.26967328855113,
+          49.87608590832701,
+          524.6005912571406,
+          49.87608590832701,
+          524.6005912571406,
+          330.12681810446077,
+          225.26967328855113,
+          330.12681810446077
+        ]
+      },
+      {
+        "anno_id": 6,
+        "attribute": {},
+        "category_type": "abandon",
+        "ignore": false,
+        "order": null,
+        "poly": [
+          1509.4779322256072,
+          95.33478533972708,
+          1800.2853440508093,
+          95.33478533972708,
+          1800.2853440508093,
+          327.2856493899979,
+          1509.4779322256072,
+          327.2856493899979
+        ]
+      },
+      {
+        "anno_id": 7,
+        "attribute": {},
+        "category_type": "abandon",
+        "ignore": false,
+        "order": null,
+        "poly": [
+          803.4475066816723,
+          29.987904907089387,
+          1102.7784246502615,
+          29.987904907089387,
+          1102.7784246502615,
+          310.23863710322314,
+          803.4475066816723,
+          310.23863710322314
+        ]
+      }
+    ],
+    "page_info": {
+      "height": 1500,
+      "image_path": "PPT_13 fallacies LALT2012_page_001.png",
+      "page_attribute": {
+        "data_source": "PPT2PDF",
+        "language": "english",
+        "layout": "single_column",
+        "special_issue": [
+          "None"
+        ],
+        "subset": "v1.5"
+      },
+      "page_no": 1,
+      "sample_id": 1334,
+      "width": 2000
+    }
+  }
+]

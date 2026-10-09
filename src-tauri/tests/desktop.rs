@@ -19,6 +19,10 @@ mod i18n;
 mod translate;
 
 #[cfg(target_os = "windows")]
+#[path = "support/ocr_benchmark.rs"]
+mod ocr_benchmark;
+
+#[cfg(target_os = "windows")]
 #[test]
 #[ignore = "Installs RapidOCR runtime and downloads/verifies Mobile and Server models"]
 fn rapidocr_install_and_switch_models() {

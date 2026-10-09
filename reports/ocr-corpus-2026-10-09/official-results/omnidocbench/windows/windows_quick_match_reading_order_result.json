@@ -1,0 +1,68 @@
+[
+    {
+        "gt": [
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "pred": [
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "img_id": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_010.png",
+        "edit": 0.0,
+        "image_name": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_010.png",
+        "upper_len": 5,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    },
+    {
+        "gt": [
+            1,
+            2
+        ],
+        "pred": [
+            1,
+            2
+        ],
+        "img_id": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_029.png",
+        "edit": 0.0,
+        "image_name": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_029.png",
+        "upper_len": 2,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    },
+    {
+        "gt": [
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "pred": [
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "img_id": "PPT_13 fallacies LALT2012_page_001.png",
+        "edit": 0.0,
+        "image_name": "PPT_13 fallacies LALT2012_page_001.png",
+        "upper_len": 5,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    }
+]

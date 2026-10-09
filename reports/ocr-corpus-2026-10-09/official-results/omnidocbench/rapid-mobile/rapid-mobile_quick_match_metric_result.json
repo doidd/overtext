@@ -1,0 +1,60 @@
+{
+    "text_block": {
+        "all": {
+            "Edit_dist": {
+                "ALL_page_avg": 0.0019267822736030828,
+                "edit_whole": 0.0025220680958385876,
+                "edit_sample_avg": 0.0009633911368015414
+            }
+        },
+        "group": {
+            "sample_count": {}
+        },
+        "page": {
+            "Edit_dist": {
+                "ALL": 0.0019267822736030828,
+                "None": 0.0019267822736030828,
+                "data_source: PPT2PDF": 0.0019267822736030828,
+                "language: english": 0.0019267822736030828,
+                "layout: single_column": 0.0019267822736030828,
+                "subset: v1.5": 0.0019267822736030828
+            }
+        }
+    },
+    "reading_order": {
+        "all": {
+            "Edit_dist": {
+                "ALL_page_avg": 0.0,
+                "edit_whole": 0.0,
+                "edit_sample_avg": 0.0
+            }
+        },
+        "group": {
+            "sample_count": {}
+        },
+        "page": {
+            "Edit_dist": {
+                "ALL": 0.0,
+                "None": 0.0,
+                "data_source: PPT2PDF": 0.0,
+                "language: english": 0.0,
+                "layout: single_column": 0.0,
+                "subset: v1.5": 0.0
+            }
+        }
+    },
+    "match_debug": {
+        "workers": 1,
+        "page_count": 3,
+        "quick_match_truncated_timeout_sec": 300,
+        "match_timeout_sec": 420,
+        "text_match_fallback_pages": {
+            "quick_match_timeout": [],
+            "page_timeout": []
+        },
+        "text_match_fallback_counts": {
+            "quick_match_timeout": 0,
+            "page_timeout": 0
+        }
+    }
+}

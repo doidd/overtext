@@ -1,0 +1,1706 @@
+{
+  "version": 1,
+  "datasets": {
+    "omnidocbench": {
+      "repo": "opendatalab/OmniDocBench",
+      "revision": "aa1ee96d106dbe53d0ae59474d75c6e6d9b53fec",
+      "annotation": "OmniDocBench.json",
+      "sha256": "a45cd84b04ad8b793e775089640e6b681209abea33ead54c1828ddca35fae496",
+      "language": "en-US",
+      "selected_images": [
+        "PPT_11.2013EvaluatingTraineeteacherproficiency_page_010.png",
+        "PPT_11.2013EvaluatingTraineeteacherproficiency_page_029.png",
+        "PPT_13 fallacies LALT2012_page_001.png"
+      ]
+    },
+    "jasyn": {
+      "repo": "stockmark/OmniDocBench-JASyn",
+      "revision": "73ecb24624682575bd5ebf138026e711589ae5c6",
+      "annotation": "OmniDocBench_JASyn.json",
+      "sha256": "d6ef2b628626d73ae430a548005d872ff83f7477aeeb1441fd3fda8caccd99a8",
+      "language": "ja",
+      "selected_images": [
+        "166_00.png",
+        "170_00.png",
+        "170_02.png"
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "local-ocr-textract",
+      "image": "src-tauri/assets/ocr-textract.png",
+      "language": "en-US",
+      "dataset": "local",
+      "annotation_source": "manually transcribed text and image region boxes; not OCR-derived",
+      "regions": [
+        {
+          "text": "What is Amazon Textract?",
+          "kind": "heading",
+          "order": 0,
+          "x": 37,
+          "y": 24,
+          "width": 391,
+          "height": 40
+        },
+        {
+          "text": "Extract text and structured data such as tables and forms from documents using artificial intelligence (AI)—no configuration or templates necessary.",
+          "kind": "list",
+          "order": 1,
+          "x": 37,
+          "y": 94,
+          "width": 480,
+          "height": 82
+        },
+        {
+          "text": "Go beyond simple optical character recognition (OCR) by extracting relationships, structure, and text from documents.",
+          "kind": "list",
+          "order": 2,
+          "x": 37,
+          "y": 193,
+          "width": 466,
+          "height": 52
+        },
+        {
+          "text": "Improve security and compliance through robust data privacy, encryption, security controls, and support compliance standards such as HIPAA, GDPR, and more.",
+          "kind": "list",
+          "order": 3,
+          "x": 37,
+          "y": 259,
+          "width": 477,
+          "height": 79
+        },
+        {
+          "text": "Easily implement human reviews with Amazon Augmented AI (A2I) to manage nuanced or sensitive workflows and audit predictions.",
+          "kind": "list",
+          "order": 4,
+          "x": 37,
+          "y": 355,
+          "width": 480,
+          "height": 78
+        }
+      ],
+      "width": 569,
+      "height": 458,
+      "sha256": "2a9ea2d13e57ac30ebb0476c2792a06df241f493c4f77789bbfed9497c00dbf4"
+    },
+    {
+      "id": "local-ocr-japanese-card",
+      "image": "src-tauri/assets/ocr-japanese-card.png",
+      "language": "ja",
+      "dataset": "local",
+      "annotation_source": "manually transcribed text and image region boxes; not OCR-derived",
+      "regions": [
+        {
+          "text": "データ加工・整理",
+          "kind": "heading",
+          "order": 0,
+          "x": 93,
+          "y": 19,
+          "width": 166,
+          "height": 27
+        },
+        {
+          "text": "弊社側で保持していない項目の付加（例：重要度）",
+          "kind": "list",
+          "order": 1,
+          "x": 25,
+          "y": 54,
+          "width": 299,
+          "height": 22
+        },
+        {
+          "text": "分類／名寄せ、集計軸の整備",
+          "kind": "list",
+          "order": 2,
+          "x": 25,
+          "y": 79,
+          "width": 212,
+          "height": 22
+        },
+        {
+          "text": "現データと過去データの統合（共通指摘ID）",
+          "kind": "list",
+          "order": 3,
+          "x": 25,
+          "y": 104,
+          "width": 270,
+          "height": 22
+        },
+        {
+          "text": "分析要件に合わせた加工",
+          "kind": "list",
+          "order": 4,
+          "x": 25,
+          "y": 128,
+          "width": 185,
+          "height": 23
+        }
+      ],
+      "width": 347,
+      "height": 164,
+      "sha256": "a2076c6664537ef92685b48f8998ba4ed106609d42ef5f669d05a392bd1987c5"
+    },
+    {
+      "id": "local-ocr-japanese",
+      "image": "src-tauri/assets/ocr-japanese.png",
+      "language": "ja",
+      "dataset": "local",
+      "annotation_source": "manually transcribed text and image region boxes; not OCR-derived",
+      "regions": [
+        {
+          "text": "データ加工・整理",
+          "kind": "heading",
+          "order": 0,
+          "x": 91,
+          "y": 14,
+          "width": 163,
+          "height": 27
+        },
+        {
+          "text": "弊社側で保持していない項目の付加（例：重要度）",
+          "kind": "paragraph",
+          "order": 1,
+          "x": 23,
+          "y": 49,
+          "width": 283,
+          "height": 23
+        },
+        {
+          "text": "分類／名寄せ、集計軸の整備",
+          "kind": "paragraph",
+          "order": 2,
+          "x": 23,
+          "y": 75,
+          "width": 217,
+          "height": 23
+        },
+        {
+          "text": "現データと過去データの統合（共通指摘ID）",
+          "kind": "paragraph",
+          "order": 3,
+          "x": 23,
+          "y": 99,
+          "width": 275,
+          "height": 23
+        },
+        {
+          "text": "分析要件に合わせた加工",
+          "kind": "paragraph",
+          "order": 4,
+          "x": 23,
+          "y": 124,
+          "width": 205,
+          "height": 23
+        }
+      ],
+      "width": 347,
+      "height": 166,
+      "sha256": "c7f1dd416f2a53880b7693a411e94213b46103b24cd33d089574328eb8f6bc18"
+    },
+    {
+      "id": "local-ocr-japanese-list",
+      "image": "src-tauri/assets/ocr-japanese-list.png",
+      "language": "ja",
+      "dataset": "local",
+      "annotation_source": "manually transcribed text and image region boxes; not OCR-derived",
+      "regions": [
+        {
+          "text": "データ加工・整理",
+          "kind": "heading",
+          "order": 0,
+          "x": 116,
+          "y": 31,
+          "width": 177,
+          "height": 32
+        },
+        {
+          "text": "弊社側で保持していない項目の付加（例：重要度）",
+          "kind": "list",
+          "order": 1,
+          "x": 34,
+          "y": 74,
+          "width": 342,
+          "height": 23
+        },
+        {
+          "text": "分類／名寄せ、集計軸の整備",
+          "kind": "list",
+          "order": 2,
+          "x": 34,
+          "y": 101,
+          "width": 245,
+          "height": 23
+        },
+        {
+          "text": "現データと過去データの統合（共通指摘ID）",
+          "kind": "list",
+          "order": 3,
+          "x": 34,
+          "y": 128,
+          "width": 299,
+          "height": 23
+        },
+        {
+          "text": "分析要件に合わせた加工",
+          "kind": "list",
+          "order": 4,
+          "x": 34,
+          "y": 155,
+          "width": 240,
+          "height": 23
+        }
+      ],
+      "width": 408,
+      "height": 204,
+      "sha256": "9a22e0f8e92afaed4baf88aaf566c03f996928c4781b01d449afecab67d111f6"
+    },
+    {
+      "id": "local-search",
+      "image": "src-tauri/assets/ocr-search-results.png",
+      "language": "en-US",
+      "dataset": "local",
+      "annotation_source": "manually transcribed text and image region boxes; not OCR-derived",
+      "regions": [
+        {
+          "text": "drupalreleases.com\nhttps://www.drupalreleases.com › project › simple-crawler",
+          "kind": "metadata",
+          "order": 0,
+          "x": 53,
+          "y": 8,
+          "width": 374,
+          "height": 41
+        },
+        {
+          "text": "Simple Crawler - Drupal Module | Drupal Releases",
+          "kind": "heading",
+          "order": 1,
+          "x": 19,
+          "y": 57,
+          "width": 451,
+          "height": 27
+        },
+        {
+          "text": "Simple Crawler helps you scrape or even crawl webpages and websites for context, research or\nmigrations. It just a wrapper around ...",
+          "kind": "paragraph",
+          "order": 2,
+          "x": 19,
+          "y": 85,
+          "width": 601,
+          "height": 43
+        },
+        {
+          "text": "whatisdrupal.com\nhttps://whatisdrupal.com › how-to-optimize-your...",
+          "kind": "metadata",
+          "order": 3,
+          "x": 19,
+          "y": 153,
+          "width": 338,
+          "height": 42
+        },
+        {
+          "text": "How to Optimize Your Drupal Website for AI Crawlers and Data ...",
+          "kind": "heading",
+          "order": 4,
+          "x": 19,
+          "y": 201,
+          "width": 587,
+          "height": 25
+        },
+        {
+          "text": "Optimizing a Drupal website for AI crawlers requires a clean and organized content management\nfoundation that adheres to ...",
+          "kind": "paragraph",
+          "order": 5,
+          "x": 19,
+          "y": 228,
+          "width": 611,
+          "height": 43
+        }
+      ],
+      "width": 707,
+      "height": 280,
+      "sha256": "967779d3d6d43bffd14cf44e4f63cf129552225aa7b29556f0daa7d231ba8b75"
+    },
+    {
+      "id": "local-textract-scale075",
+      "image": "logs/ocr-benchmark/images/local-textract-scale075.png",
+      "language": "en-US",
+      "dataset": "local",
+      "annotation_source": "manually transcribed text and image region boxes; not OCR-derived",
+      "regions": [
+        {
+          "text": "What is Amazon Textract?",
+          "kind": "heading",
+          "order": 0,
+          "x": 27.75,
+          "y": 18.0,
+          "width": 293.25,
+          "height": 30.0
+        },
+        {
+          "text": "Extract text and structured data such as tables and forms from documents using artificial intelligence (AI)—no configuration or templates necessary.",
+          "kind": "list",
+          "order": 1,
+          "x": 27.75,
+          "y": 70.5,
+          "width": 360.0,
+          "height": 61.5
+        },
+        {
+          "text": "Go beyond simple optical character recognition (OCR) by extracting relationships, structure, and text from documents.",
+          "kind": "list",
+          "order": 2,
+          "x": 27.75,
+          "y": 144.75,
+          "width": 349.5,
+          "height": 39.0
+        },
+        {
+          "text": "Improve security and compliance through robust data privacy, encryption, security controls, and support compliance standards such as HIPAA, GDPR, and more.",
+          "kind": "list",
+          "order": 3,
+          "x": 27.75,
+          "y": 194.25,
+          "width": 357.75,
+          "height": 59.25
+        },
+        {
+          "text": "Easily implement human reviews with Amazon Augmented AI (A2I) to manage nuanced or sensitive workflows and audit predictions.",
+          "kind": "list",
+          "order": 4,
+          "x": 27.75,
+          "y": 266.25,
+          "width": 360.0,
+          "height": 58.5
+        }
+      ],
+      "variant": {
+        "scale": 0.75,
+        "crop_offset": [
+          0,
+          0
+        ]
+      },
+      "width": 427,
+      "height": 344,
+      "sha256": "5d3058652a9b0d7acc92ac66ea0d3f9201f79c0f9ec0dae6d2f8f397847b3fc3"
+    },
+    {
+      "id": "local-textract-scale150",
+      "image": "logs/ocr-benchmark/images/local-textract-scale150.png",
+      "language": "en-US",
+      "dataset": "local",
+      "annotation_source": "manually transcribed text and image region boxes; not OCR-derived",
+      "regions": [
+        {
+          "text": "What is Amazon Textract?",
+          "kind": "heading",
+          "order": 0,
+          "x": 55.5,
+          "y": 36.0,
+          "width": 586.5,
+          "height": 60.0
+        },
+        {
+          "text": "Extract text and structured data such as tables and forms from documents using artificial intelligence (AI)—no configuration or templates necessary.",
+          "kind": "list",
+          "order": 1,
+          "x": 55.5,
+          "y": 141.0,
+          "width": 720.0,
+          "height": 123.0
+        },
+        {
+          "text": "Go beyond simple optical character recognition (OCR) by extracting relationships, structure, and text from documents.",
+          "kind": "list",
+          "order": 2,
+          "x": 55.5,
+          "y": 289.5,
+          "width": 699.0,
+          "height": 78.0
+        },
+        {
+          "text": "Improve security and compliance through robust data privacy, encryption, security controls, and support compliance standards such as HIPAA, GDPR, and more.",
+          "kind": "list",
+          "order": 3,
+          "x": 55.5,
+          "y": 388.5,
+          "width": 715.5,
+          "height": 118.5
+        },
+        {
+          "text": "Easily implement human reviews with Amazon Augmented AI (A2I) to manage nuanced or sensitive workflows and audit predictions.",
+          "kind": "list",
+          "order": 4,
+          "x": 55.5,
+          "y": 532.5,
+          "width": 720.0,
+          "height": 117.0
+        }
+      ],
+      "variant": {
+        "scale": 1.5,
+        "crop_offset": [
+          0,
+          0
+        ]
+      },
+      "width": 854,
+      "height": 687,
+      "sha256": "c694e4518bf754e9c223fc8d8065017fcdbab1a03a3ffa517ed6c9c80192b73d"
+    },
+    {
+      "id": "local-textract-crop",
+      "image": "logs/ocr-benchmark/images/local-textract-crop.png",
+      "language": "en-US",
+      "dataset": "local",
+      "annotation_source": "manually transcribed text and image region boxes; not OCR-derived",
+      "regions": [
+        {
+          "text": "What is Amazon Textract?",
+          "kind": "heading",
+          "order": 0,
+          "x": 17.0,
+          "y": 9.0,
+          "width": 391.0,
+          "height": 40.0
+        },
+        {
+          "text": "Extract text and structured data such as tables and forms from documents using artificial intelligence (AI)—no configuration or templates necessary.",
+          "kind": "list",
+          "order": 1,
+          "x": 17.0,
+          "y": 79.0,
+          "width": 480.0,
+          "height": 82.0
+        },
+        {
+          "text": "Go beyond simple optical character recognition (OCR) by extracting relationships, structure, and text from documents.",
+          "kind": "list",
+          "order": 2,
+          "x": 17.0,
+          "y": 178.0,
+          "width": 466.0,
+          "height": 52.0
+        },
+        {
+          "text": "Improve security and compliance through robust data privacy, encryption, security controls, and support compliance standards such as HIPAA, GDPR, and more.",
+          "kind": "list",
+          "order": 3,
+          "x": 17.0,
+          "y": 244.0,
+          "width": 477.0,
+          "height": 79.0
+        },
+        {
+          "text": "Easily implement human reviews with Amazon Augmented AI (A2I) to manage nuanced or sensitive workflows and audit predictions.",
+          "kind": "list",
+          "order": 4,
+          "x": 17.0,
+          "y": 340.0,
+          "width": 480.0,
+          "height": 78.0
+        }
+      ],
+      "variant": {
+        "scale": 1.0,
+        "crop_offset": [
+          20,
+          15
+        ]
+      },
+      "width": 529,
+      "height": 428,
+      "sha256": "1082f08b14f1cccdfb729017076f10a71cf1df3b4180c66e24ec99824f78ca85"
+    },
+    {
+      "id": "omnidocbench-PPT_11.2013EvaluatingTraineeteacherproficiency_page_010",
+      "image": "logs/ocr-benchmark/images/omnidocbench-PPT_11.2013EvaluatingTraineeteacherproficiency_page_010.png",
+      "language": "en-US",
+      "dataset": "omnidocbench",
+      "regions": [
+        {
+          "text": "Mostly based on asking language learners and showed that language proficiency was seen as one important factor",
+          "kind": "paragraph",
+          "order": 1,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 1,
+          "x": 73.33333333333316,
+          "y": 368.00000000000045,
+          "width": 1800.0000000000002,
+          "height": 164.93921334922447
+        },
+        {
+          "text": "Eg: Girard (1977- French learners of English), teaches good pronunciation, explains clearly, speaks good English,",
+          "kind": "paragraph",
+          "order": 2,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 2,
+          "x": 73.33333333333333,
+          "y": 558.6666666666666,
+          "width": 1832.0,
+          "height": 160.0
+        },
+        {
+          "text": "Eg: Brosh (1996)",
+          "kind": "paragraph",
+          "order": 3,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 3,
+          "x": 76,
+          "y": 752,
+          "width": 510.66666666666663,
+          "height": 77.33333333333337
+        },
+        {
+          "text": "· knowledge and command of the target language;",
+          "kind": "paragraph",
+          "order": 4,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 4,
+          "x": 73.33333333333333,
+          "y": 865.3333333333334,
+          "width": 1538.6666666666667,
+          "height": 74.66666666666663
+        },
+        {
+          "text": "Teacher Evaluation – context universal-Evaluation fairly\nsimple - based on visible behaviours/learner outcomes\nin ‘objective’ tests",
+          "kind": "paragraph",
+          "order": 5,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 5,
+          "x": 64,
+          "y": 974.6666666666666,
+          "width": 1810.6666666666667,
+          "height": 237.33333333333337
+        },
+        {
+          "text": "Good Language Teachers                                       UNIVERSITY OF LEEDS",
+          "kind": "metadata",
+          "order": 100005,
+          "reading_order_known": false,
+          "category": "header",
+          "annotation_id": 6,
+          "x": 53.90759703569547,
+          "y": 84.52546874674067,
+          "width": 1884.423298464789,
+          "height": 188.47049940953286
+        }
+      ],
+      "page_attribute": {
+        "data_source": "PPT2PDF",
+        "language": "english",
+        "layout": "single_column",
+        "special_issue": [
+          "None"
+        ],
+        "subset": "v1.5"
+      },
+      "original_image_sha256": "eec974d0546dcb2aaeb0d441c0131c68eb01cc0611a2e87febe638dcc2c081e3",
+      "original_page": {
+        "page_info": {
+          "image_path": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_010.png",
+          "page_no": 10,
+          "page_attribute": {
+            "data_source": "PPT2PDF",
+            "language": "english",
+            "layout": "single_column",
+            "special_issue": [
+              "None"
+            ],
+            "subset": "v1.5"
+          },
+          "width": 2000,
+          "height": 1500,
+          "sample_id": 989
+        },
+        "layout_dets": [
+          {
+            "category_type": "text_block",
+            "anno_id": 1,
+            "order": 1,
+            "ignore": false,
+            "poly": [
+              73.33333333333316,
+              368.00000000000045,
+              1873.3333333333335,
+              368.00000000000045,
+              1873.3333333333335,
+              532.9392133492249,
+              73.33333333333316,
+              532.9392133492249
+            ],
+            "attribute": {},
+            "text": "Mostly based on asking language learners and showed that language proficiency was seen as one important factor"
+          },
+          {
+            "category_type": "text_block",
+            "anno_id": 2,
+            "order": 2,
+            "ignore": false,
+            "poly": [
+              73.33333333333333,
+              558.6666666666666,
+              1905.3333333333333,
+              558.6666666666666,
+              1905.3333333333333,
+              718.6666666666666,
+              73.33333333333333,
+              718.6666666666666
+            ],
+            "attribute": {},
+            "text": "Eg: Girard (1977- French learners of English), teaches good pronunciation, explains clearly, speaks good English,"
+          },
+          {
+            "category_type": "text_block",
+            "anno_id": 3,
+            "order": 3,
+            "ignore": false,
+            "poly": [
+              76,
+              752,
+              586.6666666666666,
+              752,
+              586.6666666666666,
+              829.3333333333334,
+              76,
+              829.3333333333334
+            ],
+            "attribute": {},
+            "text": "Eg: Brosh (1996)"
+          },
+          {
+            "category_type": "text_block",
+            "anno_id": 4,
+            "order": 4,
+            "ignore": false,
+            "poly": [
+              73.33333333333333,
+              865.3333333333334,
+              1612,
+              865.3333333333334,
+              1612,
+              940,
+              73.33333333333333,
+              940
+            ],
+            "attribute": {},
+            "text": "· knowledge and command of the target language;"
+          },
+          {
+            "category_type": "text_block",
+            "anno_id": 5,
+            "order": 5,
+            "ignore": false,
+            "poly": [
+              64,
+              974.6666666666666,
+              1874.6666666666667,
+              974.6666666666666,
+              1874.6666666666667,
+              1212,
+              64,
+              1212
+            ],
+            "attribute": {},
+            "text": "Teacher Evaluation – context universal-Evaluation fairly\nsimple - based on visible behaviours/learner outcomes\nin ‘objective’ tests"
+          },
+          {
+            "category_type": "header",
+            "anno_id": 6,
+            "order": null,
+            "ignore": false,
+            "poly": [
+              53.90759703569547,
+              84.52546874674067,
+              1938.3308955004845,
+              84.52546874674067,
+              1938.3308955004845,
+              272.99596815627353,
+              53.90759703569547,
+              272.99596815627353
+            ],
+            "attribute": {},
+            "text": "Good Language Teachers                                       UNIVERSITY OF LEEDS"
+          }
+        ],
+        "extra": {
+          "relation": []
+        }
+      },
+      "width": 2000,
+      "height": 1500,
+      "sha256": "97f941273ed7443930904f59a1d356e559d07af983318111d7e9d61351e7fd11"
+    },
+    {
+      "id": "omnidocbench-PPT_11.2013EvaluatingTraineeteacherproficiency_page_029",
+      "image": "logs/ocr-benchmark/images/omnidocbench-PPT_11.2013EvaluatingTraineeteacherproficiency_page_029.png",
+      "language": "en-US",
+      "dataset": "omnidocbench",
+      "regions": [
+        {
+          "text": "Yilmaz 2011 looked at the relationships between Turkish\nprimary and secondary school teachers' perceptions of self-efficacy, English proficiency, and instructional strategies",
+          "kind": "paragraph",
+          "order": 1,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 1,
+          "x": 73.33333333333333,
+          "y": 366.6666666666667,
+          "width": 1786.6666666666667,
+          "height": 238.66666666666669
+        },
+        {
+          "text": "Results indicated that teachers' perceived efficacy was\ncorrelated with their self-reported English proficiency",
+          "kind": "paragraph",
+          "order": 2,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 2,
+          "x": 78.66666666666667,
+          "y": 640,
+          "width": 1724.0,
+          "height": 157.33333333333337
+        },
+        {
+          "text": "Turkey  UNIVERSITY OF LEEDS",
+          "kind": "metadata",
+          "order": 100002,
+          "reading_order_known": false,
+          "category": "header",
+          "annotation_id": 3,
+          "x": 69.93987780847516,
+          "y": 77.4449586055423,
+          "width": 1878.1311571512133,
+          "height": 174.64152332748347
+        }
+      ],
+      "page_attribute": {
+        "data_source": "PPT2PDF",
+        "language": "english",
+        "layout": "single_column",
+        "special_issue": [
+          "None"
+        ],
+        "subset": "v1.5"
+      },
+      "original_image_sha256": "dbeaf73292b948b705881254a85a853c7bf740ac80b849dc97417e9bd85dcff2",
+      "original_page": {
+        "page_info": {
+          "image_path": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_029.png",
+          "page_no": 29,
+          "page_attribute": {
+            "data_source": "PPT2PDF",
+            "language": "english",
+            "layout": "single_column",
+            "special_issue": [
+              "None"
+            ],
+            "subset": "v1.5"
+          },
+          "width": 2000,
+          "height": 1500,
+          "sample_id": 1335
+        },
+        "layout_dets": [
+          {
+            "category_type": "text_block",
+            "anno_id": 1,
+            "order": 1,
+            "ignore": false,
+            "poly": [
+              73.33333333333333,
+              366.6666666666667,
+              1860,
+              366.6666666666667,
+              1860,
+              605.3333333333334,
+              73.33333333333333,
+              605.3333333333334
+            ],
+            "attribute": {},
+            "text": "Yilmaz 2011 looked at the relationships between Turkish\nprimary and secondary school teachers' perceptions of self-efficacy, English proficiency, and instructional strategies"
+          },
+          {
+            "category_type": "text_block",
+            "anno_id": 2,
+            "order": 2,
+            "ignore": false,
+            "poly": [
+              78.66666666666667,
+              640,
+              1802.6666666666667,
+              640,
+              1802.6666666666667,
+              797.3333333333334,
+              78.66666666666667,
+              797.3333333333334
+            ],
+            "attribute": {},
+            "text": "Results indicated that teachers' perceived efficacy was\ncorrelated with their self-reported English proficiency"
+          },
+          {
+            "category_type": "header",
+            "anno_id": 3,
+            "order": null,
+            "ignore": false,
+            "poly": [
+              69.93987780847516,
+              77.4449586055423,
+              1948.0710349596884,
+              77.4449586055423,
+              1948.0710349596884,
+              252.08648193302577,
+              69.93987780847516,
+              252.08648193302577
+            ],
+            "attribute": {},
+            "text": "Turkey  UNIVERSITY OF LEEDS"
+          }
+        ],
+        "extra": {
+          "relation": []
+        }
+      },
+      "width": 2000,
+      "height": 1500,
+      "sha256": "7a2a9f4ef546e1dcc8f22336aa10d1e07f91e22c728ba0a3fe5bc1789bf02fad"
+    },
+    {
+      "id": "omnidocbench-PPT_13 fallacies LALT2012_page_001",
+      "image": "logs/ocr-benchmark/images/omnidocbench-PPT_13 fallacies LALT2012_page_001.png",
+      "language": "en-US",
+      "dataset": "omnidocbench",
+      "regions": [
+        {
+          "text": "International Meeting on Languages, Applied Linguistics and Translation",
+          "kind": "heading",
+          "order": 1,
+          "reading_order_known": true,
+          "category": "title",
+          "annotation_id": 1,
+          "x": 218.66666666666666,
+          "y": 360,
+          "width": 1569.3333333333333,
+          "height": 189.33333333333337
+        },
+        {
+          "text": "University of Évora, 6-7 December 2012",
+          "kind": "paragraph",
+          "order": 2,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 2,
+          "x": 604,
+          "y": 581.3333333333334,
+          "width": 792,
+          "height": 58.66666666666663
+        },
+        {
+          "text": "Thirteen Fallacies about the Users and Uses of English as an International Language",
+          "kind": "heading",
+          "order": 3,
+          "reading_order_known": true,
+          "category": "title",
+          "annotation_id": 3,
+          "x": 256,
+          "y": 820,
+          "width": 1492,
+          "height": 168
+        },
+        {
+          "text": "Luis Guerra",
+          "kind": "paragraph",
+          "order": 4,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 4,
+          "x": 878.9238184771438,
+          "y": 1101.3333333333333,
+          "width": 242.8241727485887,
+          "height": 50.57409201489486
+        },
+        {
+          "text": "University of Évora, Portugal",
+          "kind": "paragraph",
+          "order": 5,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 8,
+          "x": 710.0638314379502,
+          "y": 1157.8774895155748,
+          "width": 569.9948569637903,
+          "height": 55.58180656920922
+        }
+      ],
+      "page_attribute": {
+        "data_source": "PPT2PDF",
+        "language": "english",
+        "layout": "single_column",
+        "special_issue": [
+          "None"
+        ],
+        "subset": "v1.5"
+      },
+      "original_image_sha256": "8d8818a721a0542c0c851e0a284f2b1c26748ecbed9f9209d031803823b4d4d4",
+      "original_page": {
+        "page_info": {
+          "image_path": "PPT_13 fallacies LALT2012_page_001.png",
+          "page_no": 1,
+          "page_attribute": {
+            "data_source": "PPT2PDF",
+            "language": "english",
+            "layout": "single_column",
+            "special_issue": [
+              "None"
+            ],
+            "subset": "v1.5"
+          },
+          "width": 2000,
+          "height": 1500,
+          "sample_id": 1334
+        },
+        "layout_dets": [
+          {
+            "category_type": "title",
+            "anno_id": 1,
+            "order": 1,
+            "ignore": false,
+            "poly": [
+              218.66666666666666,
+              360,
+              1788,
+              360,
+              1788,
+              549.3333333333334,
+              218.66666666666666,
+              549.3333333333334
+            ],
+            "attribute": {},
+            "text": "International Meeting on Languages, Applied Linguistics and Translation"
+          },
+          {
+            "category_type": "text_block",
+            "anno_id": 2,
+            "order": 2,
+            "ignore": false,
+            "poly": [
+              604,
+              581.3333333333334,
+              1396,
+              581.3333333333334,
+              1396,
+              640,
+              604,
+              640
+            ],
+            "attribute": {},
+            "text": "University of Évora, 6-7 December 2012"
+          },
+          {
+            "category_type": "title",
+            "anno_id": 3,
+            "order": 3,
+            "ignore": false,
+            "poly": [
+              256,
+              820,
+              1748,
+              820,
+              1748,
+              988,
+              256,
+              988
+            ],
+            "attribute": {},
+            "text": "Thirteen Fallacies about the Users and Uses of English as an International Language"
+          },
+          {
+            "category_type": "text_block",
+            "anno_id": 4,
+            "order": 4,
+            "ignore": false,
+            "poly": [
+              878.9238184771438,
+              1101.3333333333333,
+              1121.7479912257324,
+              1101.3333333333333,
+              1121.7479912257324,
+              1151.9074253482281,
+              878.9238184771438,
+              1151.9074253482281
+            ],
+            "attribute": {},
+            "text": "Luis Guerra"
+          },
+          {
+            "category_type": "text_block",
+            "anno_id": 8,
+            "order": 5,
+            "ignore": false,
+            "poly": [
+              710.0638314379502,
+              1157.8774895155748,
+              1280.0586884017405,
+              1157.8774895155748,
+              1280.0586884017405,
+              1213.459296084784,
+              710.0638314379502,
+              1213.459296084784
+            ],
+            "attribute": {},
+            "text": "University of Évora, Portugal"
+          },
+          {
+            "category_type": "abandon",
+            "anno_id": 5,
+            "order": null,
+            "ignore": false,
+            "poly": [
+              225.26967328855113,
+              49.87608590832701,
+              524.6005912571406,
+              49.87608590832701,
+              524.6005912571406,
+              330.12681810446077,
+              225.26967328855113,
+              330.12681810446077
+            ],
+            "attribute": {}
+          },
+          {
+            "category_type": "abandon",
+            "anno_id": 6,
+            "order": null,
+            "ignore": false,
+            "poly": [
+              1509.4779322256072,
+              95.33478533972709,
+              1800.2853440508093,
+              95.33478533972709,
+              1800.2853440508093,
+              327.2856493899979,
+              1509.4779322256072,
+              327.2856493899979
+            ],
+            "attribute": {}
+          },
+          {
+            "category_type": "abandon",
+            "anno_id": 7,
+            "order": null,
+            "ignore": false,
+            "poly": [
+              803.4475066816723,
+              29.987904907089387,
+              1102.7784246502615,
+              29.987904907089387,
+              1102.7784246502615,
+              310.23863710322314,
+              803.4475066816723,
+              310.23863710322314
+            ],
+            "attribute": {}
+          }
+        ],
+        "extra": {
+          "relation": []
+        }
+      },
+      "width": 2000,
+      "height": 1500,
+      "sha256": "7e1dfa2a1a4b0d6ca38964f2301de287833803ea9c9be2b916f06a9032d2a211"
+    },
+    {
+      "id": "jasyn-166_00",
+      "image": "logs/ocr-benchmark/images/jasyn-166_00.png",
+      "language": "ja",
+      "dataset": "jasyn",
+      "regions": [
+        {
+          "text": "持続可能性とオペレーション最適化の３つの視点",
+          "kind": "heading",
+          "order": 0,
+          "reading_order_known": true,
+          "category": "title",
+          "annotation_id": 0,
+          "x": 32.0,
+          "y": 116.0,
+          "width": 767.0,
+          "height": 118.0
+        },
+        {
+          "text": "包装素材、在庫管理、イベント予算の三つの要因が、ブランド価値と効率をどう支えるか",
+          "kind": "paragraph",
+          "order": 1,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 1,
+          "x": 32.0,
+          "y": 238.0,
+          "width": 799.0,
+          "height": 29.0
+        },
+        {
+          "text": "包装素材の複雑性と持続可能なブランド価値向上成功率の関係",
+          "kind": "heading",
+          "order": 2,
+          "reading_order_known": true,
+          "category": "title",
+          "annotation_id": 2,
+          "x": 57.0,
+          "y": 314.0,
+          "width": 672.0,
+          "height": 35.0
+        },
+        {
+          "text": "包装素材の種類と複雑さが、エコブランドとしての成功率にどのように影響するかを可視化したHexbin Plotです。",
+          "kind": "paragraph",
+          "order": 3,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 3,
+          "x": 57.0,
+          "y": 356.0,
+          "width": 741.0,
+          "height": 48.0
+        },
+        {
+          "text": "素材別の複雑度（素材数×リサイクル工程数）と成功率（売上増加率＋顧客ロイヤリティ指数）の相関は0.68と中程度の正の相関が見られる。\n成功率が80％以上のブランドは、リサイクルPET、PLAバイオプラスチック、紙ベース包装の3素材以内に絞り込んでいる。",
+          "kind": "paragraph",
+          "order": 4,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 4,
+          "x": 57.0,
+          "y": 420.0,
+          "width": 753.0,
+          "height": 104.0
+        },
+        {
+          "text": "茶道の「一期一会」になぞらえて、包装は一度きりの出会い。素材を絞ることで顧客の記憶に残りやすく、持続可能性のメッセージが伝わります。",
+          "kind": "paragraph",
+          "order": 6,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 6,
+          "x": 32.0,
+          "y": 668.0,
+          "width": 921.0,
+          "height": 20.0
+        }
+      ],
+      "page_attribute": {
+        "data_source": "synthetic_document",
+        "language": "japanese",
+        "layout": "slide",
+        "special_issue": []
+      },
+      "original_image_sha256": "dec7946e6a3897a306d724464367995a56c2cd6841470ed46f11163cb4f7fc90",
+      "original_page": {
+        "layout_dets": [
+          {
+            "category_type": "title",
+            "poly": [
+              32.0,
+              116.0,
+              799.0,
+              116.0,
+              799.0,
+              234.0,
+              32.0,
+              234.0
+            ],
+            "ignore": false,
+            "order": 0,
+            "anno_id": 0,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "持続可能性とオペレーション最適化の３つの視点"
+          },
+          {
+            "category_type": "text_block",
+            "poly": [
+              32.0,
+              238.0,
+              831.0,
+              238.0,
+              831.0,
+              267.0,
+              32.0,
+              267.0
+            ],
+            "ignore": false,
+            "order": 1,
+            "anno_id": 1,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "包装素材、在庫管理、イベント予算の三つの要因が、ブランド価値と効率をどう支えるか"
+          },
+          {
+            "category_type": "title",
+            "poly": [
+              57.0,
+              314.0,
+              729.0,
+              314.0,
+              729.0,
+              349.0,
+              57.0,
+              349.0
+            ],
+            "ignore": false,
+            "order": 2,
+            "anno_id": 2,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "包装素材の複雑性と持続可能なブランド価値向上成功率の関係"
+          },
+          {
+            "category_type": "text_block",
+            "poly": [
+              57.0,
+              356.0,
+              798.0,
+              356.0,
+              798.0,
+              404.0,
+              57.0,
+              404.0
+            ],
+            "ignore": false,
+            "order": 3,
+            "anno_id": 3,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "包装素材の種類と複雑さが、エコブランドとしての成功率にどのように影響するかを可視化したHexbin Plotです。"
+          },
+          {
+            "category_type": "text_block",
+            "poly": [
+              57.0,
+              420.0,
+              810.0,
+              420.0,
+              810.0,
+              524.0,
+              57.0,
+              524.0
+            ],
+            "ignore": false,
+            "order": 4,
+            "anno_id": 4,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "素材別の複雑度（素材数×リサイクル工程数）と成功率（売上増加率＋顧客ロイヤリティ指数）の相関は0.68と中程度の正の相関が見られる。\n成功率が80％以上のブランドは、リサイクルPET、PLAバイオプラスチック、紙ベース包装の3素材以内に絞り込んでいる。"
+          },
+          {
+            "category_type": "figure",
+            "poly": [
+              860.0,
+              202.0,
+              1247.0,
+              202.0,
+              1247.0,
+              474.0,
+              860.0,
+              474.0
+            ],
+            "ignore": false,
+            "order": 5,
+            "anno_id": 5,
+            "attribute": {},
+            "line_with_spans": []
+          },
+          {
+            "category_type": "text_block",
+            "poly": [
+              32.0,
+              668.0,
+              953.0,
+              668.0,
+              953.0,
+              688.0,
+              32.0,
+              688.0
+            ],
+            "ignore": false,
+            "order": 6,
+            "anno_id": 6,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "茶道の「一期一会」になぞらえて、包装は一度きりの出会い。素材を絞ることで顧客の記憶に残りやすく、持続可能性のメッセージが伝わります。"
+          }
+        ],
+        "page_info": {
+          "page_no": 0,
+          "height": 720,
+          "width": 1280,
+          "image_path": "166_00.png",
+          "page_attribute": {
+            "data_source": "synthetic_document",
+            "language": "japanese",
+            "layout": "slide",
+            "special_issue": []
+          }
+        },
+        "extra": {
+          "relation": []
+        }
+      },
+      "width": 1280,
+      "height": 720,
+      "sha256": "c6f10c828ce07ea1d3d65d8c161b249c09697d2386b1b395cd0f89d25ccbaa4f"
+    },
+    {
+      "id": "jasyn-170_00",
+      "image": "logs/ocr-benchmark/images/jasyn-170_00.png",
+      "language": "ja",
+      "dataset": "jasyn",
+      "regions": [
+        {
+          "text": "関谷 征紀が率いるデジタル資産管理プロジェクト　資産カテゴリ別コスト配分率",
+          "kind": "heading",
+          "order": 0,
+          "reading_order_known": true,
+          "category": "title",
+          "annotation_id": 0,
+          "x": 32.0,
+          "y": 121.0,
+          "width": 778.0,
+          "height": 166.0
+        },
+        {
+          "text": "•\nハードウェアとクラウドが合わせて約53%と、インフラ投資が最大のコストドライバー\n•\nソフトウェア費用は保守・アップデートが中心で、ライフサイクル管理の最適化余地あり\n•\n人件費はプロジェクトマネジメントとデータガバナンスに集中、業務標準化で削減可能\n•\n在庫管理システムで培った「資産の可視化」手法を活かし、Excelのピボットテーブルで月次コストをモニタリング",
+          "kind": "paragraph",
+          "order": 1,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 1,
+          "x": 56.0,
+          "y": 324.0,
+          "width": 755.0,
+          "height": 156.0
+        },
+        {
+          "text": "ハードウェア更新サイクルを5年ごとに統一し、クラウド利用率を30%まで引き上げることで、総コストを約8%削減できる見込み。",
+          "kind": "paragraph",
+          "order": 3,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 3,
+          "x": 48.0,
+          "y": 643.0,
+          "width": 1183.0,
+          "height": 29.0
+        }
+      ],
+      "page_attribute": {
+        "data_source": "synthetic_document",
+        "language": "japanese",
+        "layout": "slide",
+        "special_issue": []
+      },
+      "original_image_sha256": "2a17c986de7df1c4b33a520ec6e53a4eee21e58432fe614951d5585f76b37919",
+      "original_page": {
+        "layout_dets": [
+          {
+            "category_type": "title",
+            "poly": [
+              32.0,
+              121.0,
+              810.0,
+              121.0,
+              810.0,
+              287.0,
+              32.0,
+              287.0
+            ],
+            "ignore": false,
+            "order": 0,
+            "anno_id": 0,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "関谷 征紀が率いるデジタル資産管理プロジェクト　資産カテゴリ別コスト配分率"
+          },
+          {
+            "category_type": "text_block",
+            "poly": [
+              56.0,
+              324.0,
+              811.0,
+              324.0,
+              811.0,
+              480.0,
+              56.0,
+              480.0
+            ],
+            "ignore": false,
+            "order": 1,
+            "anno_id": 1,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "•\nハードウェアとクラウドが合わせて約53%と、インフラ投資が最大のコストドライバー\n•\nソフトウェア費用は保守・アップデートが中心で、ライフサイクル管理の最適化余地あり\n•\n人件費はプロジェクトマネジメントとデータガバナンスに集中、業務標準化で削減可能\n•\n在庫管理システムで培った「資産の可視化」手法を活かし、Excelのピボットテーブルで月次コストをモニタリング"
+          },
+          {
+            "category_type": "figure",
+            "poly": [
+              875.0,
+              184.0,
+              1232.0,
+              184.0,
+              1232.0,
+              452.0,
+              875.0,
+              452.0
+            ],
+            "ignore": false,
+            "order": 2,
+            "anno_id": 2,
+            "attribute": {},
+            "line_with_spans": []
+          },
+          {
+            "category_type": "text_block",
+            "poly": [
+              48.0,
+              643.0,
+              1231.0,
+              643.0,
+              1231.0,
+              672.0,
+              48.0,
+              672.0
+            ],
+            "ignore": false,
+            "order": 3,
+            "anno_id": 3,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "ハードウェア更新サイクルを5年ごとに統一し、クラウド利用率を30%まで引き上げることで、総コストを約8%削減できる見込み。"
+          }
+        ],
+        "page_info": {
+          "page_no": 0,
+          "height": 720,
+          "width": 1280,
+          "image_path": "170_00.png",
+          "page_attribute": {
+            "data_source": "synthetic_document",
+            "language": "japanese",
+            "layout": "slide",
+            "special_issue": []
+          }
+        },
+        "extra": {
+          "relation": []
+        }
+      },
+      "width": 1280,
+      "height": 720,
+      "sha256": "2a17c986de7df1c4b33a520ec6e53a4eee21e58432fe614951d5585f76b37919"
+    },
+    {
+      "id": "jasyn-170_02",
+      "image": "logs/ocr-benchmark/images/jasyn-170_02.png",
+      "language": "ja",
+      "dataset": "jasyn",
+      "regions": [
+        {
+          "text": "2000年〜2020年における主要都道府県別幼稚園カリキュラム満足度の推移",
+          "kind": "heading",
+          "order": 0,
+          "reading_order_known": true,
+          "category": "title",
+          "annotation_id": 0,
+          "x": 21.0,
+          "y": 124.0,
+          "width": 737.0,
+          "height": 160.0
+        },
+        {
+          "text": "•\n全国的に満足度は右肩上がりで、特に東京都は20年で15ポイント上昇\n•\n北海道は近年の地域健康講座と連動した食育プログラムが満足度向上に寄与\n•\n大阪府はIT活用型教材（タブレット学習）の導入が2015年以降の伸びに影響\n•\n福岡県は伝統文化（郷土料理）を取り入れたカリキュラムが2020年に顕著なプラス効果",
+          "kind": "paragraph",
+          "order": 1,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 1,
+          "x": 44.0,
+          "y": 320.0,
+          "width": 726.0,
+          "height": 126.0
+        },
+        {
+          "text": "各県の伸び率は「地域特性×デジタル教材」の組み合わせが鍵。北海道の食育事例は、Excelで作成した満足度推移表と合わせて社内研修資料に活用できる。",
+          "kind": "paragraph",
+          "order": 3,
+          "reading_order_known": true,
+          "category": "text_block",
+          "annotation_id": 3,
+          "x": 36.0,
+          "y": 601.0,
+          "width": 1124.0,
+          "height": 55.0
+        }
+      ],
+      "page_attribute": {
+        "data_source": "synthetic_document",
+        "language": "japanese",
+        "layout": "slide",
+        "special_issue": []
+      },
+      "original_image_sha256": "304309dc690cf7b63720027989fd29633d2780c047e424d1bb7384d8256515fb",
+      "original_page": {
+        "layout_dets": [
+          {
+            "category_type": "title",
+            "poly": [
+              21.0,
+              124.0,
+              758.0,
+              124.0,
+              758.0,
+              284.0,
+              21.0,
+              284.0
+            ],
+            "ignore": false,
+            "order": 0,
+            "anno_id": 0,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "2000年〜2020年における主要都道府県別幼稚園カリキュラム満足度の推移"
+          },
+          {
+            "category_type": "text_block",
+            "poly": [
+              44.0,
+              320.0,
+              770.0,
+              320.0,
+              770.0,
+              446.0,
+              44.0,
+              446.0
+            ],
+            "ignore": false,
+            "order": 1,
+            "anno_id": 1,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "•\n全国的に満足度は右肩上がりで、特に東京都は20年で15ポイント上昇\n•\n北海道は近年の地域健康講座と連動した食育プログラムが満足度向上に寄与\n•\n大阪府はIT活用型教材（タブレット学習）の導入が2015年以降の伸びに影響\n•\n福岡県は伝統文化（郷土料理）を取り入れたカリキュラムが2020年に顕著なプラス効果"
+          },
+          {
+            "category_type": "figure",
+            "poly": [
+              831.0,
+              188.0,
+              1174.0,
+              188.0,
+              1174.0,
+              417.0,
+              831.0,
+              417.0
+            ],
+            "ignore": false,
+            "order": 2,
+            "anno_id": 2,
+            "attribute": {},
+            "line_with_spans": []
+          },
+          {
+            "category_type": "text_block",
+            "poly": [
+              36.0,
+              601.0,
+              1160.0,
+              601.0,
+              1160.0,
+              656.0,
+              36.0,
+              656.0
+            ],
+            "ignore": false,
+            "order": 3,
+            "anno_id": 3,
+            "attribute": {
+              "text_language": "other",
+              "text_background": "white",
+              "text_rotate": "normal"
+            },
+            "line_with_spans": [],
+            "text": "各県の伸び率は「地域特性×デジタル教材」の組み合わせが鍵。北海道の食育事例は、Excelで作成した満足度推移表と合わせて社内研修資料に活用できる。"
+          }
+        ],
+        "page_info": {
+          "page_no": 2,
+          "height": 692,
+          "width": 1230,
+          "image_path": "170_02.png",
+          "page_attribute": {
+            "data_source": "synthetic_document",
+            "language": "japanese",
+            "layout": "slide",
+            "special_issue": []
+          }
+        },
+        "extra": {
+          "relation": []
+        }
+      },
+      "width": 1230,
+      "height": 692,
+      "sha256": "304309dc690cf7b63720027989fd29633d2780c047e424d1bb7384d8256515fb"
+    }
+  ],
+  "selection": "horizontal slides/report/pamphlet; 100–1200 annotated text chars; no tables/LaTeX; fixed filename order"
+}

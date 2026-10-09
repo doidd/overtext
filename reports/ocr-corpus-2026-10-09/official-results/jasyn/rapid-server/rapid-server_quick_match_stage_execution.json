@@ -1,0 +1,18 @@
+{
+    "page_match": {
+        "workers": 1,
+        "page_count": 3,
+        "quick_match_truncated_timeout_sec": 300,
+        "match_timeout_sec": 420,
+        "fallbacks": {
+            "quick_match_timeout": {
+                "count": 0,
+                "cases": []
+            },
+            "page_timeout": {
+                "count": 0,
+                "cases": []
+            }
+        }
+    }
+}

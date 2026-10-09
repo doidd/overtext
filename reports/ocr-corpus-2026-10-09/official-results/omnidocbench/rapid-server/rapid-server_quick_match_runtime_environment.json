@@ -1,0 +1,98 @@
+{
+    "system": {
+        "platform": "Windows-10-10.0.26200-SP0",
+        "python_version": "3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]",
+        "python_executable": "C:\\Users\\DoDinhDoi\\orca\\overtext\\logs\\omnidocbench-python310\\python.exe",
+        "python_prefix": "C:\\Users\\DoDinhDoi\\orca\\overtext\\logs\\omnidocbench-python310",
+        "conda_env": "",
+        "conda_prefix": "",
+        "libc": "",
+        "uname": "Windows dodinhdoi 10 10.0.26200 AMD64 Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+        "os_release": {}
+    },
+    "system_packages": {
+        "package_manager": "unavailable",
+        "tracked_packages": {
+            "ghostscript": "unavailable (no supported package manager found)",
+            "imagemagick": "unavailable (no supported package manager found)",
+            "fontconfig": "unavailable (no supported package manager found)",
+            "python3": "unavailable (no supported package manager found)",
+            "python3-pip": "unavailable (no supported package manager found)",
+            "python3-setuptools": "unavailable (no supported package manager found)",
+            "python3-wheel": "unavailable (no supported package manager found)",
+            "texlive-base": "unavailable (no supported package manager found)",
+            "texlive-binaries": "unavailable (no supported package manager found)",
+            "texlive-lang-chinese": "unavailable (no supported package manager found)",
+            "texlive-lang-cjk": "unavailable (no supported package manager found)",
+            "texlive-latex-base": "unavailable (no supported package manager found)",
+            "texlive-latex-extra": "unavailable (no supported package manager found)",
+            "texlive-fonts-recommended": "unavailable (no supported package manager found)",
+            "texlive-plain-generic": "unavailable (no supported package manager found)",
+            "latexml": "unavailable (no supported package manager found)"
+        }
+    },
+    "python_packages": {
+        "pip": "26.2.1",
+        "setuptools": "84.0.0",
+        "wheel": "0.48.0"
+    },
+    "external_tools": {
+        "pdflatex": {
+            "path": "/share/texlive\\pdflatex",
+            "returncode": null,
+            "output": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)"
+        },
+        "kpsewhich": {
+            "path": "/share/texlive\\kpsewhich",
+            "returncode": null,
+            "output": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)"
+        },
+        "tlmgr": {
+            "path": "tlmgr",
+            "returncode": null,
+            "output": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)"
+        },
+        "ghostscript": {
+            "path": "gs",
+            "returncode": null,
+            "output": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)"
+        },
+        "magick": {
+            "path": "magick",
+            "returncode": null,
+            "output": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)"
+        },
+        "convert": {
+            "path": "C:\\WINDOWS\\system32\\convert.EXE",
+            "returncode": 4,
+            "output": "Invalid drive specification."
+        },
+        "identify": {
+            "path": "identify",
+            "returncode": null,
+            "output": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)"
+        },
+        "latexmlc": {
+            "path": "latexmlc",
+            "returncode": null,
+            "output": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)"
+        }
+    },
+    "texlive": {
+        "cjk_font_family": "gkai",
+        "cjk_sty": {
+            "path": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)",
+            "version": "unavailable",
+            "date": "",
+            "header": "",
+            "status": "not_found"
+        },
+        "cjk_font_fd": {
+            "path": "unavailable (FileNotFoundError: [WinError 2] The system cannot find the file specified)",
+            "version": "unavailable",
+            "date": "",
+            "header": "",
+            "status": "not_found"
+        }
+    }
+}

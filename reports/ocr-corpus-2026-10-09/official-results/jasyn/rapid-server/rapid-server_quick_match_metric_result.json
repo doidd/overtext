@@ -1,0 +1,65 @@
+{
+    "text_block": {
+        "all": {
+            "Edit_dist": {
+                "ALL_page_avg": 0.11267487449163076,
+                "edit_whole": 0.11547619047619048,
+                "edit_sample_avg": 0.11055731838062564
+            }
+        },
+        "group": {
+            "Edit_dist": {
+                "text_background: white": 0.11055731838062564,
+                "text_language: other": 0.11055731838062564,
+                "text_rotate: normal": 0.11055731838062564
+            },
+            "sample_count": {
+                "text_background: white": 12,
+                "text_language: other": 12,
+                "text_rotate: normal": 12
+            }
+        },
+        "page": {
+            "Edit_dist": {
+                "ALL": 0.11267487449163076,
+                "data_source: synthetic_document": 0.11267487449163076,
+                "language: japanese": 0.11267487449163076,
+                "layout: slide": 0.11267487449163076
+            }
+        }
+    },
+    "reading_order": {
+        "all": {
+            "Edit_dist": {
+                "ALL_page_avg": 0.13333333333333333,
+                "edit_whole": 0.2222222222222222,
+                "edit_sample_avg": 0.13333333333333333
+            }
+        },
+        "group": {
+            "sample_count": {}
+        },
+        "page": {
+            "Edit_dist": {
+                "ALL": 0.13333333333333333,
+                "data_source: synthetic_document": 0.13333333333333333,
+                "language: japanese": 0.13333333333333333,
+                "layout: slide": 0.13333333333333333
+            }
+        }
+    },
+    "match_debug": {
+        "workers": 1,
+        "page_count": 3,
+        "quick_match_truncated_timeout_sec": 300,
+        "match_timeout_sec": 420,
+        "text_match_fallback_pages": {
+            "quick_match_timeout": [],
+            "page_timeout": []
+        },
+        "text_match_fallback_counts": {
+            "quick_match_timeout": 0,
+            "page_timeout": 0
+        }
+    }
+}

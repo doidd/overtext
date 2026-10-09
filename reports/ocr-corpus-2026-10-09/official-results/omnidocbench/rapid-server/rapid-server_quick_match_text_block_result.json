@@ -1,0 +1,194 @@
+[
+    {
+        "gt_idx": [
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "gt": "Mostly based on asking language learners and showed that language proficiency was seen as one important factorEg: Girard (1977- French learners of English), teaches good pronunciation, explains clearly, speaks good English,Eg: Brosh (1996)· knowledge and command of the target language;Teacher Evaluation – context universal-Evaluation fairly\nsimple - based on visible behaviours/learner outcomes\nin ‘objective’ tests",
+        "pred_idx": [
+            2
+        ],
+        "pred": "Mostly based on asking language learners and showed that language proficiency was seen as one important factor Eg: Girard (1977- French learners of English), teaches good pronunciation, explains clearly, speaks good English, Eg: Brosh (1996) knowledge and command of the target language; Teacher Evaluation - context universal- Evaluation fairly simple - based on visible behaviours / learner outcomes in objective' tests",
+        "edit": 0.0,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "pred_position": 41,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {},
+            {},
+            {},
+            {},
+            {}
+        ],
+        "img_id": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_010.png",
+        "norm_gt": "MostlybasedonaskinglanguagelearnersandshowedthatlanguageproficiencywasseenasoneimportantfactorEgGirard1977FrenchlearnersofEnglishteachesgoodpronunciationexplainsclearlyspeaksgoodEnglishEgBrosh1996knowledgeandcommandofthetargetlanguageTeacherEvaluationcontextuniversalEvaluationfairlysimplebasedonvisiblebehaviourslearneroutcomesinobjectivetests",
+        "norm_pred": "MostlybasedonaskinglanguagelearnersandshowedthatlanguageproficiencywasseenasoneimportantfactorEgGirard1977FrenchlearnersofEnglishteachesgoodpronunciationexplainsclearlyspeaksgoodEnglishEgBrosh1996knowledgeandcommandofthetargetlanguageTeacherEvaluationcontextuniversalEvaluationfairlysimplebasedonvisiblebehaviourslearneroutcomesinobjectivetests",
+        "image_name": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_010.png",
+        "upper_len": 344,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    },
+    {
+        "gt_idx": [
+            1,
+            2
+        ],
+        "gt": "Yilmaz 2011 looked at the relationships between Turkish\nprimary and secondary school teachers' perceptions of self-efficacy, English proficiency, and instructional strategiesResults indicated that teachers' perceived efficacy was\ncorrelated with their self-reported English proficiency",
+        "pred_idx": [
+            2
+        ],
+        "pred": "Yilmaz 2011 looked at the relationships between Turkish primary and secondary school teachers' perceptions of selfefficacy, , English proficiency, and instructional strategies Results indicated that teachers' perceived efficacy was correlated with their self-reported English proficiency",
+        "edit": 0.0,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            1,
+            2
+        ],
+        "pred_position": 25,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {},
+            {}
+        ],
+        "img_id": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_029.png",
+        "norm_gt": "Yilmaz2011lookedattherelationshipsbetweenTurkishprimaryandsecondaryschoolteachersperceptionsofselfefficacyEnglishproficiencyandinstructionalstrategiesResultsindicatedthatteachersperceivedefficacywascorrelatedwiththeirselfreportedEnglishproficiency",
+        "norm_pred": "Yilmaz2011lookedattherelationshipsbetweenTurkishprimaryandsecondaryschoolteachersperceptionsofselfefficacyEnglishproficiencyandinstructionalstrategiesResultsindicatedthatteachersperceivedefficacywascorrelatedwiththeirselfreportedEnglishproficiency",
+        "image_name": "PPT_11.2013EvaluatingTraineeteacherproficiency_page_029.png",
+        "upper_len": 247,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    },
+    {
+        "gt_idx": [
+            0
+        ],
+        "gt": "International Meeting on Languages, Applied Linguistics and Translation",
+        "pred_idx": [
+            0
+        ],
+        "pred": "# International Meeting on Languages, Applied Linguistics and Translation",
+        "edit": 0.0,
+        "gt_category_type": "title",
+        "gt_position": [
+            1
+        ],
+        "pred_position": 0,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {}
+        ],
+        "img_id": "PPT_13 fallacies LALT2012_page_001.png",
+        "norm_gt": "InternationalMeetingonLanguagesAppliedLinguisticsandTranslation",
+        "norm_pred": "InternationalMeetingonLanguagesAppliedLinguisticsandTranslation",
+        "image_name": "PPT_13 fallacies LALT2012_page_001.png",
+        "upper_len": 63,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    },
+    {
+        "gt_idx": [
+            1
+        ],
+        "gt": "University of Évora, 6-7 December 2012",
+        "pred_idx": [
+            1
+        ],
+        "pred": "University of Évora, 6-7 December 2012",
+        "edit": 0.0,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            2
+        ],
+        "pred_position": 73,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {}
+        ],
+        "img_id": "PPT_13 fallacies LALT2012_page_001.png",
+        "norm_gt": "UniversityofÉvora67December2012",
+        "norm_pred": "UniversityofÉvora67December2012",
+        "image_name": "PPT_13 fallacies LALT2012_page_001.png",
+        "upper_len": 31,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    },
+    {
+        "gt_idx": [
+            2
+        ],
+        "gt": "Thirteen Fallacies about the Users and Uses of English as an International Language",
+        "pred_idx": [
+            2
+        ],
+        "pred": "Thirteen Fallacies about the Users and Uses of English as an International Language",
+        "edit": 0.0,
+        "gt_category_type": "title",
+        "gt_position": [
+            3
+        ],
+        "pred_position": 111,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {}
+        ],
+        "img_id": "PPT_13 fallacies LALT2012_page_001.png",
+        "norm_gt": "ThirteenFallaciesabouttheUsersandUsesofEnglishasanInternationalLanguage",
+        "norm_pred": "ThirteenFallaciesabouttheUsersandUsesofEnglishasanInternationalLanguage",
+        "image_name": "PPT_13 fallacies LALT2012_page_001.png",
+        "upper_len": 71,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    },
+    {
+        "gt_idx": [
+            3,
+            4
+        ],
+        "gt": "Luis GuerraUniversity of Évora, Portugal",
+        "pred_idx": [
+            3
+        ],
+        "pred": "Luis Guerra University of Évora, Portugal",
+        "edit": 0.0,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            4,
+            5
+        ],
+        "pred_position": 194,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {},
+            {}
+        ],
+        "img_id": "PPT_13 fallacies LALT2012_page_001.png",
+        "norm_gt": "LuisGuerraUniversityofÉvoraPortugal",
+        "norm_pred": "LuisGuerraUniversityofÉvoraPortugal",
+        "image_name": "PPT_13 fallacies LALT2012_page_001.png",
+        "upper_len": 35,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    }
+]

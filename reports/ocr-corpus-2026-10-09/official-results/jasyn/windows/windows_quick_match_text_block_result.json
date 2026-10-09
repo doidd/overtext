@@ -1,0 +1,407 @@
+[
+    {
+        "gt_idx": [
+            0
+        ],
+        "gt": "持続可能性とオペレーション最適化の３つの視点",
+        "pred_idx": [
+            0
+        ],
+        "pred": "# 持 続 可 能 性 と オ ペ レ ー シ ョ ン 最 適 化の 3 つ の 視 点",
+        "edit": 0.045454545454545456,
+        "gt_category_type": "title",
+        "gt_position": [
+            ""
+        ],
+        "pred_position": 0,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "166_00.png",
+        "norm_gt": "持続可能性とオペレーション最適化の３つの視点",
+        "norm_pred": "持続可能性とオペレーション最適化の3つの視点",
+        "image_name": "166_00.png",
+        "upper_len": 22,
+        "metric": {
+            "Edit_dist": 0.045454545454545456
+        },
+        "Edit_num": 1
+    },
+    {
+        "gt_idx": [
+            1
+        ],
+        "gt": "包装素材、在庫管理、イベント予算の三つの要因が、ブランド価値と効率をどう支えるか",
+        "pred_idx": [
+            2
+        ],
+        "pred": "包 装 素 材 、 在 庫 管 理 、 イ ベ ン ト 予 算 の 三 つ の 要 因 が 、 プ ラ ン ド 価 値 と 効 率 を ど う 支 え る か",
+        "edit": 0.02702702702702703,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            1
+        ],
+        "pred_position": 81,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "166_00.png",
+        "norm_gt": "包装素材在庫管理イベント予算の三つの要因がブランド価値と効率をどう支えるか",
+        "norm_pred": "包装素材在庫管理イベント予算の三つの要因がプランド価値と効率をどう支えるか",
+        "image_name": "166_00.png",
+        "upper_len": 37,
+        "metric": {
+            "Edit_dist": 0.02702702702702703
+        },
+        "Edit_num": 1
+    },
+    {
+        "gt_idx": [
+            2
+        ],
+        "gt": "包装素材の複雑性と持続可能なブランド価値向上成功率の関係",
+        "pred_idx": [
+            3
+        ],
+        "pred": "# 包 装 素 材 の 複 雑 性 と 持 続 可 能 な プ ラ ン ド 価 値 向 上 成 功 率 の 関 係",
+        "edit": 0.03571428571428571,
+        "gt_category_type": "title",
+        "gt_position": [
+            2
+        ],
+        "pred_position": 160,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "166_00.png",
+        "norm_gt": "包装素材の複雑性と持続可能なブランド価値向上成功率の関係",
+        "norm_pred": "包装素材の複雑性と持続可能なプランド価値向上成功率の関係",
+        "image_name": "166_00.png",
+        "upper_len": 28,
+        "metric": {
+            "Edit_dist": 0.03571428571428571
+        },
+        "Edit_num": 1
+    },
+    {
+        "gt_idx": [
+            3
+        ],
+        "gt": "包装素材の種類と複雑さが、エコブランドとしての成功率にどのように影響するかを可視化したHexbin Plotです。",
+        "pred_idx": [
+            4
+        ],
+        "pred": "包 装 素 材 の 種 類 と 複 雑 さ が 、 エ コ ブ ラ ン ド と し て の 成 功 率 に ど の よ う に 影 響 す る か を 可 視 化 し た Hexbin円 ot で す 。",
+        "edit": 0.037037037037037035,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            3
+        ],
+        "pred_position": 217,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "166_00.png",
+        "norm_gt": "包装素材の種類と複雑さがエコブランドとしての成功率にどのように影響するかを可視化したHexbinPlotです",
+        "norm_pred": "包装素材の種類と複雑さがエコブランドとしての成功率にどのように影響するかを可視化したHexbin円otです",
+        "image_name": "166_00.png",
+        "upper_len": 54,
+        "metric": {
+            "Edit_dist": 0.037037037037037035
+        },
+        "Edit_num": 2
+    },
+    {
+        "gt_idx": [
+            4
+        ],
+        "gt": "素材別の複雑度（素材数×リサイクル工程数）と成功率（売上増加率＋顧客ロイヤリティ指数）の相関は0.68と中程度の正の相関が見られる。\n成功率が80％以上のブランドは、リサイクルPET、PLAバイオプラスチック、紙ベース包装の3素材以内に絞り込んでいる。",
+        "pred_idx": [
+            5,
+            6,
+            7
+        ],
+        "pred": "素 材 別 の 複 雑 度 ( 素 材 数 x リ サ イ ク ル 工 程 数 ) と 成 功 率 ( 売 上 増 加 率 十 顧 客 ロ イ ヤ リ テ ィ 指 数 ) の 相関 は 0.68 と 中 程 度 の 正 の 相 関 が 見 ら れ る 。を 材 物 第 を- ・ 成 功 率 が 80 % 以 上 の ブ ラ ン ド は 、 リ サ イ ク ル PET 、 PLA バ イ オ プ ラ ス チ ッ ク 、 紙 べ ー ス 包 装 の 3 素 材 以内 に 絞 り 込 ん で い る 。",
+        "edit": 0.06722689075630252,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            4
+        ],
+        "pred_position": 319,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "166_00.png",
+        "norm_gt": "素材別の複雑度素材数リサイクル工程数と成功率売上増加率顧客ロイヤリティ指数の相関は068と中程度の正の相関が見られる成功率が80以上のブランドはリサイクルPETPLAバイオプラスチック紙ベース包装の3素材以内に絞り込んでいる",
+        "norm_pred": "素材別の複雑度素材数xリサイクル工程数と成功率売上増加率十顧客ロイヤリティ指数の相関は068と中程度の正の相関が見られるを材物第を成功率が80以上のブランドはリサイクルPETPLAバイオプラスチック紙べース包装の3素材以内に絞り込んでいる",
+        "image_name": "166_00.png",
+        "upper_len": 119,
+        "metric": {
+            "Edit_dist": 0.06722689075630252
+        },
+        "Edit_num": 8
+    },
+    {
+        "gt_idx": [
+            5
+        ],
+        "gt": "茶道の「一期一会」になぞらえて、包装は一度きりの出会い。素材を絞ることで顧客の記憶に残りやすく、持続可能性のメッセージが伝わります。",
+        "pred_idx": [
+            8
+        ],
+        "pred": "茶 道 の 「 - 期 - 会 」 に な ぞ ら え て 、 包 装 は - 度 き り の 出 会 い 。 素 材 を 絞 る こ と で 顧 客 の 記 憶 に 残 り や す く 、 持 続 可 能 性 の メ ッ セ ー ジ が 伝 わ り ま す 。",
+        "edit": 0.05,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            6
+        ],
+        "pred_position": 570,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "166_00.png",
+        "norm_gt": "茶道の一期一会になぞらえて包装は一度きりの出会い素材を絞ることで顧客の記憶に残りやすく持続可能性のメッセージが伝わります",
+        "norm_pred": "茶道の期会になぞらえて包装は度きりの出会い素材を絞ることで顧客の記憶に残りやすく持続可能性のメッセージが伝わります",
+        "image_name": "166_00.png",
+        "upper_len": 60,
+        "metric": {
+            "Edit_dist": 0.05
+        },
+        "Edit_num": 3
+    },
+    {
+        "gt_idx": [
+            0
+        ],
+        "gt": "関谷 征紀が率いるデジタル資産管理プロジェクト　資産カテゴリ別コスト配分率",
+        "pred_idx": [
+            0
+        ],
+        "pred": "# 関 谷 征 紀 が 率 い る デ ジ タ ル 資 産 管 理プ ロ ジ ェ ク ト 資 産 力 テ ゴ リ 別 コ ス",
+        "edit": 0.14285714285714285,
+        "gt_category_type": "title",
+        "gt_position": [
+            ""
+        ],
+        "pred_position": 0,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "170_00.png",
+        "norm_gt": "関谷征紀が率いるデジタル資産管理プロジェクト資産カテゴリ別コスト配分率",
+        "norm_pred": "関谷征紀が率いるデジタル資産管理プロジェクト資産力テゴリ別コス",
+        "image_name": "170_00.png",
+        "upper_len": 35,
+        "metric": {
+            "Edit_dist": 0.14285714285714285
+        },
+        "Edit_num": 5
+    },
+    {
+        "gt_idx": [
+            1
+        ],
+        "gt": "•\nハードウェアとクラウドが合わせて約53%と、インフラ投資が最大のコストドライバー\n•\nソフトウェア費用は保守・アップデートが中心で、ライフサイクル管理の最適化余地あり\n•\n人件費はプロジェクトマネジメントとデータガバナンスに集中、業務標準化で削減可能\n•\n在庫管理システムで培った「資産の可視化」手法を活かし、Excelのピボットテーブルで月次コストをモニタリング",
+        "pred_idx": [
+            3,
+            4,
+            5,
+            6
+        ],
+        "pred": "- ・ ハ ー ド ウ ェ ア と ク ラ ウ ド か 合 わ せ て 約 53 % と 、 イ ン フ ラ 投 資 か 最 大 の コ ス ト ド ラ イ バ ー、 、 ゾ プ ト ウ 土 ア 費 用 は 保 守 第 ア ッ プ デ ト が 中 心 で い ラ イ フ サ イ ク ル 管 理 の 最 適 化 余 地人 件 費 は フ 。 ロ シ ェ ク ト マ ネ シ メ ン ト と デ ー タ ガ バ ナ ン ス に 集 中 、 業 務 標 準 化 で 削 減 可 能ー ・ 一 在 庫 管 理 シ ス テ ム で 培 っ た ゴ 資 産 の 可 視 化 」 一 手 法 を 活 か し い c の ピ ホ ッ ー ト テ ー フ ・ ル で 月 一 次 コ ス ト を 一 一",
+        "edit": 0.19879518072289157,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            1
+        ],
+        "pred_position": 128,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "170_00.png",
+        "norm_gt": "ハードウェアとクラウドが合わせて約53とインフラ投資が最大のコストドライバーソフトウェア費用は保守アップデートが中心でライフサイクル管理の最適化余地あり人件費はプロジェクトマネジメントとデータガバナンスに集中業務標準化で削減可能在庫管理システムで培った資産の可視化手法を活かしExcelのピボットテーブルで月次コストをモニタリング",
+        "norm_pred": "ハードウェアとクラウドか合わせて約53とインフラ投資か最大のコストドライバーゾプトウ土ア費用は保守第アップデトが中心でいライフサイクル管理の最適化余地人件費はフロシェクトマネシメントとデータガバナンスに集中業務標準化で削減可能ー一在庫管理システムで培ったゴ資産の可視化一手法を活かしいcのピホッートテーフルで月一次コストを一一",
+        "image_name": "170_00.png",
+        "upper_len": 165,
+        "metric": {
+            "Edit_dist": 0.18787878787878787
+        },
+        "Edit_num": 31
+    },
+    {
+        "gt_idx": [
+            2
+        ],
+        "gt": "ハードウェア更新サイクルを5年ごとに統一し、クラウド利用率を30%まで引き上げることで、総コストを約8%削減できる見込み。",
+        "pred_idx": [
+            8
+        ],
+        "pred": "# ハ ー ド ウ ェ ア 更 新 サ イ ク ル を 5 年 ご と に 統 一 し 、 ク ラ ウ ド 利 用 率 を 30 % ま で 引 き 上 げ る こ と で 、 総 コ ス ト を 約 8 % 削 減 で き る 見 込 み 。",
+        "edit": 0.0,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            3
+        ],
+        "pred_position": 482,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "170_00.png",
+        "norm_gt": "ハードウェア更新サイクルを5年ごとに統一しクラウド利用率を30まで引き上げることで総コストを約8削減できる見込み",
+        "norm_pred": "ハードウェア更新サイクルを5年ごとに統一しクラウド利用率を30まで引き上げることで総コストを約8削減できる見込み",
+        "image_name": "170_00.png",
+        "upper_len": 56,
+        "metric": {
+            "Edit_dist": 0.0
+        },
+        "Edit_num": 0
+    },
+    {
+        "gt_idx": [
+            0
+        ],
+        "gt": "2000年〜2020年における主要都道府県別幼稚園カリキュラム満足度の推移",
+        "pred_idx": [
+            0
+        ],
+        "pred": "# 2000 年 ~ 2020 年 に お け る 主 要 都 道府 県 別 幼 稚 呆 リ キ ュ ラ ム 満 足 度 の",
+        "edit": 0.1111111111111111,
+        "gt_category_type": "title",
+        "gt_position": [
+            ""
+        ],
+        "pred_position": 0,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "170_02.png",
+        "norm_gt": "2000年2020年における主要都道府県別幼稚園カリキュラム満足度の推移",
+        "norm_pred": "2000年2020年における主要都道府県別幼稚呆リキュラム満足度の",
+        "image_name": "170_02.png",
+        "upper_len": 36,
+        "metric": {
+            "Edit_dist": 0.1111111111111111
+        },
+        "Edit_num": 4
+    },
+    {
+        "gt_idx": [
+            1
+        ],
+        "gt": "•\n全国的に満足度は右肩上がりで、特に東京都は20年で15ポイント上昇\n•\n北海道は近年の地域健康講座と連動した食育プログラムが満足度向上に寄与\n•\n大阪府はIT活用型教材（タブレット学習）の導入が2015年以降の伸びに影響\n•\n福岡県は伝統文化（郷土料理）を取り入れたカリキュラムが2020年に顕著なプラス効果",
+        "pred_idx": [
+            3,
+            4,
+            5,
+            6,
+            7
+        ],
+        "pred": "、 に 活 足 度 は ち 日 上 カ て 、 特 に 東 京 都 は 20 年 て 15 ホ イ ン ト 上 昇北 海 道 は 近 年 の 地 域 健 - ・ と 連 動 し た 食 育 プ ロ グ ラ ム が 満 足 度 向 上 に 寄 与レ ッ ト 学 習 ) の 導 入 か 2015 年 以 降 の 倅 び に 影 響大 販 府 は は 活 用 型 教 材 、当 県 は 伝 統 文 化 ( - 取 り 入 れ た カ リ キ ュ ラ ム か 2020 年 に 著 な フ ラ ス 効 果",
+        "edit": 0.36428571428571427,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            1
+        ],
+        "pred_position": 125,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "170_02.png",
+        "norm_gt": "全国的に満足度は右肩上がりで特に東京都は20年で15ポイント上昇北海道は近年の地域健康講座と連動した食育プログラムが満足度向上に寄与大阪府はIT活用型教材タブレット学習の導入が2015年以降の伸びに影響福岡県は伝統文化郷土料理を取り入れたカリキュラムが2020年に顕著なプラス効果",
+        "norm_pred": "に活足度はち日上カて特に東京都は20年て15ホイント上昇北海道は近年の地域健と連動した食育プログラムが満足度向上に寄与レット学習の導入か2015年以降の倅びに影響大販府はは活用型教材当県は伝統文化取り入れたカリキュラムか2020年に著なフラス効果",
+        "image_name": "170_02.png",
+        "upper_len": 140,
+        "metric": {
+            "Edit_dist": 0.34285714285714286
+        },
+        "Edit_num": 48
+    },
+    {
+        "gt_idx": [
+            2
+        ],
+        "gt": "各県の伸び率は「地域特性×デジタル教材」の組み合わせが鍵。北海道の食育事例は、Excelで作成した満足度推移表と合わせて社内研修資料に活用できる。",
+        "pred_idx": [
+            8
+        ],
+        "pred": "各 県 の 伸 び 率 は 「 地 域 特 性 >< デ ジ タ ル 教 材 」 の 組 み 合 わ せ が 鍵 。 北 海 道 の 食 育 事 例 は 、 ( e に 作 成 し た 満 足 度 推 移 表 と 合 わ せ て 社内 研 修 資 料 に 活 用 で き る 。",
+        "edit": 0.07462686567164178,
+        "gt_category_type": "text_block",
+        "gt_position": [
+            3
+        ],
+        "pred_position": 374,
+        "pred_category_type": "text_block",
+        "gt_attribute": [
+            {
+                "text_background": "white",
+                "text_language": "other",
+                "text_rotate": "normal"
+            }
+        ],
+        "img_id": "170_02.png",
+        "norm_gt": "各県の伸び率は地域特性デジタル教材の組み合わせが鍵北海道の食育事例はExcelで作成した満足度推移表と合わせて社内研修資料に活用できる",
+        "norm_pred": "各県の伸び率は地域特性デジタル教材の組み合わせが鍵北海道の食育事例はeに作成した満足度推移表と合わせて社内研修資料に活用できる",
+        "image_name": "170_02.png",
+        "upper_len": 67,
+        "metric": {
+            "Edit_dist": 0.07462686567164178
+        },
+        "Edit_num": 5
+    }
+]

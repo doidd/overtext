@@ -1,0 +1,41 @@
+{
+  "matcher": "quick_match",
+  "scores": [
+    {
+      "dataset": "omnidocbench",
+      "engine": "windows",
+      "text_edit": 0.003316749585406302,
+      "reading_order_edit": 0.0
+    },
+    {
+      "dataset": "omnidocbench",
+      "engine": "rapid-mobile",
+      "text_edit": 0.0019267822736030828,
+      "reading_order_edit": 0.0
+    },
+    {
+      "dataset": "omnidocbench",
+      "engine": "rapid-server",
+      "text_edit": 0.0,
+      "reading_order_edit": 0.0
+    },
+    {
+      "dataset": "jasyn",
+      "engine": "windows",
+      "text_edit": 0.1417309670781893,
+      "reading_order_edit": 0.0
+    },
+    {
+      "dataset": "jasyn",
+      "engine": "rapid-mobile",
+      "text_edit": 0.09900898570363818,
+      "reading_order_edit": 0.13333333333333333
+    },
+    {
+      "dataset": "jasyn",
+      "engine": "rapid-server",
+      "text_edit": 0.11267487449163076,
+      "reading_order_edit": 0.13333333333333333
+    }
+  ]
+}
